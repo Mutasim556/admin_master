@@ -1,12 +1,12 @@
 <ul class="sidebar-links" id="simple-bar">
     <li class="sidebar-list">
-        <a class="sidebar-link sidebar-title link-nav" href="{{ route('home') }}"
+        <a class="sidebar-link sidebar-title link-nav" href="{{ route('admin.index') }}"
             aria-expanded="false"><i data-feather="home"></i><span
                 >{{ __('admin_local.Dashboard') }}</span>
         </a>
     </li>
     {{-- @if (hasPermission(['user-index','user-create','user-update','user-delete'])) --}}
-    <li class="sidebar-list">
+    {{-- <li class="sidebar-list">
         <a class="sidebar-link sidebar-title" href="javascript:void(0)"
             aria-expanded="false">
             <i data-feather="user-plus"></i>
@@ -20,10 +20,10 @@
                 </a>
             </li>
         </ul>
-    </li>
+    </li> --}}
     {{-- @endif --}}
 
-    <li class="sidebar-list">
+    {{-- <li class="sidebar-list">
         <a class="sidebar-link sidebar-title" href="javascript:void(0)"
             aria-expanded="false">
             <i data-feather="slack"></i>
@@ -53,5 +53,5 @@
             aria-expanded="false"><i data-feather="home"></i><span
                 > {{ __('admin_local.Roles And Permissions') }}</span>
         </a>
-    </li>
+    </li> --}}
 </ul>
