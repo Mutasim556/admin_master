@@ -3,7 +3,13 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+
+use App\Models\User;
+use Database\Seeders\Admin\AdminSeeder;
+use Database\Seeders\Admin\PermissionSeeder;
+use Database\Seeders\Admin\RoleSeeder;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -14,9 +20,16 @@ class DatabaseSeeder extends Seeder
     {
         // \App\Models\User::factory(10)->create();
 
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+            // $admin = new User();
+            // $admin->name = 'Mutasim';
+            // $admin->email = 'admin@admin.com';
+            // $admin->phone = '01724698392';
+            // $admin->username = 'mutasim';
+            // $admin->password = Hash::make('admin');
+            // $admin->save();
+
+        // $this->call(PermissionSeeder::class);
+        $this->call(RoleSeeder::class);
+        $this->call(AdminSeeder::class);
     }
 }

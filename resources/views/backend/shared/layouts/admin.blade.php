@@ -12,7 +12,7 @@
     <meta name="author" content="pixelstrap">
     <link rel="icon" href="{{ asset('admin/assets/images/favicon/favicon.png') }}" type="image/x-icon">
     <link rel="shortcut icon" href="{{ asset('admin/assets/images/favicon/favicon.png') }}" type="image/x-icon">
-    <title>{{ env('APP_ADMIN') }} -@stack('title')</title>
+    <title>{{ env('APP_BACKEND_NAME') }} -@stack('title')</title>
     <link rel="stylesheet" type="text/css" href="{{ asset('admin/assets/css/vendors/font-awesome.css') }}">
     <!-- ico-font-->
     <link rel="stylesheet" type="text/css" href="{{ asset('admin/assets/css/vendors/icofont.css') }}">
@@ -141,17 +141,16 @@
                                     <div class="lang"><i data-feather="globe"></i></div>
                                 </div>
                                 <div class="more_lang">
-                                    @php
+                                    {{-- @php
                                         $languages = DB::table('languages')
                                             ->where([['status', 1], ['delete', 0]])
                                             ->get();
                                     @endphp
                                     @foreach ($languages as $language)
                                         <div class="lang {{ getLanguageSession()==$language->lang?'selected':'' }}" onclick="change_lang('{{ $language->lang }}')">
-                                            {{-- <i class="flag-icon flag-icon-{{ $language->lang }}" >{{ $language->name }}</i> --}}
                                             <span class="lang-txt">{{ $language->name }}</span>
                                         </div>
-                                    @endforeach
+                                    @endforeach --}}
 
                                     {{-- <div class="lang selected" onclick="change_lang('bn')"><i
                                             class="flag-icon flag-icon-bd"></i><span class="lang-txt">Bangla</span>
@@ -162,9 +161,9 @@
                         <li class="profile-nav onhover-dropdown">
                             <div class="account-user"><i data-feather="user"></i></div>
                             <ul class="profile-dropdown onhover-show-div">
-                                <li><a href="{{ route('admin.profile') }}"><i
+                                {{-- <li><a href="{{ route('admin.profile') }}"><i
                                             data-feather="user"></i><span> {{ __('admin_local.Account')}}</span></a>
-                                </li>
+                                </li> --}}
                                 <li><a href="email_inbox.html"><i data-feather="mail"></i><span> {{ __('admin_local.Inbox')}}</span></a></li>
                                 <li><a href="edit-profile.html"><i
                                             data-feather="settings"></i><span> {{ __('admin_local.Settings')}}</span></a></li>
@@ -238,6 +237,7 @@
     <script src="{{ asset('admin/assets/js/tooltip-init.js') }}"></script>
     <script src="{{ asset('admin/assets/js/custom-card/custom-card.js') }}"></script>
     <script src="{{ asset('admin/assets/js/notify/bootstrap-notify.min.js') }}"></script>
+    {{-- <script src="{{ asset('admin/assets/js/notify/index.js') }}"></script> --}}
 
     {{-- <script src="{{ asset('admin/assets/js/dashboard/default.js') }}"></script> --}}
     {{-- <script src="{{ asset('admin/assets/js/notify/index.js') }}"></script> --}}

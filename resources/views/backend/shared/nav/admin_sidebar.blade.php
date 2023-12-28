@@ -5,23 +5,22 @@
                 >{{ __('admin_local.Dashboard') }}</span>
         </a>
     </li>
-    {{-- @if (hasPermission(['user-index','user-create','user-update','user-delete'])) --}}
-    {{-- <li class="sidebar-list">
+    @if (hasPermission(['user-index','user-create','user-update','user-delete']))
+    <li class="sidebar-list">
         <a class="sidebar-link sidebar-title" href="javascript:void(0)"
             aria-expanded="false">
             <i data-feather="user-plus"></i>
             <span class="lan-3">{{ __('admin_local.Users') }}</span>
         </a>
         <ul class="sidebar-submenu">
-
             <li>
-                <a href="{{ route('user.index') }}" class="sidebar-link">
+                <a href="{{ route('admin.user.index') }}" class="sidebar-link">
                     <span > {{ __('admin_local.User List') }} </span>
                 </a>
             </li>
         </ul>
-    </li> --}}
-    {{-- @endif --}}
+    </li>
+    @endif
 
     {{-- <li class="sidebar-list">
         <a class="sidebar-link sidebar-title" href="javascript:void(0)"
