@@ -30,11 +30,11 @@ $('#add_user_form').submit(function (e) {
                 }
                 let editButton = ''; 
                 if(datam.hasEditPermission){
-                    change_status = `<span class="mx-2">${data.status}</span><input
-                    data-status="${data.status == 'Active' ? 'Inactive' : 'Active'}"
+                    change_status = `<span class="mx-2">${data.status==1?'Active':'Inactive'}</span><input
+                    data-status="${data.status == 1 ? 0 : 1}"
                     id="status_change" type="checkbox" data-toggle="switchery"
                     data-color="green" data-secondary-color="red" data-size="small"
-                    ${data.status == 'Active' ? 'checked' : ''} />`;
+                    ${data.status == 1 ? 'checked' : ''} />`;
                     editButton = `<a data-bs-toggle="modal" style="cursor: pointer;"
                     data-bs-target="#edit-user-modal" class="text-primary"
                     id="edit_button"><i class=" fa fa-edit mx-1"></i>Edit</a>`;

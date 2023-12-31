@@ -45,12 +45,13 @@
                 </a>
             </li>
         </ul>
-    </li>
-
+    </li> --}}
+    @if (hasPermission(['role-permission-index','role-permission-create','role-permission-update','role-permission-delete']))
     <li class="sidebar-list">
-        <a class="sidebar-link sidebar-title link-nav" href="{{ route('role.index') }}"
+        <a class="sidebar-link sidebar-title link-nav" href="{{ route('admin.role.index') }}"
             aria-expanded="false"><i data-feather="home"></i><span
                 > {{ __('admin_local.Roles And Permissions') }}</span>
         </a>
-    </li> --}}
+    </li>
+    @endif
 </ul>

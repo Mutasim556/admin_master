@@ -50,7 +50,7 @@
                         <div class="form-group mb-0">
                             <div class="checkbox p-0">
                                 <input id="checkbox1" type="checkbox">
-                                <label class="text-muted" for="checkbox1">Remember password</label>
+                                <label class="text-muted" for="checkbox1">{{ __('admin_local.Remember password') }}</label>
                             </div>
                             <div class="d-flex">
                                 <div class="ms-auto">
@@ -67,13 +67,15 @@
                     </form>
                 </div>
                 <div class="login-main" id="recoverform" style="display: none;">
-                    <form class="col-12" action="index.html">
+                    <form class="col-12" action="" id="forget_password_form">
+                        @csrf
                         <!-- email -->
                         <h4 class="text-center">{{ __('admin_local.Forget Password') }}</h4>
                         <div class="form-group row">
                             <div class="col-12">
                                 <label for="forget_email">{{ __('admin_local.User Email') }}</label>
-                                <input class="form-control" id="forget_email" type="email" required="" />
+                                <input class="form-control" id="email" name="email" type="email" required="" />
+                                <span class="text-danger err-mgs"></span>
                             </div>
                         </div>
 
@@ -83,6 +85,7 @@
                                 <button class="btn d-block w-100 btn-primary text-uppercase" type="submit" name="action">
                                     {{ __('admin_local.Reset') }}
                                 </button>
+                                <div class="text-danger countdown"></div>
                             </div>
                             <div class="form-group mt-2">
                                 <div class="d-flex">
@@ -110,5 +113,10 @@
             $("#recoverform").slideUp();
             $("#loginform").fadeIn();
         });
+
+        var reset = '{{ __("admin_local.Reset") }}';
+        var wait_mgs = '{{ __("admin_local.Please Wait") }}';
     </script>
+    <script src="{{ asset('admin/assets/js/sweet-alert/sweetalert.min.js') }}"></script>
+    <script src="{{ asset('admin/custom/user/auth.js') }}"></script>
 @endpush

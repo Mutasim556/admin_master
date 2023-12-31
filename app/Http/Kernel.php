@@ -3,6 +3,7 @@
 namespace App\Http;
 
 use App\Http\Middleware\Admin\AdminLoginmiddleware;
+use App\Http\Middleware\Admin\CheckLoggedAdminStatus;
 use App\Http\Middleware\Admin\CheckLoggedInMiddleware;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
@@ -51,6 +52,7 @@ class Kernel extends HttpKernel
 
     protected $routeMiddleware = [
         'admin' => AdminLoginmiddleware::class,
+        'adminStatusCheck' => CheckLoggedAdminStatus::class,
     ];
     /**
      * The application's middleware aliases.

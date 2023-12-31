@@ -99,12 +99,19 @@ $(document).on('change','#status_change',function(){
     var status = $(this).data('status');
     var update_id = $(this).closest('tr').data('id');
     var parent_td = $(this).parent();
+    // console.log(update_id);
+    // console.log(status);
     parent_td.empty().append(`<div class="loader-box"><div class="loader-35"></div></div>`);
     $.ajax({
-        type: "get",
+        type: "GET",
         url: 'user/update/status/'+update_id+"/"+status,
+        dataType: 'JSON',
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
         success: function (data) {
-            parent_td.empty().append(`<span class="mx-2">${data.status}</span><input data-status="${data.status=='Active'?'Inactive':'Active'}" id="status_change" type="checkbox" data-toggle="switchery" data-color="green"  data-secondary-color="red" data-size="small" ${data.status=='Active'?'checked':''} />`);
+            console.log(update_id);
+            parent_td.empty().append(`<span class="mx-2">${data.status==1?'Active':'Inactive'}</span><input data-status="${data.status==1?0:1}" id="status_change" type="checkbox" data-toggle="switchery" data-color="green"  data-secondary-color="red" data-size="small" ${data.status==1?'checked':''} />`);
             new Switchery(parent_td.find('input')[0], parent_td.find('input').data());
         },
         error: function (err) {

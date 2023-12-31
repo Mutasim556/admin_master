@@ -28,8 +28,8 @@ class DatabaseSeeder extends Seeder
             // $admin->password = Hash::make('admin');
             // $admin->save();
 
-        // $this->call(PermissionSeeder::class);
-        $this->call(RoleSeeder::class);
-        $this->call(AdminSeeder::class);
+        $this->call(PermissionSeeder::class);
+        // $this->call(RoleSeeder::class);
+        // $this->call(AdminSeeder::class);
     }
 }

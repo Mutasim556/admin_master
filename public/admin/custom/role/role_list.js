@@ -36,16 +36,28 @@ $('#add_role_form').submit(function (e) {
                 $.each(datam.permissions,function(idx,val){
                     permission = permission+'<span class="badge badge-success">'+val.name+'</span>';
                 });
+                if(datam.hasAnyPermission){
+
+                }
+                let delete_option = '';
+                let edit_option = '';
+                let action_option = '';
+                if(datam.hasEditPermission){
+                    edit_option = `<button id="edit_button" data-bs-toggle="modal" style="cursor: pointer;" data-bs-target="#edit-role-modal" class="btn btn-primary px-2 py-1"><i class="fa fa-pencil-square-o"></i></button>`;
+                }
+                if(datam.hasDeletePermission){
+                    delete_option = `<button id="delete_button" class="btn btn-danger px-2 py-1"><i class="fa fa-trash"></i></button>`;
+                }
+                if(datam.hasAnyPermission){
+                    action_option = edit_option+" "+delete_option;
+                }
                 $('#basic-1 tbody').append(`<tr id="tr-${data.id}" data-id="${data.id}">
                     <td>${data.id}</td>
                     <td>${data.name}</td>
                     <td>
                         ${permission.length>0?permission:'<span class="badge badge-danger">no permission</span>'}
                     </td>
-                    <td>
-                        <button id="edit_button" data-bs-toggle="modal" style="cursor: pointer;" data-bs-target="#edit-role-modal" class="btn btn-primary px-2 py-1"><i class="fa fa-pencil-square-o"></i></button>
-                        <button id="delete_button" class="btn btn-danger px-2 py-1"><i class="fa fa-trash"></i></button>
-                    </td>
+                    <td>${action_option}</td>
                 </tr>`)
                 new Switchery($('#tr-'+data.id).find('input')[0], $('#tr-'+data.id).find('input').data());
             });
@@ -59,7 +71,7 @@ $('#add_role_form').submit(function (e) {
                 $(this).empty();
             })
             $.each(err.responseJSON.errors,function(idx,val){
-                $('#add_role_form #'+idx).addClass('border-danger is-invalid')
+                $('#add_role_form #'+idx).addClass('border-danger is-invalid') 
                 $('#add_role_form #'+idx).next('.err-mgs').empty().append(val);
             })
         }
@@ -70,7 +82,7 @@ $(document).on('click','#edit_button',function(){
     let edit_id = $(this).closest('tr').data('id');
     $.ajax({
         method : 'get',
-        url : 'role/edit/'+edit_id,
+        url : 'role/'+edit_id+"/edit",
         success :function(data){
             $('#edit_role_form #role_name').val(data.role.name);
             $('#edit_role_form #role_id').val(data.role.id);
@@ -99,6 +111,18 @@ $(document).on('click','#edit_button',function(){
         error : function(err){
             $('button[type=submit]', '#edit_role_form').html('Submit');
             $('button[type=submit]', '#edit_role_form').removeClass('disabled');
+            var err_message = err.responseJSON.message.split("(");
+            if(err.status===403){
+                swal({
+                    icon: "warning",
+                    title: "Warning !",
+                    text: err_message[0],
+                    confirmButtonText: "Ok",
+                }).then(function(){
+                    $('button[type=button]', '#edit_role_form').click();
+                });
+                
+            }
             $('#edit_role_form .err-mgs').each(function(id,val){
                 $(this).prev('input').removeClass('border-danger is-invalid')
                 $(this).prev('textarea').removeClass('border-danger is-invalid')
@@ -120,7 +144,7 @@ $('#edit_role_form').submit(function (e) {
     var trid = '#tr-'+$('#role_id', this).val();
     $.ajax({
         type: "put",
-        url: 'role/update/' + $('#role_id', this).val(),
+        url: 'role/' + $('#role_id', this).val(),
         data: $(this).serialize(),
         dataType: 'JSON',
         headers: {
@@ -139,9 +163,9 @@ $('#edit_role_form').submit(function (e) {
             $('td:nth-child(3)',trid).html(permission.length>0?permission:'<span class="badge badge-danger">no permission</span>');
             swal({
                 icon: "success",
-                title: "Congratulations !",
-                text: 'role data updated suvccessfully',
-                confirmButtonText: "Ok",
+                title: data.title,
+                text: data.text,
+                confirmButtonText: data.confirmButtonText,
             }).then(function () {
                 $('#edit_role_form .err-mgs').each(function(id,val){
                     $(this).prev('input').removeClass('border-danger is-invalid')
@@ -182,7 +206,7 @@ $(document).on('click','#delete_button',function(){
         if (willDelete) {
             $.ajax({
                 type: "delete",
-                url: 'role/delete/'+delete_id,
+                url: 'role/'+delete_id,
                 data: {
                     _token : $("input[name=_token]").val(),
                 },
@@ -197,12 +221,25 @@ $(document).on('click','#delete_button',function(){
                     });
                 },
                 error: function (err) {
-                    swal({
-                        icon: err.responseJSON.status,
-                        title:  err.responseJSON.title,
-                        text:  err.responseJSON.text,
-                        confirmButtonText:  err.responseJSON.confirmTextButton,
-                    });
+                    var err_message = err.responseJSON.message.split("(");
+                    if(err.status===403){
+                        swal({
+                            icon: "warning",
+                            title: "Warning !",
+                            text: err_message[0],
+                            confirmButtonText: "Ok",
+                        }).then(function(){
+                            $('button[type=button]', '#edit_user_form').click();
+                        });
+                        
+                    }else{
+                        swal({
+                            icon: "warning",
+                            title: "Warning !",
+                            text: err_message[0],
+                            confirmButtonText: "Ok",
+                        });
+                    }
                 }
             });
            

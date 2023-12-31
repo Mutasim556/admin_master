@@ -318,5 +318,5 @@
         var form_url = "{{ route('admin.user.store') }}";
     </script>
     <script src="{{ asset('admin/custom/user/create_user.js') }}"></script>
-    <script src="{{ asset('admin/custom/user/user_list.js') }}"></script>
+    <script src="{{ asset('admin/custom/user/user_list.js') }}"></script> 
 @endpush
