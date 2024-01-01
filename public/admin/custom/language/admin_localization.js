@@ -62,3 +62,37 @@ $('#edit_string_form').submit(function (e) {
         }
     });
 });
+
+
+//update api key
+$('#edit_apikey_form').submit(function(e){
+    e.preventDefault();
+    $('button[type=submit]', this).html(updating+'....');
+    $('button[type=submit]', this).addClass('disabled');
+    $.ajax({
+        type: "POST",
+        url: 'language/store/apikey',
+        data: $(this).serialize(),
+        dataType: 'JSON',
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        success: function (data) {
+            $('button[type=submit]', '#edit_apikey_form').html(update_btn);
+            $('button[type=submit]', '#edit_apikey_form').removeClass('disabled');
+            swal({
+                icon: "success",
+                title: data.title,
+                text: data.text,
+                confirmButtonText: data.confirmButtonText,
+            }).then(function(){
+                $('button[type=button]', '#edit_apikey_form').click();
+            });
+            
+        },
+        error : function (err){
+            $('button[type=submit]', '#edit_apikey_form').html(update_btn);
+            $('button[type=submit]', '#edit_apikey_form').removeClass('disabled');
+        }
+    });
+});

@@ -29,7 +29,7 @@
         </a>
     </li>
     @endif
-    @if (hasPermission(['language-index','language-create','language-update','language-delete']))
+    @if (hasPermission(['language-index','language-create','language-update','language-delete','backend-string-index']))
     <li class="sidebar-list">
         <a class="sidebar-link sidebar-title" href="javascript:void(0)"
             aria-expanded="false">
@@ -44,16 +44,14 @@
                 </a>
             </li>
             @endif
+            
+            @if (hasPermission(['backend-string-index']))
             <li>
                 <a href="{{ route('admin.backend.language.index') }}" class="sidebar-link">
                     <span > {{ __('admin_local.Backed Language') }} </span>
                 </a>
             </li>
-            {{-- <li>
-                <a href="" class="sidebar-link">
-                    <span > {{ __('admin_local.Frontend Language') }} </span>
-                </a>
-            </li> --}}
+            @endif
         </ul>
     </li>
     @endif

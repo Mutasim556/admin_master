@@ -17,7 +17,7 @@ class AdminLoginmiddleware
     public function handle(Request $request, Closure $next): Response
     {
         if(!Auth::guard('admin')->check()){
-            return to_route('admin.login')->with('login_first','Please Login First !');
+            return to_route('admin.login')->with('login_first',__('admin_local.Please Login First !'));
         }
         return $next($request);
     }

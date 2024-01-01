@@ -46,6 +46,7 @@ Route::prefix('admin')->name('admin.')->group(function(){
         Route::resource('backend/language',BackendLanguageController::class,['as'=>'backend'])->except(['craete','show','edit','distroy']);
         Route::controller(BackendLanguageController::class)->name('backend.language.')->prefix('backend/language')->group(function () {
             Route::post('/store/translate/string', 'storeTranslateString')->name('storeTranslateString');
+            Route::post('/store/apikey', 'storeApikey')->name('storeApikey');
         });
         Route::get('/change/language/{lang}',ChangeLanguageController::class)->name('changeLanguage');
     });

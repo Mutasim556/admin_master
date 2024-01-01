@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\Localization;
 
 use App\Http\Controllers\Controller;
+use App\Models\Admin\ApiKey;
 use App\Models\Admin\Language;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -17,10 +18,19 @@ class BackendLanguageController extends Controller
     /**
      * Display a listing of the resource.
      */
+    public function __construct()
+    {
+        $this->middleware('permission:backend-string-index,admin')->only('index');
+        $this->middleware('permission:backend-string-generate,admin')->only('store');
+        $this->middleware('permission:backend-string-translate,admin')->only('storeTranslateString');
+        $this->middleware('permission:backend-string-update,admin')->only('update');
+        $this->middleware('permission:backend-api-accesskey,admin')->only('storeApikey');
+    }
     public function index()
     {
         $languages = Language::where('delete', 0)->get();
-        return view('backend.blade.language.backend_language', compact('languages'));
+        $api_key = ApiKey::first();
+        return view('backend.blade.language.backend_language', compact('languages','api_key'));
     }
 
     /**
@@ -112,19 +122,27 @@ class BackendLanguageController extends Controller
     }
 
     public function storeTranslateString(Request $data) : RedirectResponse {
+        $api_key =ApiKey::first();
+        if(!$api_key){
+            return back()->with('no_api_key',__("admin_local.No api key . Please insert a valid Microsoft Translate Api Key first"));
+        }
         $languageCode = $data->lang;
         $languageStrings = trans($data->file_name, [], $data->lang);
         $keyString = array_keys($languageStrings);
         $keyText = implode(' || ', $keyString);
         $response  = Http::withHeaders([
             'X-RapidAPI-Host' => 'microsoft-translator-text.p.rapidapi.com',
-            'X-RapidAPI-Key' => 'fdd77a90f3msh8a9f787264252d4p1cb68ejsn41d6ad25230e',
+            // 'X-RapidAPI-Key' => 'fdd77a90f3msh8a9f787264252d4p1cb68ejsn41d6ad25230e',
+            'X-RapidAPI-Key' => $api_key->api_key,
             'content-type' => 'application/json',
         ])->post('https://microsoft-translator-text.p.rapidapi.com/translate?to%5B0%5D=' . $languageCode . '&api-version=3.0&profanityAction=NoAction&textType=plain', [
             [
                 "Text" => $keyText
             ]
         ]);
+        if($response->status()===403){
+            return back()->with('no_api_key',__("admin_local.Invalid Api Key ! Please insert the correct one"));
+        }
         $translatedText = json_decode($response->body())[0]->translations[0]->text;
         $translatedString = explode(' || ', $translatedText);
         $updatedArray = array_combine($keyString, $translatedString);
@@ -132,7 +150,25 @@ class BackendLanguageController extends Controller
         $phpArray = "<?php\n\nreturn " . var_export($updatedArray, true) . ";\n";
         file_put_contents(lang_path($data->lang . '/' . $data->file_name . '.php'), $phpArray);
 
-        return back();
+        return back()->with('success_translate',__("admin_local.Translation successfully done"));
+    }
+
+    public function storeApikey(Request $data) : Response {
+        $key = ApiKey::count();
+        if($key<1){
+            $new_key = new ApiKey();
+            $new_key->api_key = $data->api_key;
+            $new_key->save();
+        }else{
+            $new_key = ApiKey::findOrFail(1);
+            $new_key->api_key = $data->api_key;
+            $new_key->save();
+        }
+        return response([
+            'title'=>__('admin_local.Congratulations !'),
+            'text'=>__('admin_local.Api key updated successfully.'),
+            'confirmButtonText'=>__('admin_local.Ok'),
+        ]);
     }
 
     /**

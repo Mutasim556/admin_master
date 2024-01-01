@@ -58,7 +58,7 @@ class LanguageController extends Controller
         return response()->json([
             'language' => $language,
             'title'=>__('admin_local.Congratulations !'),
-            'text'=>__('admin_local.Language create suvccessfully.'),
+            'text'=>__('admin_local.Language create successfully.'),
             'confirmButtonText'=>__('admin_local.Ok'),
             'hasAnyPermission' => hasPermission(['language-update','language-delete']),
             'hasEditPermission' => hasPermission(['language-update']),

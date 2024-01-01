@@ -24,6 +24,52 @@
     </style>
 @endpush
 @section('content')
+    {{-- Add apikey Modal Start --}}
+
+    <div class="modal fade" id="edit-apikey-modal" tabindex="-1" aria-labelledby="bs-example-modal-lg" aria-hidden="true">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <div class="modal-header d-flex align-items-center" style="border-bottom:1px dashed gray">
+                    <h4 class="modal-title" id="myLargeModalLabel">
+                        {{ __('admin_local.Update Api Key') }}
+                    </h4>
+                    <button type="button" class="btn-close " data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <p class="px-3 text-danger"><i>{{ __('admin_local.The field labels marked with * are required input fields.') }}</i>
+                </p>
+                <div class="modal-body" style="margin-top: -20px">
+                    <form action="" id="edit_apikey_form">
+                        @csrf
+                        <div class="row">
+                            <div class="col-lg-12 mt-2">
+                                <label for="api_key"><strong>{{ __('admin_local.Microsoft Translate Api Key') }} *</strong></label>
+                                <textarea rows="5" class="form-control" name="api_key" id="api_key">{{ $api_key?$api_key->api_key:"" }}</textarea>
+                                <span class="text-danger err-mgs"></span>
+                            </div>
+                        </div>
+
+                        <div class="row mt-4 mb-2">
+                            <div class="form-group col-lg-12">
+                                <button class="btn btn-danger text-white font-weight-medium waves-effect text-start"
+                                    data-bs-dismiss="modal" style="float: right" type="button">{{ __('admin_local.Close') }}</button>
+                                <button class="btn btn-primary mx-2" style="float: right"
+                                    type="submit">{{ __('admin_local.Update') }}</button>
+                            </div>
+
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+
+    {{-- Add apikey Modal End --}}
+
+
+
     {{-- Edit String Modal Start --}}
 
     <div class="modal fade" id="edit-string-modal" tabindex="-1" aria-labelledby="bs-example-modal-lg" aria-hidden="true">
@@ -106,6 +152,14 @@
                     </div>
 
                     <div class="card-body">
+                        @if (hasPermission(['backend-api-accesskey']))
+                        <div class="row mb-3">
+                            <div class="col-md-12 text-right">
+                                <button class="btn btn-info" style="float: right;" type="btn" data-bs-toggle="modal"
+                                    data-bs-target="#edit-apikey-modal">+  {{ __('admin_local.Add Api Key')}}</button>
+                            </div>
+                        </div>
+                        @endif
                         <ul class="nav nav-tabs nav-primary" id="pills-warningtab" role="tablist">
                             @foreach ($languages as $language)
                                 <li class="nav-item"><a
@@ -128,15 +182,18 @@
                                     id="{{ $language->name }}" role="tabpanel"
                                     aria-labelledby="{{ $language->name }}-tab">
                                     <div class="row">
+                                        @if (hasPermission(['backend-string-generate']))
                                         <div class="col-md-3">
                                             <form method="POST" action="{{ route('admin.backend.language.store') }}">
                                                 @csrf
-                                                <input type="hidden" value="{{ resource_path('views/backend') }},{{ app_path('Http/Controllers/Admin') }}" name="directory">
+                                                <input type="hidden" value="{{ resource_path('views/backend') }},{{ app_path('Http/Controllers/Admin') }},{{ app_path('Http/Middleware/Admin') }}" name="directory">
                                                 <input type="hidden" value="admin_local" name="file_name">
                                                 <input type="hidden" value="{{ $language->lang }}" name="lang">
                                                 <button type="submit" class="btn btn-success m-t-30"> {{ __('admin_local.Generate String')}}</button>
                                             </form>
                                         </div>
+                                        @endif
+                                        @if (hasPermission(['backend-string-translate']))
                                         <div class="col-md-3">
                                             <form method="POST" action="{{ route('admin.backend.language.storeTranslateString') }}">
                                                 @csrf
@@ -145,6 +202,7 @@
                                                 <button type="submit" class="btn btn-dark m-t-30"> {{ __('admin_local.Translate String')}}</button>
                                             </form>
                                         </div>
+                                        @endif
                                     </div>
                                     <div class="table-responsive theme-scrollbar mb-0 m-t-30">
                                         <table class="display table-bordered dataTable">
@@ -154,7 +212,7 @@
                                                     <th>{{ __('admin_local.Traslation') }}</th>
                                                     <th>{{ __('admin_local.Action') }}</th>
                                                 </tr>
-                                            </thead>
+                                            </thead> 
                                             <tbody>
                                                 @php
                                                     $translatedvalue = trans('admin_local', [], $language->lang);
@@ -165,10 +223,14 @@
                                                         <td>{{ $key }}</td>
                                                         <td>{{ $value }}</td>
                                                         <td class="text-center">
+                                                            @if (hasPermission(['backend-string-update']))
                                                             <button id="edit_button" data-key="{{ $key }}" data-value="{{ $value }}" data-lang_code="{{ $language->lang }}" data-filename="admin_local" class="btn btn-danger px-2 py-1" data-bs-toggle="modal" style="cursor: pointer;"
                                                             data-bs-target="#edit-string-modal">
                                                                 <i class="fa fa-pencil-square-o"></i> 
                                                             </button>
+                                                            @else
+                                                            <span class="badge badge-danger">{{ __('admin_local.No Permission') }}</span>
+                                                            @endif
                                                         </td>
                                                     </tr>
                                                 @endforeach
@@ -215,6 +277,61 @@
         })
 
         var form_url = "{{ route('admin.backend.language.store') }}";
+        var updating = "{{ __('admin_local.Updating') }}"
+        var update_btn = "{{ __('admin_local.Update') }}"
     </script>
     <script src="{{ asset('admin/custom/language/admin_localization.js') }}"></script>
+
+    <script>
+        function invalidApiKey(x) {
+            $.notify(
+                '<i class="fa fa-close"></i><strong> &nbsp;&nbsp;'+x+'</strong>', {
+                    type: 'danger',
+                    allow_dismiss: true,
+                    delay: 3000,
+                    showProgressbar: true,
+                    timer: 300,
+                    placement: {
+                        from: 'bottom',
+                        align: 'center'
+                    },
+                    animate: {
+                        enter: 'animated zoomInUp',
+                        exit: 'animated zoomOutDown'
+                    }
+                });
+        };
+        function successTranslate(x) {
+            $.notify(
+                '<i class="fa fa-check-square-o"></i><strong> &nbsp;&nbsp;'+x+'</strong>', {
+                    type: 'success',
+                    allow_dismiss: true,
+                    delay: 3000,
+                    showProgressbar: true,
+                    timer: 300,
+                    placement: {
+                        from: 'top',
+                        align: 'right'
+                    },
+                    animate: {
+                        enter: 'animated bounceIn',
+                        exit: 'animated bounceDown'
+                    }
+                });
+        };
+    </script>
+    @if(Session::has('no_api_key'))
+    <script>
+        $(document).ready(function(){
+            invalidApiKey('{{ session()->get("no_api_key") }}');
+        });
+    </script>
+    @endif
+    @if(Session::has('success_translate'))
+    <script>
+        $(document).ready(function(){
+            successTranslate('{{ session()->get("success_translate") }}');
+        });
+    </script>
+    @endif
 @endpush
