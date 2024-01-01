@@ -24,4 +24,5 @@ function generateRandomString(){
 
 function LoggedAdmin(){
     return Auth::guard('admin')->user();
+    
 }
