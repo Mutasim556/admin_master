@@ -19,7 +19,7 @@ $('#edit_string_form').submit(function (e) {
     var trid = $('#edit_string_form #trid').val();
     $.ajax({
         type: "post",
-        url: 'update-admin-localization-string',
+        url: 'language/'+$('#lang_code', this).val(),
         data: $(this).serialize(),
         dataType: 'JSON',
         headers: {
@@ -31,9 +31,9 @@ $('#edit_string_form').submit(function (e) {
             $('button[type=submit]', '#edit_string_form').removeClass('disabled');
             swal({
                 icon: "success",
-                title: "Congratulations !",
-                text: 'Localization data updated suvccessfully',
-                confirmButtonText: "Ok",
+                title: data.title,
+                text: data.text,
+                confirmButtonText: data.confirmButtonText,
             }).then(function () {
                 $('td:nth-child(3) #edit_button','#'+trid).data('value',data.value)
                 $('td:nth-child(2)','#'+trid).html(data.value);

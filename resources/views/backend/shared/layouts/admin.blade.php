@@ -141,7 +141,7 @@
                                     <div class="lang"><i data-feather="globe"></i></div>
                                 </div>
                                 <div class="more_lang">
-                                    {{-- @php
+                                    @php
                                         $languages = DB::table('languages')
                                             ->where([['status', 1], ['delete', 0]])
                                             ->get();
@@ -150,7 +150,7 @@
                                         <div class="lang {{ getLanguageSession()==$language->lang?'selected':'' }}" onclick="change_lang('{{ $language->lang }}')">
                                             <span class="lang-txt">{{ $language->name }}</span>
                                         </div>
-                                    @endforeach --}}
+                                    @endforeach
 
                                     {{-- <div class="lang selected" onclick="change_lang('bn')"><i
                                             class="flag-icon flag-icon-bd"></i><span class="lang-txt">Bangla</span>
@@ -161,9 +161,9 @@
                         <li class="profile-nav onhover-dropdown">
                             <div class="account-user"><i data-feather="user"></i></div>
                             <ul class="profile-dropdown onhover-show-div">
-                                {{-- <li><a href="{{ route('admin.profile') }}"><i
+                                <li><a href="{{ route('admin.profile') }}"><i
                                             data-feather="user"></i><span> {{ __('admin_local.Account')}}</span></a>
-                                </li> --}}
+                                </li>
                                 <li><a href="email_inbox.html"><i data-feather="mail"></i><span> {{ __('admin_local.Inbox')}}</span></a></li>
                                 <li><a href="edit-profile.html"><i
                                             data-feather="settings"></i><span> {{ __('admin_local.Settings')}}</span></a></li>
@@ -259,7 +259,7 @@
         function change_lang(x) {
             $.ajax({
                 type: "get",
-                url: '/change-admin-language/' + x,
+                url: window.location.origin+"/admin/change/language/" + x,
                 success: function(data) {
                     window.location.reload();
                 },

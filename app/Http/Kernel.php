@@ -5,6 +5,7 @@ namespace App\Http;
 use App\Http\Middleware\Admin\AdminLoginmiddleware;
 use App\Http\Middleware\Admin\CheckLoggedAdminStatus;
 use App\Http\Middleware\Admin\CheckLoggedInMiddleware;
+use App\Http\Middleware\LanguageChangeMiddleware;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -39,6 +40,7 @@ class Kernel extends HttpKernel
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            LanguageChangeMiddleware::class,
         ],
 
         'api' => [

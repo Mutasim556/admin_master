@@ -30,7 +30,7 @@ $('#add_language_form').submit(function (e) {
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },
-        success: function (data) {
+        success: function (res) {
             $('button[type=submit]', '#add_language_form').html('Submit');
             $('button[type=submit]', '#add_language_form').removeClass('disabled');
             swal({
@@ -42,34 +42,52 @@ $('#add_language_form').submit(function (e) {
                 timer: 1500,
             }).then(function () {
                 // $('#add_language_form').trigger('reset');
+                let data = res.language;
+
+                let lang_status = `<span class="badge badge-danger">No Permision</span>`;
+                if(res.hasEditPermission){
+                    lang_status = ` <span class="mx-2">${data.status==0?'Inactive':'Active'}</span><input
+                    data-status="${data.status == 1 ? 0 : 1}"
+                    id="status_change" type="checkbox" data-toggle="switchery"
+                    data-color="green" data-secondary-color="red" data-size="small"
+                    ${data.status == 1 ? 'checked' : ''} />`;
+                }
+                let lang_edit = '';
+                let lang_delete = '';
+                let lang_action = `<span class="badge badge-danger">No Permision</span>`;
+                if(res.hasEditPermission){
+                    lang_edit = ` <a data-bs-toggle="modal" style="cursor: pointer;"
+                    data-bs-target="#edit-language-modal" class="text-primary"
+                    id="edit_button"><i class=" fa fa-edit mx-1"></i>Edit</a>`;
+                }
+                if(res.hasDeletePermission){
+                    lang_delete = ` <a class="text-danger" id="delete_button"
+                    style="cursor: pointer;"><i class="fa fa-trash mx-1"></i>
+                    Delete</a>`;
+                }
+                if(res.hasAnyPermission){
+                    lang_action = `<div class="dropdown">
+                        <button
+                            class="btn btn-info text-white px-2 py-1 dropbtn">Action
+                            <i class="fa fa-angle-down"></i></button>
+                        <div class="dropdown-content">
+                            ${lang_edit}
+
+                            ${lang_delete}
+                        </div>
+                    </div>`;
+                }
+
                 $('button[type=button]', '#add_language_form').click();
                 $('#basic-1 tbody').append(`<tr id="tr-${data.id}" data-id="${data.id}">
                     <td>${data.name}</td>
                     <td>${data.slug}</td>
                     <td>${data.default==1?'<span class="badge badge-success">Yes</span>':'<span class="badge badge-danger">No</span>'}</td>
                     <td class="text-center">
-                        <span class="mx-2">${data.status==0?'Inactive':'Active'}</span><input
-                            data-status="${data.status == 1 ? 0 : 1}"
-                            id="status_change" type="checkbox" data-toggle="switchery"
-                            data-color="green" data-secondary-color="red" data-size="small"
-                            ${data.status == 1 ? 'checked' : ''} />
+                       ${lang_status}
                     </td>
-                    <td>
-                        <div class="dropdown">
-                            <button
-                                class="btn btn-info text-white px-2 py-1 dropbtn">Action
-                                <i class="fa fa-angle-down"></i></button>
-                            <div class="dropdown-content">
-                                <a data-bs-toggle="modal" style="cursor: pointer;"
-                                    data-bs-target="#edit-language-modal" class="text-primary"
-                                    id="edit_button"><i class=" fa fa-edit mx-1"></i>Edit</a>
-
-                                <a class="text-danger" id="delete_button"
-                                    style="cursor: pointer;"><i class="fa fa-trash mx-1"></i>
-                                    Delete</a>
-                            </div>
-                        </div>
-
+                    <td class="text-center">
+                        ${lang_action}
                     </td>
                 </tr>`)
                 new Switchery($('#tr-'+data.id).find('input')[0], $('#tr-'+data.id).find('input').data());

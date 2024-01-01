@@ -20,9 +20,15 @@ class PermissionSeeder extends Seeder
         // Permission::create(['guard_name'=>'admin','name'=>'user-delete','group_name'=>'User Permissions']);
 
         //permission for role
-        Permission::create(['guard_name'=>'admin','name'=>'role-permission-index','group_name'=>'Roles And Permissions']);
-        Permission::create(['guard_name'=>'admin','name'=>'role-permission-create','group_name'=>'Roles And Permissions']);
-        Permission::create(['guard_name'=>'admin','name'=>'role-permission-update','group_name'=>'Roles And Permissions']);
-        Permission::create(['guard_name'=>'admin','name'=>'role-permission-delete','group_name'=>'Roles And Permissions']);
+        // Permission::create(['guard_name'=>'admin','name'=>'role-permission-index','group_name'=>'Roles And Permissions']);
+        // Permission::create(['guard_name'=>'admin','name'=>'role-permission-create','group_name'=>'Roles And Permissions']);
+        // Permission::create(['guard_name'=>'admin','name'=>'role-permission-update','group_name'=>'Roles And Permissions']);
+        // Permission::create(['guard_name'=>'admin','name'=>'role-permission-delete','group_name'=>'Roles And Permissions']);
+
+        //permission for language
+        Permission::create(['guard_name'=>'admin','name'=>'language-index','group_name'=>'Language Permissions']);
+        Permission::create(['guard_name'=>'admin','name'=>'language-create','group_name'=>'Language Permissions']);
+        Permission::create(['guard_name'=>'admin','name'=>'language-update','group_name'=>'Language Permissions']);
+        Permission::create(['guard_name'=>'admin','name'=>'language-delete','group_name'=>'Language Permissions']);
     }
 }

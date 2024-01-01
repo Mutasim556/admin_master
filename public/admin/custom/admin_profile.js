@@ -23,7 +23,7 @@ $('#update_basic_info_form').on("submit", function (e) {
     $('#update_basic_info_button').html('Updating profile info ......');
     $.ajax({
         type: 'POST',
-        url: '/update-basic-info',
+        url: 'update-basic-info',
         data: $(this).serialize(),
         headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
         dataType: 'JSON',
@@ -62,7 +62,7 @@ $('#change_password_form').on("submit", function (e) {
     $('#update_password_button').html('Updating password ......');
     $.ajax({
         type: 'POST',
-        url: '/update-password',
+        url: 'update-password',
         data: $(this).serialize(),
         headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
         dataType: 'JSON',

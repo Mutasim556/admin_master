@@ -21,37 +21,41 @@
         </ul>
     </li>
     @endif
-
-    {{-- <li class="sidebar-list">
+    @if (hasPermission(['role-permission-index','role-permission-create','role-permission-update','role-permission-delete']))
+    <li class="sidebar-list">
+        <a class="sidebar-link sidebar-title link-nav" href="{{ route('admin.role.index') }}"
+            aria-expanded="false"><i data-feather="unlock"></i><span
+                > {{ __('admin_local.Roles And Permissions') }}</span>
+        </a>
+    </li>
+    @endif
+    @if (hasPermission(['language-index','language-create','language-update','language-delete']))
+    <li class="sidebar-list">
         <a class="sidebar-link sidebar-title" href="javascript:void(0)"
             aria-expanded="false">
             <i data-feather="slack"></i>
             <span class="lan-3">{{ __('admin_local.Language') }}</span>
         </a>
         <ul class="sidebar-submenu">
+            @if (hasPermission(['language-index','language-create','language-update','language-delete']))
             <li>
-                <a href="{{ route('language.index') }}" class="sidebar-link">
+                <a href="{{ route('admin.language.index') }}" class="sidebar-link">
                     <span > {{ __('admin_local.Language List') }} </span>
                 </a>
             </li>
+            @endif
             <li>
-                <a href="{{ route('language.admin_language') }}" class="sidebar-link">
-                    <span > {{ __('admin_local.Admin Language') }} </span>
+                <a href="{{ route('admin.backend.language.index') }}" class="sidebar-link">
+                    <span > {{ __('admin_local.Backed Language') }} </span>
                 </a>
             </li>
-            <li>
+            {{-- <li>
                 <a href="" class="sidebar-link">
                     <span > {{ __('admin_local.Frontend Language') }} </span>
                 </a>
-            </li>
+            </li> --}}
         </ul>
-    </li> --}}
-    @if (hasPermission(['role-permission-index','role-permission-create','role-permission-update','role-permission-delete']))
-    <li class="sidebar-list">
-        <a class="sidebar-link sidebar-title link-nav" href="{{ route('admin.role.index') }}"
-            aria-expanded="false"><i data-feather="home"></i><span
-                > {{ __('admin_local.Roles And Permissions') }}</span>
-        </a>
     </li>
     @endif
+   
 </ul>

@@ -1,6 +1,8 @@
 <?php
 
+use App\Models\Admin\Language;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cookie;
 
 function userRoleName(){
     return auth()->guard('admin')->user()->getRoleNames()->first();
@@ -24,5 +26,23 @@ function generateRandomString(){
 
 function LoggedAdmin(){
     return Auth::guard('admin')->user();
-    
+}
+
+function setLanguage(string $lang) : void{
+    Cookie::queue('language', $lang, 10);
+    // session(['language'=>$code]);
+}
+function getLanguageSession() : string {
+    if(Cookie::get('language') !== null){
+        return Cookie::get('language');
+    }else{
+        try {
+            $language = Language::where('default',1)->first();
+            setLanguage($language->lang);
+            return $language->lang;
+        } catch (\Throwable $th) {
+            setLanguage('en');
+            return Cookie::get('language');
+        }
+    }
 }
