@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\Role;
 
 use App\Http\Controllers\Controller;
+use App\Models\Admin;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -21,12 +22,14 @@ class RoleAndPermissionController extends Controller
         $this->middleware('permission:role-permission-create,admin')->only('store');
         $this->middleware('permission:role-permission-update,admin')->only(['edit','update']);
         $this->middleware('permission:role-permission-delete,admin')->only('destroy');
+        $this->middleware('permission:specific-permission-create,admin')->only(['getUserPermission','giveUserPermission']);
     }
     public function index() : View
     {
         $roles = Role::all();
         $permissions = Permission::all()->groupBy('group_name');
-        return view('backend.blade.role.index',compact('roles','permissions'));
+        $users = Admin::where([['delete',0],['status',1]])->get();
+        return view('backend.blade.role.index',compact('roles','permissions','users'));
     }
 
     /**
@@ -119,5 +122,34 @@ class RoleAndPermissionController extends Controller
         }
         $role->delete();
         return response(['title'=>__('admin_local.Congratulations !'),'text'=>__('admin_local.Role removed successfully') ,'confirmTextButton'=>__('admin_local.Ok')],200);
+    }
+
+
+
+    //custom methods
+    public function getUserPermission(string $id) : Response {
+        $user = Admin::findOrFail($id);
+        $permissions = Permission::all()->groupBy('group_name');
+        $userPermissions = $user->permissions;
+        $userPermissions = $user->permissions->pluck('name')->toArray();;
+        return response([
+            'user'=>$user,
+            'permissions'=>$permissions,
+            'userPermissions'=>$userPermissions,
+        ]);
+    }
+
+    public function giveUserPermission(Request $data){
+        
+        $user = Admin::findOrFail($data->user_id);
+        // $user->update(['guard_name' => 'admin', 'name' => $data->role_name]);
+        $user->syncPermissions($data->permissions);
+
+        return response([
+            'title'=>__('admin_local.Congratulations !'),
+            'text'=>__('admin_local.Permission assiened successfully'),
+            'confirmButtonText'=>__('admin_local.Ok'),
+        ]);
+        
     }
 }

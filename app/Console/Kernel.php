@@ -2,8 +2,10 @@
 
 namespace App\Console;
 
+use App\Mail\Test\testMail;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Illuminate\Support\Facades\Mail;
 
 class Kernel extends ConsoleKernel
 {
@@ -13,6 +15,10 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         // $schedule->command('inspire')->hourly();
+        // $schedule->call(function(){
+        //     Mail::to('admin@admin.com')->send(new testMail());
+        // })->everyFifteenSeconds();
+        // $schedule->command('custom:task')->everyFifteenSeconds();
     }
 
     /**

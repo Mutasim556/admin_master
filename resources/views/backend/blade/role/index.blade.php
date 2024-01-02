@@ -124,7 +124,7 @@
                                 <span class="text-danger err-mgs"></span>
                             </div>
                             <div id="edit_permission">
-                               <span>Getting Permissons ...... <i class="fa fa-spinner fa-spin" ></i></span>
+                               <span>{{ __('admin_local.Getting Permissons') }} ...... <i class="fa fa-spinner fa-spin" ></i></span>
                             </div>
 
                         </div>
@@ -151,6 +151,67 @@
 
     {{-- Add role Modal End --}}
 
+    {{-- Add permission to specific user Modal start--}}
+
+    <div class="modal fade" id="add-specific-user-permission-modal" tabindex="-1" aria-labelledby="bs-example-modal-lg" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header d-flex align-items-center" style="border-bottom:1px dashed gray">
+                    <h4 class="modal-title" id="myLargeModalLabel">
+                        {{ __('admin_local.Add Specific Permission') }}
+                    </h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <p class="px-3 text-danger"><i>{{ __('admin_local.The field labels marked with * are required input fields.') }}</i>
+                </p>
+                <div class="modal-body" style="margin-top: -20px">
+                    <form action="" id="add_specific_user_permission_form">
+                        @csrf
+                        <div class="row">
+                            <div class="col-lg-12 mt-2">
+                                <label for="user_id"><strong>{{ __('admin_local.Select User') }} *</strong></label>
+                                <select class="form-control js-example-basic-single3" name="user_id" id="user_id">
+                                    <option value="">{{ __('admin_local.Select Please') }}</option>
+                                    @foreach ($users as $user)
+                                        @php
+                                            if($user->getRoleNames()->first()=='Super Admin'){
+                                                continue;
+                                            }
+                                        @endphp
+                                        <option value="{{ $user->id }}">{{ $user->name }} ( {{ $user->email }} )</option>
+                                    @endforeach
+                                </select>
+                                <span class="text-danger err-mgs"></span>
+                            </div>
+                            
+                        </div>
+                        <div class="row" id="role_and_permission">
+
+                        </div>
+
+                        <div class="row mt-4 mb-2">
+                            <div class="form-group col-lg-12">
+
+                                <button class="btn btn-danger text-white font-weight-medium waves-effect text-start"
+                                    data-bs-dismiss="modal" style="float: right"
+                                    type="button">{{ __('admin_local.Close') }}</button>
+                                <button class="btn btn-primary mx-2" style="float: right"
+                                    type="submit">{{ __('admin_local.Submit') }}</button>
+                            </div>
+
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+
+    {{-- permission to specific user Modal End --}}
+
 
 
     <div class="container-fluid">
@@ -163,14 +224,22 @@
                     </div>
 
                     <div class="card-body">
-                        @if (hasPermission(['role-permission-create']))
+                        
                         <div class="row mb-3">
+                            @if (hasPermission(['role-permission-create']))
                             <div class="col-md-3">
                                 <button class="btn btn-success" type="btn" data-bs-toggle="modal"
                                     data-bs-target="#add-role-modal">+  {{ __('admin_local.Add Role')}}</button>
                             </div>
+                            @endif
+                            @if (hasPermission(['specific-permission-create']))
+                            <div class="col-md-9 offset-md-3">
+                                <button class="btn btn-outline-info" style="float:right" type="btn" data-bs-toggle="modal"
+                                    data-bs-target="#add-specific-user-permission-modal">+  {{ __('admin_local.Give Permission To Specific User')}}</button>
+                            </div>
+                            @endif
                         </div> 
-                        @endif
+                        
                         <div class="table-responsive theme-scrollbar">
                             <table id="basic-1" class="display table-bordered">
                                 <thead>
@@ -209,7 +278,7 @@
                                                     @if (hasPermission(['role-permission-delete']))
                                                         <button id="delete_button" class="btn btn-danger px-2 py-1"><i class="fa fa-trash"></i></button>
                                                     @endif
-                                                @endif
+                                                @endif 
                                             </td>
                                         </tr>
                                     @endforeach
@@ -241,6 +310,9 @@
         $('.js-example-basic-single1').select2({
             dropdownParent: $('#edit-role-modal')
         });
+        $('.js-example-basic-single3').select2({
+            dropdownParent: $('#add-specific-user-permission-modal')
+        });
         $(document).on('select2:open', () => {
             document.querySelector('.select2-search__field').focus();
         });
@@ -249,6 +321,9 @@
         });
 
         var form_url = "{{ route('admin.role.store') }}";
+        var getting_permission = `<span>{{ __('admin_local.Getting Permissons') }} ...... <i class="fa fa-spinner fa-spin" ></i></span>`;
+        var submit_btn_after = `{{ __('admin_local.Submitting') }}`;
+        var submit_btn_before = `{{ __('admin_local.Submit') }}`;
     </script>
     <script src="{{ asset('admin/custom/role/role_list.js') }}"></script>
 @endpush

@@ -35,6 +35,10 @@ Route::prefix('admin')->name('admin.')->group(function(){
 
         //roles and permissions
         Route::resource('role',RoleAndPermissionController::class)->except(['craete','show']);
+        Route::controller(RoleAndPermissionController::class)->name('role.')->prefix('role')->group(function () {
+            Route::get('/get-user-permissions/{id}','getUserPermission')->name('getUserPermission');
+            Route::post('/give-user-permissions','giveUserPermission')->name('giveUserPermission');
+        });
 
         //language controller 
         Route::resource('language',LanguageController::class)->except(['craete','show']);

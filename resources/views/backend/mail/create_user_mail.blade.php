@@ -93,8 +93,8 @@
                   <td style="padding: 30px"> 
                     <h6 style="font-weight: 600">User Email and Password</h6>
                     <p>Your account has been created for {{ env('APP_BACKEND_NAME') }}. Your email and password given below .</p>
-                    <p style="text-align: center">Email : {{ $email }}</p>
-                    <p style="text-align: center">Password : {{ $password }}</p>
+                    {{-- <p style="text-align: center">Email : {{ $email }}</p>
+                    <p style="text-align: center">Password : {{ $password }}</p> --}}
                     
                     <p>This email contains user credentials . Please don't share the email with others</p>
                     <p>Good luck! Hope it works.</p>
