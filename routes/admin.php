@@ -61,6 +61,8 @@ Route::prefix('admin')->name('admin.')->group(function(){
             Route::post('/maintenance-mode-on',[MaintenanceModeController::class,'maintenanceModeOn'])->name('server.maintenanceModeOn');
             // Route::get('/server/down',[MaintenanceModeController::class,'down'])->name('server.down');
             Route::get('/server/up',[MaintenanceModeController::class,'up'])->name('server.up');
+            Route::get('/secret-code/delete/{id}',[MaintenanceModeController::class,'destroy'])->name('secret-code.delete');
+            Route::get('/secret-code/delete-all',[MaintenanceModeController::class,'destroyAll'])->name('secret-code.delete-all');
         });
     });
 });

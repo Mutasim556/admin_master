@@ -57,36 +57,75 @@ $('#turn_on_form').on("submit", function (e) {
             });
         }
     })
-    // $.ajax({
-    //     type: 'POST',
-    //     url: 'update-password',
-    //     data: $(this).serialize(),
-    //     headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
-    //     dataType: 'JSON',
-    //     success: function (data) {
-    //         $('button[type=submit]', '#turn_on_form').html(submit_btn_before);
-    //         $('button[type=submit]', '#turn_on_form').removeClass('disabled');
-    //         swal({
-    //             icon: "success",
-    //             title: "Congratulations !",
-    //             text: 'Password changed successfully',
-    //             confirmButtonText: "Ok",
-    //         }).then(() => {
-    //             $("#turn_on_form").trigger("reset");
-    //         })
-    //     },
-    //     error: function (err) {
-    //         $('button[type=submit]', '#turn_on_form').html(submit_btn_before);
-    //         $('button[type=submit]', '#turn_on_form').removeClass('disabled');
-    //         var err_message = err.responseJSON.message.split("(");
-    //         swal({
-    //             icon: "warning",
-    //             title: "Warning !",
-    //             text: err_message[0],
-    //             confirmButtonText: "Ok",
-    //         });
-    //     }
-    // })
+    
+});
+
+$(document).on('click','#delete_button',function(){
+    var id = $(this).data('id');
+    var tr = $(this).closest('tr');
+    swal({
+        title: delete_swal_title,
+        text: delete_swal_text,
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+    }).then((willDelete) => {
+        if (willDelete) {
+            $.ajax({
+                type: "GET",
+                url: "secret-code/delete/"+id,
+                success: function (data) {
+                    swal({
+                        icon: "success",
+                        title: data.title,
+                        text: data.text,
+                        confirmButtonText: data.confirmButtonText,
+                    }).then(function () {
+                        tr.remove();
+                    });
+                },
+                error: function (err) {
+                   
+                }
+            });
+
+        } else {
+            swal(delete_swal_cancel_text);
+        }
+    })
+});
+
+$(document).on('click','#delete_all_btn',function(){
+    swal({
+        title: delete_swal_title,
+        text: delete_swal_text,
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+    }).then((willDelete) => {
+        if (willDelete) {
+            $.ajax({
+                type: "GET",
+                url: "secret-code/delete-all",
+                success: function (data) {
+                    swal({
+                        icon: "success",
+                        title: data.title,
+                        text: data.text,
+                        confirmButtonText: data.confirmButtonText,
+                    }).then(function () {
+                       window.location.reload();
+                    });
+                },
+                error: function (err) {
+                    swal(delete_swal_cancel_text);
+                }
+            });
+
+        } else {
+            swal(delete_swal_cancel_text);
+        }
+    })
 });
 
 

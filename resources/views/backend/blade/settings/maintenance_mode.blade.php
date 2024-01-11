@@ -147,9 +147,16 @@
                             </div>
                         </div>
                         <div class="col-xl-12">
-                            <h4 class="modal-title text-center" id="myLargeModalLabel">
+                            <h4 class="modal-title text-center mb-3" id="myLargeModalLabel">
                                 {{ __('admin_local.Maintenance Report') }}
                             </h4>
+                            @if (!app()->isDownForMaintenance() && $maintenances->count()>0)
+                                <h4 class="modal-title mb-3" id="myLargeModalLabel1">
+                                    <button type="button" id="delete_all_btn"
+                                        class="btn btn-danger py-1">{{ __('admin_local.Delete All') }}</button>
+                                </h4>
+                            @endif
+
                             <table id="basic-1" class="display table-bordered">
                                 <thead>
                                     <tr>
@@ -161,12 +168,26 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($maintenances as $key => $maintenance)
-                                        <tr class="{{ $key==0?'bg-info':'' }}">
-                                            <td class="{{ $key==0?'bg-info':'' }}">{{ $maintenance->admin->name }} (Id : {{ $maintenance->admin->id }} )</td>
+                                        <tr class="{{ $key == 0 ? 'bg-info' : '' }}">
+                                            <td class="{{ $key == 0 ? 'bg-info' : '' }}">{{ $maintenance->admin->name }}
+                                                (Id :{{ $maintenance->admin->id }})
+                                            </td>
                                             <td>{{ $maintenance->secret_code }}</td>
-                                            <td>{{ date('Y-m-d h:i:s A',strtotime($maintenance->created_at)) }}</td>
+                                            <td>{{ date('Y-m-d h:i:s A', strtotime($maintenance->created_at)) }}</td>
                                             <td>
-                                                <button class="btn btn-danger px-1 py-0"><i class="fa fa-trash"></i></button>
+                                                @if (app()->isDownForMaintenance() && $key != 0)
+                                                    <button class="btn btn-danger px-1 py-0" type="button"
+                                                        id="delete_button" data-id="{{ $maintenance->id }}"><i
+                                                            class="fa fa-trash"></i></button>
+                                                @elseif(!app()->isDownForMaintenance())
+                                                    <button class="btn btn-danger px-1 py-0" type="button"
+                                                        id="delete_button" data-id="{{ $maintenance->id }}"><i
+                                                            class="fa fa-trash"></i></button>
+                                                @else
+                                                    <span
+                                                        class="badge badge-danger">{{ __("admin_local.Can't delete") }}</span>
+                                                @endif
+
                                             </td>
                                         </tr>
                                     @endforeach
@@ -209,11 +230,11 @@
             }, {
                 width: 100,
                 targets: 2
-            },{
+            }, {
                 width: 60,
                 targets: 3
             }],
-            
+
         });
 
         var form_url_on = "{{ route('admin.settings.server.maintenanceModeOn') }}";
@@ -222,8 +243,13 @@
         var submit_btn_after = `{{ __('admin_local.Submitting') }}`;
         var submit_btn_before = `{{ __('admin_local.Submit') }}`;
         var confirm_swal_title = `{{ __('admin_local.Are you sure?') }}`;
-        var confirm_swal_text = `{{ __('admin_local.Once deleted, you will not be able to recover this language') }}`;
-        var confirm_swal_cancel_text = `{{ __('admin_local.Delete request canceld successfully') }}`;
+        var confirm_swal_text = `{{ __('admin_local.Once trun on, you will not be able to visit this site') }}`;
+        var confirm_swal_cancel_text = `{{ __('admin_local.Turn on request canceld successfully') }}`;
+
+        var delete_swal_title = `{{ __('admin_local.Are you sure?') }}`;
+        var delete_swal_text =
+            `{{ __('admin_local.Once deleted, you will not be able to recover this maintenance data') }}`;
+        var delete_swal_cancel_text = `{{ __('admin_local.Delete request canceld successfully') }}`;
     </script>
     <script src="{{ asset('admin/custom/settings/maintenance.js') }}"></script>
 @endpush
