@@ -1,6 +1,6 @@
 @extends('backend.shared.layouts.admin')
 @push('title')
-    Access Denied
+    {{ __('admin_local.Access Denied') }}
 @endpush
 @section('content')
 <div class="container-fluid">

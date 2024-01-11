@@ -46,3 +46,12 @@ function getLanguageSession() : string {
         }
     }
 }
+
+function routeExist(string $routeName){
+
+}
+
+//turn of/on maintenance mail
+function maintenanceMailSwitch(){
+    return false;
+} 

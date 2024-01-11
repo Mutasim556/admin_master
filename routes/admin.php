@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\Localization\BackendLanguageController;
 use App\Http\Controllers\Admin\Localization\ChangeLanguageController;
 use App\Http\Controllers\Admin\Localization\LanguageController;
 use App\Http\Controllers\Admin\Role\RoleAndPermissionController;
+use App\Http\Controllers\Admin\Settings\MaintenanceModeController;
 use App\Http\Controllers\Admin\User\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -53,5 +54,13 @@ Route::prefix('admin')->name('admin.')->group(function(){
             Route::post('/store/apikey', 'storeApikey')->name('storeApikey');
         });
         Route::get('/change/language/{lang}',ChangeLanguageController::class)->name('changeLanguage');
+
+        //settings
+        Route::prefix('settings')->name('settings.')->group(function(){
+            Route::get('/maintenance-mode',[MaintenanceModeController::class,'maintenanceMode'])->name('server.maintenanceMode');
+            Route::post('/maintenance-mode-on',[MaintenanceModeController::class,'maintenanceModeOn'])->name('server.maintenanceModeOn');
+            // Route::get('/server/down',[MaintenanceModeController::class,'down'])->name('server.down');
+            Route::get('/server/up',[MaintenanceModeController::class,'up'])->name('server.up');
+        });
     });
 });
