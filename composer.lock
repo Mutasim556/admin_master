@@ -1186,20 +1186,20 @@
         },
         {
             "name": "intervention/gif",
-            "version": "3.0.0",
+            "version": "4.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Intervention/gif.git",
-                "reference": "cfececc760862f075a52acf747031bad08c8301b"
+                "reference": "521010e0cf1f5cde9df54b8adcd7496ab5f1504f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Intervention/gif/zipball/cfececc760862f075a52acf747031bad08c8301b",
-                "reference": "cfececc760862f075a52acf747031bad08c8301b",
+                "url": "https://api.github.com/repos/Intervention/gif/zipball/521010e0cf1f5cde9df54b8adcd7496ab5f1504f",
+                "reference": "521010e0cf1f5cde9df54b8adcd7496ab5f1504f",
                 "shasum": ""
             },
             "require": {
-                "php": "^8.0"
+                "php": "^8.1"
             },
             "require-dev": {
                 "phpstan/phpstan": "^1",
@@ -1232,27 +1232,27 @@
             ],
             "support": {
                 "issues": "https://github.com/Intervention/gif/issues",
-                "source": "https://github.com/Intervention/gif/tree/3.0.0"
+                "source": "https://github.com/Intervention/gif/tree/4.0.0"
             },
-            "time": "2023-11-27T18:54:30+00:00"
+            "time": "2024-01-06T16:35:57+00:00"
         },
         {
             "name": "intervention/image",
-            "version": "3.2.0",
+            "version": "3.2.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Intervention/image.git",
-                "reference": "dcedead709149720ceb1977f2e061167d79ae171"
+                "reference": "72680e81388bba766cef9db42943ff7d152a6d84"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Intervention/image/zipball/dcedead709149720ceb1977f2e061167d79ae171",
-                "reference": "dcedead709149720ceb1977f2e061167d79ae171",
+                "url": "https://api.github.com/repos/Intervention/image/zipball/72680e81388bba766cef9db42943ff7d152a6d84",
+                "reference": "72680e81388bba766cef9db42943ff7d152a6d84",
                 "shasum": ""
             },
             "require": {
                 "ext-mbstring": "*",
-                "intervention/gif": "^3",
+                "intervention/gif": "^4",
                 "php": "^8.1"
             },
             "require-dev": {
@@ -1289,7 +1289,7 @@
             ],
             "support": {
                 "issues": "https://github.com/Intervention/image/issues",
-                "source": "https://github.com/Intervention/image/tree/3.2.0"
+                "source": "https://github.com/Intervention/image/tree/3.2.3"
             },
             "funding": [
                 {
@@ -1301,7 +1301,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-12-23T16:36:10+00:00"
+            "time": "2024-01-08T09:53:13+00:00"
         },
         {
             "name": "laravel/breeze",
@@ -2844,23 +2844,23 @@
         },
         {
             "name": "phenx/php-font-lib",
-            "version": "0.5.4",
+            "version": "0.5.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dompdf/php-font-lib.git",
-                "reference": "dd448ad1ce34c63d09baccd05415e361300c35b4"
+                "reference": "671df0f3516252011aa94f9e8e3b3b66199339f8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dompdf/php-font-lib/zipball/dd448ad1ce34c63d09baccd05415e361300c35b4",
-                "reference": "dd448ad1ce34c63d09baccd05415e361300c35b4",
+                "url": "https://api.github.com/repos/dompdf/php-font-lib/zipball/671df0f3516252011aa94f9e8e3b3b66199339f8",
+                "reference": "671df0f3516252011aa94f9e8e3b3b66199339f8",
                 "shasum": ""
             },
             "require": {
                 "ext-mbstring": "*"
             },
             "require-dev": {
-                "symfony/phpunit-bridge": "^3 || ^4 || ^5"
+                "symfony/phpunit-bridge": "^3 || ^4 || ^5 || ^6"
             },
             "type": "library",
             "autoload": {
@@ -2870,7 +2870,7 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "LGPL-3.0"
+                "LGPL-2.1-or-later"
             ],
             "authors": [
                 {
@@ -2882,9 +2882,9 @@
             "homepage": "https://github.com/PhenX/php-font-lib",
             "support": {
                 "issues": "https://github.com/dompdf/php-font-lib/issues",
-                "source": "https://github.com/dompdf/php-font-lib/tree/0.5.4"
+                "source": "https://github.com/dompdf/php-font-lib/tree/0.5.5"
             },
-            "time": "2021-12-17T19:44:54+00:00"
+            "time": "2024-01-07T18:13:29+00:00"
         },
         {
             "name": "phenx/php-svg-lib",
