@@ -15,8 +15,13 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
+            $table->string('phone')->unique();
+            $table->string('username')->unique();
+            $table->text('image')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->boolean('status')->default(1)->comment("0=Inactive 1=Active");
+            $table->boolean('delete')->default(0)->comment("0=Not Deleted 1=Deleted");;
             $table->rememberToken();
             $table->timestamps();
         });
