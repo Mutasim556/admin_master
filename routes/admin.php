@@ -64,5 +64,11 @@ Route::prefix('admin')->name('admin.')->group(function(){
             Route::get('/secret-code/delete/{id}',[MaintenanceModeController::class,'destroy'])->name('secret-code.delete');
             Route::get('/secret-code/delete-all',[MaintenanceModeController::class,'destroyAll'])->name('secret-code.delete-all');
         });
+
+        //products
+        require __DIR__.'/inventory/product.php';
     });
+
+
+    
 });

@@ -19,6 +19,89 @@
             </ul>
         </li>
     @endif
+    <li class="sidebar-list">
+        <a class="sidebar-link sidebar-title" href="javascript:void(0)"
+            aria-expanded="false">
+            <i data-feather="package"></i>
+            <span class="lan-3">{{ __('Product') }}</span>
+        </a>
+        <ul class="sidebar-submenu">
+            <li >
+                <a href="{{ route('admin.product.unit.index') }}" class="sidebar-link">
+                    
+                    <span > {{ __('admin_local.Units') }} </span>
+                </a>
+            </li>
+            {{-- <li>
+                <a href="{{ route('product.brand.index') }}" class="sidebar-link">
+                    
+                    <span > {{ __('Brand') }} </span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('product.size.index') }}" class="sidebar-link">
+                    
+                    <span > {{ __('Size') }} </span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('product.parent-category.index') }}" class="sidebar-link">
+                    
+                    <span > {{ __('Parent Category') }} </span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('product.category.index') }}" class="sidebar-link">
+                    
+                    <span > {{ __('Category') }} </span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('product.product.create') }}" class="sidebar-link">
+                    
+                    <span > {{ __('Add Product') }} </span>
+                </a>
+            </li> --}}
+            <li>
+                <a href="index6.html" class="sidebar-link">
+                    
+                    <span > {{ __('Product List') }} </span>
+                </a>
+            </li>
+            <li>
+                <a href="index6.html" class="sidebar-link">
+                    
+                    <span > {{ __('Add Adjustment') }} </span>
+                </a>
+            </li>
+            <li>
+                <a href="index6.html" class="sidebar-link">
+                    
+                    <span > {{ __('Adjustment List') }} </span>
+                </a>
+            </li>
+            <li>
+                <a href="index6.html" class="sidebar-link">
+                    
+                    <span > {{ __('Stock Count') }} </span>
+                </a>
+            </li>
+
+            <li>
+                <a href="index6.html" class="sidebar-link">
+                    
+                    <span > {{ __('Add Promotion') }} </span>
+                </a>
+            </li>
+            <li>
+                <a href="index6.html" class="sidebar-link">
+                    
+                    <span > {{ __('Promotion List') }} </span>
+                </a>
+            </li>
+            
+        </ul>
+    </li>
     @if (hasPermission([
             'role-permission-index',
             'role-permission-create',

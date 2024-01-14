@@ -7,6 +7,7 @@ namespace Database\Seeders;
 use App\Models\User;
 use Database\Seeders\Admin\AdminSeeder;
 use Database\Seeders\Admin\PermissionSeeder;
+use Database\Seeders\Admin\Product\UnitSeeder;
 use Database\Seeders\Admin\RoleSeeder;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -29,6 +30,7 @@ class DatabaseSeeder extends Seeder
             // $admin->save();
 
         $this->call(PermissionSeeder::class);
+        // $this->call(UnitSeeder::class);
         // $this->call(RoleSeeder::class);
         // $this->call(AdminSeeder::class);
     }
