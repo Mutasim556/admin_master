@@ -11,6 +11,13 @@ use Illuminate\Http\Response;
 
 class UnitController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:unit-index,admin');
+        $this->middleware('permission:unit-store,admin')->only('store');
+        $this->middleware('permission:unit-update,admin')->only(['edit','update','updateStatus']);
+        $this->middleware('permission:unit-delete,admin')->only('destroy');
+    }
     /**
      * Display a listing of the resource.
      */

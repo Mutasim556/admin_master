@@ -59,7 +59,6 @@ return array (
   'Brand Image' => 'ব্র্যান্ড ইমেজ',
   'Edit Brand' => 'ব্র্যান্ড সম্পাদনা',
   'Previous Parent brand Image' => 'Previous প্যারেন্ট ব্র্যান্ড ইমেজ',
-  'No data available in table' => 'টেবিলে কোন তথ্য উপলব্ধ নেই',
   'Units' => 'ইউনিট',
   'Add Unit' => 'ইউনিট যোগ করুন',
   'Unit Name' => 'ইউনিটের নাম',

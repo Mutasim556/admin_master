@@ -190,13 +190,14 @@
                     </div>
 
                     <div class="card-body">
-                        <div class="row mb-3">
-                            <div class="col-md-3">
-                                <button class="btn btn-success" type="btn" data-bs-toggle="modal"
-                                    data-bs-target="#add-unit-modal">+ Add Unit</button>
+                        @if (hasPermission(['unit-store']))
+                            <div class="row mb-3">
+                                <div class="col-md-3">
+                                    <button class="btn btn-success" type="btn" data-bs-toggle="modal"
+                                        data-bs-target="#add-unit-modal">+ Add Unit</button>
+                                </div>
                             </div>
-                        </div>
-
+                        @endif
                         <div class="table-responsive theme-scrollbar">
                             <table id="basic-1" class="display table-bordered">
                                 <thead>
@@ -219,27 +220,39 @@
                                             <td>{{ $unit->operator ? $unit->operator : '*' }}</td>
                                             <td>{{ $unit->operation_value }}</td>
                                             <td class="text-center">
-                                                <span class="mx-2">{{ $unit->unit_status==0?'Inactive':'Active' }}</span><input
-                                                    data-status="{{ $unit->unit_status == 0 ? 1 : 0 }}"
-                                                    id="status_change" type="checkbox" data-toggle="switchery"
-                                                    data-color="green" data-secondary-color="red" data-size="small"
-                                                    {{ $unit->unit_status == 1 ? 'checked' : '' }} />
+                                                @if (hasPermission(['unit-update']))
+                                                    <span
+                                                        class="mx-2">{{ $unit->unit_status == 0 ? 'Inactive' : 'Active' }}</span><input
+                                                        data-status="{{ $unit->unit_status == 0 ? 1 : 0 }}"
+                                                        id="status_change" type="checkbox" data-toggle="switchery"
+                                                        data-color="green" data-secondary-color="red" data-size="small"
+                                                        {{ $unit->unit_status == 1 ? 'checked' : '' }} />
+                                                @else
+                                                    <span class="badge badge-danger">{{ __('admin_local.No Permission') }}</span>
+                                                @endif
                                             </td>
                                             <td>
+                                                @if (hasPermission(['unit-update','unit-delete']))
                                                 <div class="dropdown">
                                                     <button
                                                         class="btn btn-info text-white px-2 py-1 dropbtn">{{ __('Action') }}
                                                         <i class="fa fa-angle-down"></i></button>
                                                     <div class="dropdown-content">
+                                                        @if (hasPermission(['unit-update']))
                                                         <a data-bs-toggle="modal" style="cursor: pointer;"
                                                             data-bs-target="#edit-unit-modal" class="text-primary"
                                                             id="edit_button"><i class=" fa fa-edit mx-1"></i>Edit</a>
-
+                                                        @endif
+                                                        @if (hasPermission(['unit-delete']))
                                                         <a class="text-danger" id="delete_button"
                                                             style="cursor: pointer;"><i class="fa fa-trash mx-1"></i>
                                                             Delete</a>
+                                                        @endif
                                                     </div>
                                                 </div>
+                                                @else
+                                                <span class="badge badge-danger">{{ __('admin_local.No Permission') }}</span>
+                                                @endif
                                             </td>
                                         </tr>
                                     @endforeach

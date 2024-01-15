@@ -1,6 +1,6 @@
 $('#add_brand_form').submit(function (e) {
     e.preventDefault();
-    $('button[type=submit]', this).html('Submitting....');
+    $('button[type=submit]', this).html(submit_btn_after+"....");
     $('button[type=submit]', this).addClass('disabled');
     var formData = new FormData(this);
     $.ajax({
@@ -14,16 +14,16 @@ $('#add_brand_form').submit(function (e) {
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },
-        success: function (data) {
-            $('button[type=submit]', '#add_brand_form').html('Submit');
+        success: function (rdata) {
+            $('button[type=submit]', '#add_brand_form').html(submit_btn_before);
             $('button[type=submit]', '#add_brand_form').removeClass('disabled');
             swal({
                 icon: "success",
-                title: "Congratulations !",
+                title: '',
                 text: 'Brand create suvccessfully',
                 confirmButtonText: "Ok",
             }).then(function(){
-                let brand_image = data.brand_image?'<img src="/'+data.brand_image+'">':"No File";
+                let brand_image = data.brand_image?'<img src="/'+data.brand_image+'">':no_file;
                 $('#basic-1 tbody').append(`<tr id="trid-${data.brand_id}" data-id="${data.brand_id}"><td>${brand_image}</td><td>${data.brand_name}</td><td class="text-center"><span class="mx-2">${data.brand_status}</span><input
                 data-status="Inactive"
                 id="status_change" type="checkbox" data-toggle="switchery"
@@ -35,7 +35,7 @@ $('#add_brand_form').submit(function (e) {
             });
         },
         error: function (err) {
-            $('button[type=submit]', '#add_brand_form').html('Submit');
+            $('button[type=submit]', '#add_brand_form').html(submit_btn_before);
             $('button[type=submit]', '#add_brand_form').removeClass('disabled');
             var err_message = err.responseJSON.message.split("(");
             swal({

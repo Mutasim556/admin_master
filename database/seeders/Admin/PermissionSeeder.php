@@ -42,9 +42,15 @@ class PermissionSeeder extends Seeder
         //products 
         // unit permission
         // Permission::create(['guard_name'=>'admin','name'=>'unit-index','group_name'=>'Product Units Permissions']);
-        Permission::create(['guard_name'=>'admin','name'=>'unit-store','group_name'=>'Product Units Permissions']);
-        Permission::create(['guard_name'=>'admin','name'=>'unit-update','group_name'=>'Product Units Permissions']);
-        Permission::create(['guard_name'=>'admin','name'=>'unit-delete','group_name'=>'Product Units Permissions']);
+        // Permission::create(['guard_name'=>'admin','name'=>'unit-store','group_name'=>'Product Units Permissions']);
+        // Permission::create(['guard_name'=>'admin','name'=>'unit-update','group_name'=>'Product Units Permissions']);
+        // Permission::create(['guard_name'=>'admin','name'=>'unit-delete','group_name'=>'Product Units Permissions']);
+
+        // unit permission
+        Permission::create(['guard_name'=>'admin','name'=>'brand-index','group_name'=>'Product Brands Permissions']);
+        Permission::create(['guard_name'=>'admin','name'=>'brand-store','group_name'=>'Product Brands Permissions']);
+        Permission::create(['guard_name'=>'admin','name'=>'brand-update','group_name'=>'Product Brands Permissions']);
+        Permission::create(['guard_name'=>'admin','name'=>'brand-delete','group_name'=>'Product Brands Permissions']);
         
         //backend settings permission
         // Permission::create(['guard_name'=>'admin','name'=>'maintenance-mode-index','group_name'=>'Settings Permissions']);
