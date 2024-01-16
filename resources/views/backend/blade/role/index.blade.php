@@ -66,15 +66,17 @@
                                 <input type="text" class="form-control" name="role_name" id="role_name">
                                 <span class="text-danger err-mgs"></span>
                             </div>
-                            @foreach ($permissions as $group=>$permission)
-                                <div class="col-lg-12 mt-4">
-                                    <label for="user_permission">{{ $group }}</label><br>
-                                    @foreach ($permission as $item)
-                                        <input data-status="" id="permission-switch" type="checkbox" data-toggle="switchery" data-color="green" data-secondary-color="red" data-size="small" value="{{ $item->name }}" name="permissions[]"/>
-                                        <span class="mx-2">{{ $item->name }}</span>
-                                    @endforeach
-                                </div>
-                            @endforeach
+                            <div class="vertical-scroll scroll-demo">
+                                @foreach ($permissions as $group=>$permission)
+                                    <div class="col-lg-12 mt-4">
+                                        <label for="user_permission">{{ $group }}</label><br>
+                                        @foreach ($permission as $item)
+                                            <input data-status="" id="permission-switch" type="checkbox" data-toggle="switchery" data-color="green" data-secondary-color="red" data-size="small" value="{{ $item->name }}" name="permissions[]"/>
+                                            <span class="mx-2">{{ $item->name }}</span>
+                                        @endforeach
+                                    </div>
+                                @endforeach
+                            </div>
                         </div>
 
                         <div class="row mt-4 mb-2">
@@ -123,10 +125,11 @@
                                 <input type="text" class="form-control" name="role_name" id="role_name">
                                 <span class="text-danger err-mgs"></span>
                             </div>
-                            <div id="edit_permission">
-                               <span>{{ __('admin_local.Getting Permissons') }} ...... <i class="fa fa-spinner fa-spin" ></i></span>
+                            <div class="vertical-scroll scroll-demo">
+                                <div id="edit_permission">
+                                    <span>{{ __('admin_local.Getting Permissons') }} ...... <i class="fa fa-spinner fa-spin" ></i></span>
+                                 </div>
                             </div>
-
                         </div>
 
                         <div class="row mt-4 mb-2">
@@ -186,10 +189,10 @@
                             </div>
                             
                         </div>
-                        <div class="row" id="role_and_permission">
-
+                        <div class="vertical-scroll scroll-demo">
+                            <div class="row" id="role_and_permission"></div>
                         </div>
-
+                        
                         <div class="row mt-4 mb-2">
                             <div class="form-group col-lg-12">
 

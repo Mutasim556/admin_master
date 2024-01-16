@@ -23,6 +23,7 @@
     <!-- Feather icon-->
     <link rel="stylesheet" type="text/css" href="{{ asset('admin/assets/css/vendors/feather-icon.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('admin/assets/css/vendors/scrollbar.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('admin/assets/css/vendors/scrollable.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('admin/assets/css/vendors/animate.css') }}">
     <!-- Bootstrap css-->
     <link rel="stylesheet" type="text/css" href="{{ asset('admin/assets/css/vendors/bootstrap.css') }}">
@@ -233,6 +234,8 @@
     <script src="{{ asset('admin/assets/js/config.js') }}"></script>
     <script src="{{ asset('admin/assets/js/sidebar-menu.js') }}"></script>
     <script src="{{ asset('admin/assets/js/clipboard/clipboard.min.js') }}"></script>
+    <script src="{{ asset('admin/assets/js/scrollable/perfect-scrollbar.min.js') }}"></script>
+    <script src="{{ asset('admin/assets/js/scrollable/scrollable-custom.js') }}"></script>
     @stack('js')
     <script src="{{ asset('admin/assets/js/tooltip-init.js') }}"></script>
     <script src="{{ asset('admin/assets/js/custom-card/custom-card.js') }}"></script>
