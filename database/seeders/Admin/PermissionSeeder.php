@@ -47,10 +47,22 @@ class PermissionSeeder extends Seeder
         // Permission::create(['guard_name'=>'admin','name'=>'unit-delete','group_name'=>'Product Units Permissions']);
 
         // unit permission
-        Permission::create(['guard_name'=>'admin','name'=>'brand-index','group_name'=>'Product Brands Permissions']);
-        Permission::create(['guard_name'=>'admin','name'=>'brand-store','group_name'=>'Product Brands Permissions']);
-        Permission::create(['guard_name'=>'admin','name'=>'brand-update','group_name'=>'Product Brands Permissions']);
-        Permission::create(['guard_name'=>'admin','name'=>'brand-delete','group_name'=>'Product Brands Permissions']);
+        // Permission::create(['guard_name'=>'admin','name'=>'brand-index','group_name'=>'Product Brands Permissions']);
+        // Permission::create(['guard_name'=>'admin','name'=>'brand-store','group_name'=>'Product Brands Permissions']);
+        // Permission::create(['guard_name'=>'admin','name'=>'brand-update','group_name'=>'Product Brands Permissions']);
+        // Permission::create(['guard_name'=>'admin','name'=>'brand-delete','group_name'=>'Product Brands Permissions']);
+
+        // size permission
+        // Permission::create(['guard_name'=>'admin','name'=>'size-index','group_name'=>'Product Sizes Permissions']);
+        // Permission::create(['guard_name'=>'admin','name'=>'size-store','group_name'=>'Product Sizes Permissions']);
+        // Permission::create(['guard_name'=>'admin','name'=>'size-update','group_name'=>'Product Sizes Permissions']);
+        // Permission::create(['guard_name'=>'admin','name'=>'size-delete','group_name'=>'Product Sizes Permissions']);
+
+        // parent category permission
+        Permission::create(['guard_name'=>'admin','name'=>'parent-category-index','group_name'=>'Product Parent Category Permissions']);
+        Permission::create(['guard_name'=>'admin','name'=>'parent-category-store','group_name'=>'Product Parent Category Permissions']);
+        Permission::create(['guard_name'=>'admin','name'=>'parent-category-update','group_name'=>'Product Parent Category Permissions']);
+        Permission::create(['guard_name'=>'admin','name'=>'parent-category-delete','group_name'=>'Product Parent Category Permissions']);
         
         //backend settings permission
         // Permission::create(['guard_name'=>'admin','name'=>'maintenance-mode-index','group_name'=>'Settings Permissions']);

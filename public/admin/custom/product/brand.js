@@ -32,10 +32,11 @@ $('#add_brand_form').submit(function (e) {
                     id="status_change" type="checkbox" data-toggle="switchery"
                     data-color="green" data-secondary-color="red" data-size="small" checked />`;
                 }
+                let action_option = `<span class="badge badge-danger">${no_permission_mgs}</span>` ;
                 if(rdata.hasAnyPermission){
                     action_option = `<div class="dropdown"><button class="btn btn-info text-white px-2 py-1 dropbtn">Action <i class="fa fa-angle-down"></i></button> <div class="dropdown-content">`;
                     if(rdata.hasEditPermission){
-                        action_option = action_option + `<a data-bs-toggle="modal" style="cursor: pointer;" data-bs-target="#edit-unit-modal" class="text-primary" id="edit_button"><i class=" fa fa-edit mx-1"></i>Edit</a>`;
+                        action_option = action_option + `<a data-bs-toggle="modal" style="cursor: pointer;" data-bs-target="#edit-size-modal" class="text-primary" id="edit_button"><i class=" fa fa-edit mx-1"></i>Edit</a>`;
                     }
                     if(rdata.hasDeletePermission){
                         action_option = action_option + `<a class="text-danger" id="delete_button" style="cursor: pointer;"><i class="fa fa-trash mx-1"></i> Delete</a>`;
@@ -48,7 +49,7 @@ $('#add_brand_form').submit(function (e) {
                 <td class="text-center">${update_status_btn}</td>
                 <td>${action_option}</td></tr>`);
 
-                new Switchery($('#trid-'+data.brand_id).find('input')[0], $('#trid-'+data.brand_id).find('input').data());
+                new Switchery($('#trid-'+data.id).find('input')[0], $('#trid-'+data.id).find('input').data());
                 $('#add_brand_form .err-mgs').each(function(id,val){
                     $(this).prev('input').removeClass('border-danger is-invalid')
                     $(this).prev('textarea').removeClass('border-danger is-invalid')

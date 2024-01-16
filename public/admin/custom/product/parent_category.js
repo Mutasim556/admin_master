@@ -1,6 +1,6 @@
 $('#add_parent_category_form').submit(function (e) {
     e.preventDefault();
-    $('button[type=submit]', this).html('Submitting....');
+    $('button[type=submit]', this).html(submit_btn_after+'....');
     $('button[type=submit]', this).addClass('disabled');
     var formData = new FormData(this);
     $.ajax({
@@ -14,22 +14,49 @@ $('#add_parent_category_form').submit(function (e) {
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },
-        success: function (data) {
-            $('button[type=submit]', '#add_parent_category_form').html('Submit');
+        success: function (rdata) {
+
+            $('button[type=submit]', '#add_parent_category_form').html(submit_btn_before);
             $('button[type=submit]', '#add_parent_category_form').removeClass('disabled');
             swal({
                 icon: "success",
-                title: "Congratulations !",
-                text: 'Parent category create suvccessfully',
-                confirmButtonText: "Ok",
+                title: rdata.title,
+                text: rdata.text,
+                confirmButtonText: rdata.confirmButtonText,
             }).then(function(){
-                let par_image = data.parent_category_image?'<img src="/'+data.parent_category_image+'">':"No File";
-                $('#basic-1 tbody').append(`<tr id="trid-${data.parent_category_id}" data-id="${data.parent_category_id}"><td>${data.parent_category_name}</td><td>${par_image}</td><td>${data.name}</td><td class="text-center"><span class="mx-2">${data.parent_category_status}</span><input
-                data-status="Inactive"
-                id="status_change" type="checkbox" data-toggle="switchery"
-                data-color="green" data-secondary-color="red" data-size="small" checked /></td><td><div class="dropdown"><button class="btn btn-info text-white px-2 py-1 dropbtn">Action <i class="fa fa-angle-down"></i></button> <div class="dropdown-content"> <a data-bs-toggle="modal" style="cursor: pointer;" data-bs-target="#edit-parent-category-modal" class="text-primary" id="edit_button"><i class=" fa fa-edit mx-1"></i>Edit</a> <a class="text-danger" id="delete_button" style="cursor: pointer;"><i class="fa fa-trash mx-1"></i> Delete</a> </div></div></td></tr>`);
+                let data = rdata.parent_category;
+                let update_status_btn = `<span class="badge badge-danger">${no_permission_mgs}</span>`;
+                if(rdata.hasEditPermission){
+                    update_status_btn = `<span class="mx-2">${data.parent_category_status==0?'Inactive':'Active'}</span><input
+                    data-status="${data.parent_category_status==0?1:0}"
+                    id="status_change" type="checkbox" data-toggle="switchery"
+                    data-color="green" data-secondary-color="red" data-size="small" checked />`;
+                }
+                let action_option = `<span class="badge badge-danger">${no_permission_mgs}</span>` ;
+                if(rdata.hasAnyPermission){
+                    action_option = `<div class="dropdown"><button class="btn btn-info text-white px-2 py-1 dropbtn">Action <i class="fa fa-angle-down"></i></button> <div class="dropdown-content">`;
+                    if(rdata.hasEditPermission){
+                        action_option = action_option + `<a data-bs-toggle="modal" style="cursor: pointer;" data-bs-target="#edit-parent-category-modal" class="text-primary" id="edit_button"><i class=" fa fa-edit mx-1"></i>Edit</a>`;
+                    }
+                    if(rdata.hasDeletePermission){
+                        action_option = action_option + `<a class="text-danger" id="delete_button" style="cursor: pointer;"><i class="fa fa-trash mx-1"></i> Delete</a>`;
+                    }
 
-                new Switchery($('#trid-'+data.parent_category_id).find('input')[0], $('#trid-'+data.parent_category_id).find('input').data());
+                    action_option = action_option + `</div></div>`;
+                }
+                let par_image = data.parent_category_image?'<img src="/'+data.parent_category_image+'">':"No File";
+                $('#basic-1 tbody').append(`<tr id="trid-${data.id}" data-id="${data.id}"><td>${data.parent_category_name}</td><td>${par_image}</td><td>${rdata.user_name}</td>
+                <td class="text-center">${update_status_btn}</td>
+                <td>${action_option}</td></tr>`);
+                if(rdata.hasEditPermission){
+                    new Switchery($('#trid-'+data.id).find('input')[0], $('#trid-'+data.id).find('input').data());
+                }
+
+                $('#add_parent_category_form .err-mgs').each(function(id,val){
+                    $(this).prev('input').removeClass('border-danger is-invalid')
+                    $(this).prev('textarea').removeClass('border-danger is-invalid')
+                    $(this).empty();
+                })
                 $('#add_parent_category_form').trigger('reset');
                 $('button[type=button]','#add_parent_category_form').click();
             });
@@ -37,13 +64,28 @@ $('#add_parent_category_form').submit(function (e) {
         error: function (err) {
             $('button[type=submit]', '#add_parent_category_form').html('Submit');
             $('button[type=submit]', '#add_parent_category_form').removeClass('disabled');
-            var err_message = err.responseJSON.message.split("(");
-            swal({
-                icon: "warning",
-                title: "Warning !",
-                text: err_message[0],
-                confirmButtonText: "Ok",
-            });
+            if(err.status===403){
+                var err_message = err.responseJSON.message.split("(");
+                swal({
+                    icon: "warning",
+                    title: "Warning !",
+                    text: err_message[0],
+                    confirmButtonText: "Ok",
+                }).then(function(){
+                    $('button[type=button]', '#add_parent_category_form').click();
+                });
+                
+            }
+
+            $('#add_parent_category_form .err-mgs').each(function(id,val){
+                $(this).prev('input').removeClass('border-danger is-invalid')
+                $(this).prev('textarea').removeClass('border-danger is-invalid')
+                $(this).empty();
+            })
+            $.each(err.responseJSON.errors,function(idx,val){
+                $('#add_parent_category_form #'+idx).addClass('border-danger is-invalid')
+                $('#add_parent_category_form #'+idx).next('.err-mgs').empty().append(val);
+            })
         }
     });
 });

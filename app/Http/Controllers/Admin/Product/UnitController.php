@@ -90,6 +90,8 @@ class UnitController extends Controller
         $unit->operation_value=$data->operation_value?$data->operation_value:1;
         $unit->save();
 
+        
+
         return response([
             'unit' => $unit,
             'title'=>__('admin_local.Congratulations !'),

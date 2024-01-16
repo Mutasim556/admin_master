@@ -7,6 +7,8 @@ namespace Database\Seeders;
 use App\Models\User;
 use Database\Seeders\Admin\AdminSeeder;
 use Database\Seeders\Admin\PermissionSeeder;
+use Database\Seeders\Admin\Product\ParentCategorySeeder;
+use Database\Seeders\Admin\Product\SizeSeeder;
 use Database\Seeders\Admin\Product\UnitSeeder;
 use Database\Seeders\Admin\RoleSeeder;
 use Illuminate\Database\Seeder;
@@ -30,6 +32,8 @@ class DatabaseSeeder extends Seeder
             // $admin->save();
 
         $this->call(PermissionSeeder::class);
+        $this->call(ParentCategorySeeder::class);
+        // $this->call(SizeSeeder::class);
         // $this->call(UnitSeeder::class);
         // $this->call(RoleSeeder::class);
         // $this->call(AdminSeeder::class);
