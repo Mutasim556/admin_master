@@ -194,7 +194,7 @@
                             <div class="row mb-3">
                                 <div class="col-md-3">
                                     <button class="btn btn-success" type="btn" data-bs-toggle="modal"
-                                        data-bs-target="#add-unit-modal">+ Add Unit</button>
+                                        data-bs-target="#add-unit-modal">+ {{ __('admin_local.Add Unit') }}</button>
                                 </div>
                             </div>
                         @endif
@@ -235,18 +235,18 @@
                                                 @if (hasPermission(['unit-update','unit-delete']))
                                                 <div class="dropdown">
                                                     <button
-                                                        class="btn btn-info text-white px-2 py-1 dropbtn">{{ __('Action') }}
+                                                        class="btn btn-info text-white px-2 py-1 dropbtn">{{ __('admin_local.Action') }}
                                                         <i class="fa fa-angle-down"></i></button>
                                                     <div class="dropdown-content">
                                                         @if (hasPermission(['unit-update']))
                                                         <a data-bs-toggle="modal" style="cursor: pointer;"
                                                             data-bs-target="#edit-unit-modal" class="text-primary"
-                                                            id="edit_button"><i class=" fa fa-edit mx-1"></i>Edit</a>
+                                                            id="edit_button"><i class=" fa fa-edit mx-1"></i>{{ __('admin_local.Edit') }}</a>
                                                         @endif
                                                         @if (hasPermission(['unit-delete']))
                                                         <a class="text-danger" id="delete_button"
                                                             style="cursor: pointer;"><i class="fa fa-trash mx-1"></i>
-                                                            Delete</a>
+                                                            {{ __('admin_local.Delete') }}</a>
                                                         @endif
                                                     </div>
                                                 </div>

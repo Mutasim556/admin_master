@@ -63,11 +63,13 @@
                             <div class="col-lg-6 mt-2">
                                 <label for="brand_name"><strong>{{ __('Brand Name') }} *</strong></label>
                                 <input type="text" class="form-control" name="brand_name" id="brand_name">
+                                <span class="text-danger err-mgs"></span>
                             </div>
                            
                             <div class="col-lg-6 mt-2">
                                 <label for="brand_image"><strong>{{ __('Brand Image') }} </strong></label>
                                 <input type="file" class="form-control" name="brand_image" id="brand_image">
+                                <span class="text-danger err-mgs"></span>
                             </div>
                         </div>
                         <div class="row mt-4 mb-2">
@@ -111,11 +113,13 @@
                             <div class="col-lg-6 mt-2">
                                 <label for="brand_name"><strong>{{ __('Brand Name') }} *</strong></label>
                                 <input type="text" class="form-control" name="brand_name" id="brand_name">
+                                <span class="text-danger err-mgs"></span>
                             </div>
                            
                             <div class="col-lg-6 mt-2">
                                 <label for="brand_image"><strong>{{ __('Brand Image') }} </strong></label>
                                 <input type="file" class="form-control" name="brand_image" id="brand_image">
+                                <span class="text-danger err-mgs"></span>
                             </div>
                             <div class="col-lg-6 mt-2">
                                 <label for="parent_brand_image"><strong>{{ __('Previous Parent brand Image') }} </strong></label>
@@ -157,12 +161,14 @@
                     </div>
 
                     <div class="card-body">
-                        <div class="row mb-3">
-                            <div class="col-md-3">
-                                <button class="btn btn-success" type="btn" data-bs-toggle="modal"
-                                    data-bs-target="#add-brand-modal">+ {{ __('admin_local.Add Brand') }}</button>
+                        @if (hasPermission(['brand-store']))
+                            <div class="row mb-3">
+                                <div class="col-md-3">
+                                    <button class="btn btn-success" type="btn" data-bs-toggle="modal"
+                                        data-bs-target="#add-brand-modal">+ {{ __('admin_local.Add Brand') }}</button>
+                                </div>
                             </div>
-                        </div>
+                        @endif
 
                         <div class="table-responsive theme-scrollbar">
                             <table id="basic-1" class="display table-bordered">
@@ -176,34 +182,43 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($brands as $brand)
-                                        <tr id="trid-{{ $brand->brand_id }}" data-id="{{ $brand->brand_id }}">
-                                            <td>@if($brand->brand_image)<img src="{{ asset($brand->brand_image) }}" alt="" style="height:">@else No File @endif</td>
+                                        <tr id="trid-{{ $brand->id }}" data-id="{{ $brand->id }}">
+                                            <td>@if($brand->brand_image)<img src="{{ asset($brand->brand_image) }}" alt="" style="height:">@else {{ __('admin_local.No File') }} @endif</td>
                                             <td>{{ $brand->brand_name }}</td>
                                             <td class="text-center">
-                                                <span class="mx-2">{{ $brand->brand_status }}</span><input
-                                                    data-status="{{ $brand->brand_status == 'Active' ? 'Inactive' : 'Active' }}"
-                                                    id="status_change" type="checkbox" data-toggle="switchery"
-                                                    data-color="green" data-secondary-color="red" data-size="small"
-                                                    {{ $brand->brand_status == 'Active' ? 'checked' : '' }} />
+                                                @if (hasPermission(['brand-update']))
+                                                    <span
+                                                        class="mx-2">{{ $brand->brand_status == 0 ? 'Inactive' : 'Active' }}</span><input
+                                                        data-status="{{ $brand->brand_status == 0 ? 1 : 0 }}"
+                                                        id="status_change" type="checkbox" data-toggle="switchery"
+                                                        data-color="green" data-secondary-color="red" data-size="small"
+                                                        {{ $brand->brand_status == 1 ? 'checked' : '' }} />
+                                                @else
+                                                    <span class="badge badge-danger">{{ __('admin_local.No Permission') }}</span>
+                                                @endif
                                             </td>
                                             <td>
+                                                @if (hasPermission(['brand-update','brand-delete']))
                                                 <div class="dropdown">
                                                     <button
-                                                        class="btn btn-info text-white px-2 py-1 dropbtn">{{ __('Action') }}
+                                                        class="btn btn-info text-white px-2 py-1 dropbtn">{{ __('admin_local.Action') }}
                                                         <i class="fa fa-angle-down"></i></button>
                                                     <div class="dropdown-content">
+                                                        @if (hasPermission(['brand-update']))
                                                         <a data-bs-toggle="modal" style="cursor: pointer;"
                                                             data-bs-target="#edit-brand-modal" class="text-primary"
                                                             id="edit_button"><i class=" fa fa-edit mx-1"></i>{{ __('admin_local.Edit') }}</a>
-
-                                                        {{-- <a class="text-info" id="delete_button" style="cursor: pointer;"><i
-                                                            class="fa fa-trash mx-1"></i> Email</a> --}}
-
+                                                        @endif
+                                                        @if (hasPermission(['brand-delete']))
                                                         <a class="text-danger" id="delete_button"
                                                             style="cursor: pointer;"><i class="fa fa-trash mx-1"></i>
                                                             {{ __('admin_local.Delete') }}</a>
+                                                        @endif
                                                     </div>
                                                 </div>
+                                                @else
+                                                <span class="badge badge-danger">{{ __('admin_local.No Permission') }}</span>
+                                                @endif
                                             </td>
                                         </tr>
                                     @endforeach
@@ -276,7 +291,7 @@
         var delete_swal_text =
             `{{ __('admin_local.Once deleted, you will not be able to recover this brand data') }}`;
         var delete_swal_cancel_text = `{{ __('admin_local.Delete request canceld successfully') }}`;
-        var no_file = '{{ __("admin_local.No file") }}'
+        var no_file = '{{ __("admin_local.No file") }}';
     </script>
     <script src="{{ asset('admin/custom/product/brand.js') }}"></script>
     {{-- <script src="{{ asset('inventory/custom/user/user_list.js') }}"></script> --}}

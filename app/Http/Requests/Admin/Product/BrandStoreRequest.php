@@ -38,17 +38,16 @@ class BrandStoreRequest extends FormRequest
             $manager = new ImageManager(new Driver());
             $image = $manager->read($this->brand_image);
             $image = $image->resize(100,50)->save('admin/inventory/file/brand/'.$file);
-            // Image::make($this->brand_image)->resize(100,50)->save('inventory/file/brand/'.$file);
         }else{
             $file_name = "";
         }
+        $brand = new Brand();
+        $brand->brand_name = $this->brand_name;
+        $brand->brand_image = $file_name;
+        $brand->brand_status = 1;
+        $brand->brand_create_by = LoggedAdmin()->id;
+        $brand->save();
 
-       $brand = new Brand();
-       $brand->brand_name = $this->brand_name;
-       $brand->brand_image = $file_name;
-       $brand->brand_create_by = LoggedAdmin()->id;
-       $brand->save();
-
-       return $brand;
+        return $brand;
     }
 }
