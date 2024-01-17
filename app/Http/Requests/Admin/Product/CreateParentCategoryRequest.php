@@ -4,6 +4,7 @@ namespace App\Http\Requests\Admin\Product;
 
 use App\Models\Admin\Product\ParentCategory;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 use Intervention\Image\Drivers\Gd\Driver;
 use Intervention\Image\ImageManager;
 
@@ -25,7 +26,7 @@ class CreateParentCategoryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'parent_category_name'=>'required|unique:parent_categories,parent_category_name',
+            'parent_category_name'=>['required',Rule::unique('parent_categories')->ignore('id')->where(function($query){$query->where('parent_category_delete',0);})],
             'parent_category_image'=>'mimes:jpg,jpeg,png|max:2000',
         ];
     }

@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Validation\Rule;
 use Intervention\Image\Drivers\Gd\Driver;
 use Intervention\Image\ImageManager;
 
@@ -82,7 +83,7 @@ class ParentCategoryController extends Controller
             return false;
         }
         $data->validate([
-            'parent_category_name'=>['required','unique:parent_categories,parent_category_name,'.$id.',id'],
+            'parent_category_name'=>['required',Rule::unique('parent_categories')->ignore('id')->where(function($query) use ($id){$query->where([['parent_category_delete',0],['id','!=',$id]]);})],
             'parent_category_image'=>'mimes:jpg,jpeg,png|max:2000',
         ]);
         $parent_category = ParentCategory::findOrFail($id);
@@ -106,6 +107,7 @@ class ParentCategoryController extends Controller
 
         return response([
             'parent_category' => $parent_category,
+            'user_name' => $parent_category->admin()->first()->name,
             'title'=>__('admin_local.Congratulations !'),
             'text'=>__('admin_local.Parent Category updated successfully.'),
             'confirmButtonText'=>__('admin_local.Ok'),
@@ -119,6 +121,7 @@ class ParentCategoryController extends Controller
     {
         $parent_category = ParentCategory::findOrFail($id);
         $parent_category->parent_category_delete=1;
+        $parent_category->save();
         return response([
             'title'=>__('admin_local.Congratulations !'),
             'text'=>__('admin_local.Parent category deleted successfully.'),

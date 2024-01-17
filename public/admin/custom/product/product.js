@@ -13,7 +13,7 @@ $(document).ready(function () {
             return false;
         }
     });
-    $( "form" ).validate({
+    $("form").validate({
         rules: {
             field: {
               required: true,
@@ -30,6 +30,7 @@ $('#add_product_form select[name="product_unit"]').change(function () {
         url: 'get-unit/' + $(this).val(),
         dataType: "JSON",
         success: function (data) {
+            console.log(data);
             $('#sale_unit').empty().append('<option value="' + data.unit_id + '">' + data.unit_name + '</option>');
             $('#purchase_unit').empty().append('<option value="' + data.unit_id + '">' + data.unit_name + '</option>');
             $('#sale_unit').trigger('change');

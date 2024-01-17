@@ -78,6 +78,11 @@ $('#add_brand_form').submit(function (e) {
 // Show data on edit modal
 $(document).on('click', '#edit_button', function () {
     $('#edit_brand_form').trigger('reset');
+    $('#edit_brand_form .err-mgs').each(function(id,val){
+        $(this).prev('input').removeClass('border-danger is-invalid')
+        $(this).prev('textarea').removeClass('border-danger is-invalid')
+        $(this).empty();
+    })
     let brand = $(this).closest('tr').data('id');
     $.ajax({
         type: "get",

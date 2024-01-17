@@ -12,6 +12,6 @@ class ParentCategory extends Model
     protected $table = 'parent_categories';
 
     public function admin(){
-        return $this->hasOne(Admin::class,'id','parent_category_added_by');
+        return $this->belongsTo(Admin::class,'parent_category_added_by','id');
     }
 }

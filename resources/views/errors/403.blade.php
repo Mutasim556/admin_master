@@ -14,7 +14,12 @@
                 <div class="card-body my-2">
                     <div class="row">
                         <div class="col-md-4 mx-auto text-center">
-                            <img src="{{ asset('admin/images/403.avif') }}" style="height: 200px" alt="">
+                            {{-- <audio id="my_audio" src="{{ asset('admin/assets/audio/access-denied2.mp3') }}" autoplay loop="loop"></audio> --}}
+                            {{-- <audio id="audio" controls autoplay>
+                                <source  src="{{ asset('admin/assets/audio/access-denied2.mp3') }}" type="audio/ogg">
+                                <source  src="{{ asset('admin/assets/audio/access-denied2.mp3') }}" type="audio/mpeg">
+                            </audio> --}}
+                            <img src="{{ asset('admin/images/access-denied.gif') }}" style="height: 200px;width:100%"  alt="">
                         </div>
                     </div>
                 </div>
@@ -22,4 +27,13 @@
         </div>
     </div>
 </div>
+
+
 @endsection
+@push('js')
+{{-- <script>
+    $(document).ready(function(){
+        $('#audio')[0].play();
+    })
+</script> --}}
+@endpush

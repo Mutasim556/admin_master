@@ -44,7 +44,7 @@ $('#add_parent_category_form').submit(function (e) {
 
                     action_option = action_option + `</div></div>`;
                 }
-                let par_image = data.parent_category_image?'<img src="/'+data.parent_category_image+'">':"No File";
+                let par_image = data.parent_category_image?'<img src="/'+data.parent_category_image+'">':no_file;
                 $('#basic-1 tbody').append(`<tr id="trid-${data.id}" data-id="${data.id}"><td>${data.parent_category_name}</td><td>${par_image}</td><td>${rdata.user_name}</td>
                 <td class="text-center">${update_status_btn}</td>
                 <td>${action_option}</td></tr>`);
@@ -92,6 +92,11 @@ $('#add_parent_category_form').submit(function (e) {
 
 // Show data on edit modal
 $(document).on('click', '#edit_button', function () {
+    $('#edit_parent_category_form .err-mgs').each(function(id,val){
+        $(this).prev('input').removeClass('border-danger is-invalid')
+        $(this).prev('textarea').removeClass('border-danger is-invalid')
+        $(this).empty();
+    })
     $('#edit_parent_category_form').trigger('reset');
     let parent_cat = $(this).closest('tr').data('id');
     $.ajax({
@@ -102,10 +107,10 @@ $(document).on('click', '#edit_button', function () {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },
         success: function (data) {
-            $('#edit_parent_category_form #parent_category_id').val(data.parent_category_id);
+            $('#edit_parent_category_form #parent_category_id').val(data.id);
             $('#edit_parent_category_form #parent_category_name').val(data.parent_category_name);
             if(data.parent_category_image==''){
-                $('#edit_parent_category_form #image_preview').empty().append(`No Image`);
+                $('#edit_parent_category_form #image_preview').empty().append(no_file);
             }else{
                 $('#edit_parent_category_form #image_preview').empty().append(`<img src="/${data.parent_category_image}">`);
             }
@@ -126,7 +131,7 @@ $(document).on('click', '#edit_button', function () {
 //update data
 $('#edit_parent_category_form').submit(function (e) {
     e.preventDefault();
-    $('button[type=submit]', this).html('Submitting....');
+    $('button[type=submit]', this).html(submit_btn_after+'....');
     $('button[type=submit]', this).addClass('disabled');
     var trid = '#trid-'+$('#parent_category_id', this).val();
     var formData = new FormData(this);
@@ -144,32 +149,37 @@ $('#edit_parent_category_form').submit(function (e) {
         cache: false,
         processData: false,
         success: function (data) {
-            $('button[type=submit]', '#edit_parent_category_form').html('Submit');
+            $('button[type=submit]', '#edit_parent_category_form').html(submit_btn_before);
             $('button[type=submit]', '#edit_parent_category_form').removeClass('disabled');
-            $('td:nth-child(1)',trid).html(data.parent_category_name);
-            $('td:nth-child(2)',trid).html(data.parent_category_image?`<img src="/${data.parent_category_image}">`:'No Image');
-            $('td:nth-child(3)',trid).html(data.name);
+            $('td:nth-child(1)',trid).html(data.parent_category.parent_category_name);
+            $('td:nth-child(2)',trid).html(data.parent_category.parent_category_image?`<img src="/${data.parent_category.parent_category_image}">`:no_file);
+            $('td:nth-child(3)',trid).html(data.user_name);
             swal({
                 icon: "success",
-                title: "Congratulations !",
-                text: 'User data updated suvccessfully',
-                confirmButtonText: "Ok",
+                title: data.title,
+                text: data.text,
+                confirmButtonText: data.confirmButtonText,
             }).then(function () {
+                $('#edit_parent_category_form .err-mgs').each(function(id,val){
+                    $(this).prev('input').removeClass('border-danger is-invalid')
+                    $(this).prev('textarea').removeClass('border-danger is-invalid')
+                    $(this).empty();
+                })
                 $('#edit_parent_category_form').trigger('reset');
                 $('button[type=button]', '#edit_parent_category_form').click();
-                
-
             });
         },
         error: function (err) {
-            $('button[type=submit]', '#edit_parent_category_form').html('Submit');
-            $('button[type=submit]', '#edit_parent_category_form').removeClass('disabled');
-            var err_message = err.responseJSON.message.split("(");
-            swal({
-                icon: "warning",
-                title: "Warning !",
-                text: err_message[0],
-                confirmButtonText: "Ok",
+            $('button[type=submit]', '#edit_parent_category_form').html(submit_btn_before);
+            $('button[type=submit]', '#edit_parent_category_form').removeClass('disabled'); 
+            $('#edit_parent_category_form .err-mgs').each(function(id,val){
+                $(this).prev('input').removeClass('border-danger is-invalid')
+                $(this).prev('textarea').removeClass('border-danger is-invalid')
+                $(this).empty();
+            })
+            $.each(err.responseJSON.errors,function(idx,val){
+                $('#edit_parent_category_form #'+idx).addClass('border-danger is-invalid')
+                $('#edit_parent_category_form #'+idx).next('.err-mgs').empty().append(val);
             });
         }
     });
@@ -183,12 +193,9 @@ $(document).on('change','#status_change',function(){
     parent_td.empty().append(`<i class="fa fa-refresh fa-spin"></i>`);
     $.ajax({
         type: "get",
-        url: 'parent_category/update/status/'+update_id+"/"+status,
+        url: 'parent-category/update/status/'+update_id+"/"+status,
         success: function (data) {
-            parent_td.empty().append(`<span class="mx-2">${data.parent_category_status}</span><input data-status="${data.parent_category_status=='Active'?'Inactive':'Active'}" id="status_change" type="checkbox" data-toggle="switchery" data-color="green"  data-secondary-color="red" data-size="small" ${data.parent_category_status=='Active'?'checked':''} />`);
-            // parent_td.children('input').each(function (idx, obj) {
-            //     new Switchery($(this)[0], $(this).data());
-            // });
+            parent_td.empty().append(`<span class="mx-2">${data.parent_category_status==1?'Active':'Inactive'}</span><input data-status="${data.parent_category_status==1?0:1}" id="status_change" type="checkbox" data-toggle="switchery" data-color="green"  data-secondary-color="red" data-size="small" ${data.parent_category_status==1?'checked':''} />`);
             new Switchery(parent_td.find('input')[0], parent_td.find('input').data());
         },
         error: function (err) {
@@ -207,8 +214,8 @@ $(document).on('change','#status_change',function(){
 $(document).on('click','#delete_button',function(){
     var delete_id = $(this).closest('tr').data('id');
     swal({
-        title: "Are you sure?",
-        text: "Once deleted, you will not be able to recover this parent category",
+        title: delete_swal_title,
+        text: delete_swal_text,
         icon: "warning",
         buttons: true,
         dangerMode: true,
@@ -223,9 +230,9 @@ $(document).on('click','#delete_button',function(){
                 success: function (data) {
                     swal({
                         icon: "success",
-                        title: "Congratulations !",
-                        text: 'Parent category deleted successfully',
-                        confirmButtonText: "Ok",
+                        title: data.title,
+                        text: data.text,
+                        confirmButtonText: data.confirmButtonText,
                     }).then(function () {
                         $('#trid-'+delete_id).hide();
                     });
@@ -242,7 +249,7 @@ $(document).on('click','#delete_button',function(){
             });
            
         } else {
-            swal("Delete request canceld successfully");
+            swal(delete_swal_cancel_text);
         }
     })
 });

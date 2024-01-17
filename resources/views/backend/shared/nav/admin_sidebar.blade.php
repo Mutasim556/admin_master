@@ -19,7 +19,7 @@
             </ul>
         </li>
     @endif
-    @if (hasPermission(['unit-index','brand-index','size-index','parent-category-index']))
+    @if (hasPermission(['unit-index','brand-index','size-index','parent-category-index','category-index','product-store']))
         <li class="sidebar-list">
             <a class="sidebar-link sidebar-title" href="javascript:void(0)"
                 aria-expanded="false">
@@ -55,6 +55,22 @@
                         <a href="{{ route('admin.product.parent-category.index') }}" class="sidebar-link">
                             
                             <span > {{ __('admin_local.Parent Category') }} </span>
+                        </a>
+                    </li>
+                @endif
+                @if (hasPermission(['category-index']))
+                    <li>
+                        <a href="{{ route('admin.product.category.index') }}" class="sidebar-link">
+                            
+                            <span > {{ __('admin_local.Category') }} </span>
+                        </a>
+                    </li>
+                @endif
+                @if (hasPermission(['product-store']))
+                    <li>
+                        <a href="{{ route('admin.product.create') }}" class="sidebar-link">
+                            
+                            <span > {{ __('admin_local.Add Product') }} </span>
                         </a>
                     </li>
                 @endif
