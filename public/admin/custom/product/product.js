@@ -159,7 +159,16 @@ $('#add_promotional_price').change(function () {
 $('#add_new_variant').click(function () {
     // $('<div class="row append_variant_option_row"><div class="form-group col-md-5"><label for="variant_option">Option</label><input type="text" class="form-control" name="variant_option[]" id="variant_option" > </div><div class="form-group col-md-5"> <label for="variant_value">Value</label><input type="text" class="form-control variant_value" name="variant_value[]" id="variant_value" data-role="tagsinput"></div></div>').insertAfter("div").hide().show(300);
 
-    $('#variant_option_row').next('div').append('<div class="row variant_option_row"><div class="form-group col-md-5"><label for="variant_option">Option *</label><input type="text" class="form-control" name="variant_option[]" id="variant_option" required> </div><div class="form-group col-md-5"> <label for="variant_value">Value *</label><input type="text" class="form-control variant_value" name="variant_value[]" id="variant_value" data-role="tagsinput" required></div><div class="form-group col-md-2" style="line-height: 100px;"><button type="button" class="btn btn-danger py-2 px-2" id="remove_varient_div"><i class="fa fa-trash"></i></button></div></div>');
+    $('#variant_option_row').next('div').append(`<div class="row variant_option_row">
+    <div class="form-group col-md-5">
+    <label for="variant_option">Option *</label>
+    <input type="text" class="form-control" name="variant_option[]" id="variant_option" required> </div>
+    <span class="text-danger err-mgs"></span>
+    <div class="form-group col-md-5">
+    <label for="variant_value">Value *</label>
+    <input type="text" class="form-control variant_value" name="variant_value[]" id="variant_value" data-role="tagsinput" required>
+    </div>
+    <div class="form-group col-md-2" style="line-height: 100px;"><button type="button" class="btn btn-danger py-2 px-2" id="remove_varient_div"><i class="fa fa-trash"></i></button></div></div>`);
     
 
     $(".variant_value").tagsinput();
@@ -233,31 +242,70 @@ var myDropzone = new Dropzone("div#dropzoneDragArea", {
     renameFile: function (file) {
         var dt = new Date();
         var time = dt.getTime();
-        return time + file.name;
+        var file_ext = file.name.split('.');
+        return 'PRODUCT-'+time+'.'+file_ext[file_ext.length-1];
     },
     acceptedFiles: ".jpeg,.jpg,.png,.gif",
-    init: function () {
+    init: function (file) {
         var myDropzone = this;
         $('#add_product_form').on("submit", function (e) {
             e.preventDefault();
-            $.ajax({
-                type: 'POST',
-                url: form_url,
-                data: $(this).serialize(),
-                success: function (data) {
-                    console.log(data);
-                },
-                error: function (err) {
-                    var err_message = err.responseJSON.message.split("(");
-                    swal({
-                        icon: "warning",
-                        title: "Warning !",
-                        text: err_message[0],
-                        confirmButtonText: "Ok",
+            // e.stopPropagation();
+            // console.log(myDropzone.getQueuedFiles().length);
+            if (myDropzone.getQueuedFiles().length > 0)
+            {                        
+                myDropzone.processQueue();  
+            } else {    
+                    let fData =  new FormData(this);
+                    fData.append('_token',$('#csrf_token').val());            
+                    $.ajax({
+                        type: 'POST',
+                        url: form_url,
+                        data: fData,
+                        dataType: 'JSON',
+                        contentType: false,
+                        cache: false,
+                        processData: false,
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        success: function (data) {
+                            console.log(data);
+                        },
+                        error: function (err) {
+                            // var err_message = err.responseJSON.message.split("(");
+                            // swal({
+                            //     icon: "warning",
+                            //     title: "Warning !",
+                            //     text: err_message[0],
+                            //     confirmButtonText: "Ok",
+                            // });
+                            $('#add_product_form').find(" :input").each(function(){
+                                $(this).removeClass('border-danger is-invalid')
+                            })
+                            $('#add_product_form .text-danger').each(function(id,val){
+                                $(this).empty();
+                            })
+                           
+                            $.each(err.responseJSON.errors,function(idx,val){
+                                let splitVal = idx.split('.');
+                                if(splitVal.length>1 ){
+                                    if(splitVal[0]='variant_option'){
+                                        $('#add_product_form #variant_error').removeClass('d-none');
+                                    }else if(splitVal[0]='variant_value'){
+                                        $('#add_product_form #variant_error').removeClass('d-none');
+                                    }else{
+                                        $('#add_product_form #variant_error').addClass('d-none');
+                                    }
+                                }else{
+                                    $('#add_product_form #variant_error').addClass('d-none');
+                                }
+                                $('#add_product_form #'+idx).addClass('border-danger is-invalid')
+                                $('#add_product_form .err-mgs-'+idx).empty().append(val);
+                            })
+                        },
                     });
-                },
-            });
-            myDropzone.processQueue();
+            }   
         });
         this.on('sending', function (file, xhr, formData) {
             // Append all form inputs to the formData Dropzone will POST
@@ -268,16 +316,29 @@ var myDropzone = new Dropzone("div#dropzoneDragArea", {
         });
     },
     error: function (file, err) {
+        this.removeAllFiles(true);
 
+        $('#add_product_form').find(" :input").each(function(){
+            $(this).removeClass('border-danger is-invalid')
+        })
+        $('#add_product_form .text-danger').each(function(id,val){
+            $(this).empty();
+        })
+       
+        $.each(err.errors,function(idx,val){
+            $('#add_product_form #'+idx).addClass('border-danger is-invalid')
+            $('#add_product_form .err-mgs-'+idx).empty().append(val);
+        })
     },
     successmultiple: function (file, response) {
-        // window.location.reload()
+        // console.log(response);
+        this.removeAllFiles(true);
     },
     completemultiple: function (file, response) {
-        console.log(file, response, "completemultiple");
+        // console.log(file, response, "completemultiple");
     },
     reset: function () {
-        console.log("resetFiles");
-        this.removeAllFiles(true);
+        // console.log("resetFiles");
+        // this.removeAllFiles(true);
     }
 });

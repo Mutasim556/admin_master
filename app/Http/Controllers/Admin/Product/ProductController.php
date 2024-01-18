@@ -3,12 +3,15 @@
 namespace App\Http\Controllers\Admin\Product;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\Product\ProductStoreRequest;
 use App\Models\Admin\Product\Brand;
 use App\Models\Admin\Product\Category;
 use App\Models\Admin\Product\Unit;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Intervention\Image\Drivers\Gd\Driver;
+use Intervention\Image\ImageManager;
 
 class ProductController extends Controller
 {
@@ -38,9 +41,29 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ProductStoreRequest $data)
     {
-        //
+        dd($data->all());
+        $images = $data->image;
+        // dd($images[0]->getClientOriginalName());
+        $image_names = [];
+
+        if($images) {
+            foreach ($images as $key => $image) {
+                $imageName = $image->getClientOriginalName();
+                $manager = new ImageManager(new Driver());
+                $manager->read($image)->resize(150,150)->save('admin/inventory/file/product/'.$imageName);
+                $imageName  = 'admin/inventory/file/product/'.$imageName;
+                $image_names[] = $imageName;
+            }
+            $data['product_image'] = implode(",", $image_names);
+        }
+        else {
+            $data['product_image'] = 'zummXD2dvAtI.png';
+        }
+        
+        // dd($data['product_image']);
+        return  $data['product_image'];
     }
 
     /**
