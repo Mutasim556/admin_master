@@ -46,4 +46,5 @@ Route::controller(ProductController::class)->prefix('product')->group(function (
    Route::get('/update/status/{id}/{status}', 'updateStatus');
    Route::get('/generate/product-code', 'generateProductCode');
    Route::get('/get-unit/{pram}', 'getUnit');
+   Route::get('/get-variant/{pram}', 'getVariant');
 });

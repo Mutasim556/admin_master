@@ -147,39 +147,35 @@
                                     <div class="row" id="combo">
                                         <div class="form-group col-md-8">
                                             <label for="add_combo_product">{{ __('admin_local.Add Combo Product') }} *</label>
-                                            <div class="input-group">
-                                                <span class="input-group-text" style="border:1px solid black;"><i
+                                            <div class="input-group col-md-12" id="the-basics">
+                                                <span class="input-group-text col-md-1" style="border:1px solid black;"><i
                                                         class="fa fa-barcode"></i></span>
-                                                <input type="text" class="form-control" name="add_combo_product"
-                                                    id="add_combo_product">
+                                                <div class="col-md-11">
+                                                    <input type="text" class="form-control" name="add_combo_product"
+                                                    id="add_combo_product" style="width: 100% !important;">
+                                                </div>
+                                                
                                             </div>
-
+                                            <span class="text-danger err-mgs-add_combo_product"></span>
                                         </div>
                                         <div class="form-group col-md-12">
                                             <label for="add_combo_product">{{ __('admin_local.Combo Products') }} *</label>
-                                            <table id="" class="display table table-bordered">
-                                                <thead>
-                                                    <tr>
-                                                        <th><b>{{ __('admin_local.Product') }}</b></th>
-                                                        <th><b>{{ __('admin_local.Quantity') }}</b></th>
-                                                        <th><b>{{ __('admin_local.Unit Price') }}</b></th>
-                                                        <th><b>{{ __('admin_local.Action') }}</b></th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr>
-                                                        <td>Test</td>
-                                                        <td><input type="number" class="form-control" value="1"
-                                                                min="1"></td>
-                                                        <td><input type="number" class="form-control" value="1"
-                                                                min="1"></td>
-                                                        <td class="text-center"><button type="button"
-                                                                class="btn btn-danger btn-sm px-2 py-2"><i
-                                                                    class="fa fa-trash"
-                                                                    style="font-size: 17px"></i></button></td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
+                                            <div class="table-responsive">
+                                                <table id="combo_product_table" class="display table table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th><b>{{ __('admin_local.Product') }}</b></th>
+                                                            <th><b>{{ __('admin_local.Quantity') }}</b></th>
+                                                            <th><b>{{ __('admin_local.Unit Price') }}</b></th>
+                                                            <th><b>{{ __('admin_local.Action') }}</b></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            
                                         </div>
                                     </div>
                                     <div class="row" id="visible_unit">
@@ -252,7 +248,7 @@
                                         <div class="form-group col-md-4">
                                             <label for="product_tax">{{ __('admin_local.Product Tax') }}</label>
                                             <select class="form-control" id="product_tax" name="product_tax">
-                                                <option value="">No Tax</option>
+                                                <option value="1">No Tax</option>
                                             </select>
                                         </div>
                                         <div class="form-group col-md-4">
@@ -310,7 +306,7 @@
                                     <div class="row variant_option_row" id="variant_option_row"
                                         style="margin-bottom: -30px;">
                                         
-                                        <div class="form-group col-md-12 d-none" id="variant_error">
+                                        <div class="form-group col-md-8 mx-auto d-none" id="variant_error">
                                             <div class="alert alert-warning alert-dismissible bg-warning text-white border-0 fade show"
                                                 role="alert">
                                                 <button type="button" class="btn-close" data-bs-dismiss="alert"
@@ -357,7 +353,7 @@
                                     <div class="row " id="warehouse_price_row">
                                         <div class="form-group col-md-8">
                                             <input type="checkbox" id="warehouse_price" class="mr-2"
-                                                name="warehouse_price">
+                                                name="warehouse">
                                             &nbsp;&nbsp;<label
                                                 for="warehouse_price">{{ __('admin_local.This product has different price for different warehouse') }}
                                             </label>
@@ -374,7 +370,8 @@
                                                 </thead>
                                                 <tbody>
                                                     <tr>
-                                                        <td>Test</td>
+                                                        <td><input type="text" class="form-control" name="warehouse_name[]" value="{{ 'Test' }}" readonly></td>
+                                                        <input type="hidden" class="form-control" name="warehouse_id[]" value="1" >
                                                         <td><input type="number" name="warehouse_prices[]" class="form-control" value="1"
                                                                 min="1"></td>
                                                     </tr>
@@ -450,6 +447,7 @@
             </div>
         </div>
     </div>
+    
 @endsection
 @push('js')
     <script src="{{ asset('admin/assets/js/sweet-alert/sweetalert.min.js') }}"></script>
@@ -465,6 +463,9 @@
     <script src="{{ asset('admin/assets/js/datepicker/date-picker/datepicker.js') }}"></script>
     <script src="{{ asset('admin/assets/js/datepicker/date-picker/datepicker.en.js') }}"></script>
     <script src="{{ asset('admin/assets/js/datepicker/date-picker/datepicker.custom.js') }}"></script>
+    <script src="{{ asset('admin/assets/js/typeahead/handlebars.js') }}"></script>
+    <script src="{{ asset('admin/assets/js/typeahead/typeahead.bundle.js') }}"></script>
+    {{-- <script src="{{ asset('admin/assets/js/typeahead/typeahead.custom.js') }}"></script> --}}
     {{-- <script src="{{ asset('inventory/assets/js/select2/select2-custom.js') }}"></script> --}}
     <script>
         $('.js-example-basic-single').select2();
@@ -515,6 +516,31 @@
             `{{ __('admin_local.Once deleted, you will not be able to recover this size data') }}`;
         var delete_swal_cancel_text = `{{ __('admin_local.Delete request canceld successfully') }}`;
         var no_file = `{{ __('admin_local.No file') }}`;
+
+        var substringMatcher = function(strs) {
+            return function findMatches(q, cb) {
+            var matches, substringRegex;
+            matches = [];
+            substrRegex = new RegExp(q, 'i');
+            $.each(strs, function(i, str) {
+                if (substrRegex.test(str)) {
+                matches.push(str);
+                }
+            });
+            cb(matches);
+            };
+        };
+        var products = [{!! "'" . implode ( "', '", $product_name ) . "'" !!}];
+        var product_prices =[{!! "'" . implode ( "', '", $product_prices ) . "'" !!}];
+        $('#the-basics .form-control').typeahead({
+            hint: true,
+            highlight: true,
+            minLength: 1
+        },
+        {
+            name: 'products',
+            source: substringMatcher(products)
+        });
     </script>
     <script src="{{ asset('admin/custom/product/product.js') }}"></script>
     {{-- <script src="{{ asset('inventory/custom/user/user_list.js') }}"></script> --}}

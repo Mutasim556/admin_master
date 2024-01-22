@@ -159,16 +159,7 @@ $('#add_promotional_price').change(function () {
 $('#add_new_variant').click(function () {
     // $('<div class="row append_variant_option_row"><div class="form-group col-md-5"><label for="variant_option">Option</label><input type="text" class="form-control" name="variant_option[]" id="variant_option" > </div><div class="form-group col-md-5"> <label for="variant_value">Value</label><input type="text" class="form-control variant_value" name="variant_value[]" id="variant_value" data-role="tagsinput"></div></div>').insertAfter("div").hide().show(300);
 
-    $('#variant_option_row').next('div').append(`<div class="row variant_option_row">
-    <div class="form-group col-md-5">
-    <label for="variant_option">Option *</label>
-    <input type="text" class="form-control" name="variant_option[]" id="variant_option" required> </div>
-    <span class="text-danger err-mgs"></span>
-    <div class="form-group col-md-5">
-    <label for="variant_value">Value *</label>
-    <input type="text" class="form-control variant_value" name="variant_value[]" id="variant_value" data-role="tagsinput" required>
-    </div>
-    <div class="form-group col-md-2" style="line-height: 100px;"><button type="button" class="btn btn-danger py-2 px-2" id="remove_varient_div"><i class="fa fa-trash"></i></button></div></div>`);
+    $('#variant_option_row').next('div').append('<div class="row variant_option_row"><div class="form-group col-md-5"><label for="variant_option">Option *</label><input type="text" class="form-control" name="variant_option[]" id="variant_option"> </div><div class="form-group col-md-5"> <label for="variant_value">Value *</label><input type="text" class="form-control variant_value" name="variant_value[]" id="variant_value" data-role="tagsinput"></div><div class="form-group col-md-2" style="line-height: 100px;"><button type="button" class="btn btn-danger py-2 px-2" id="remove_varient_div"><i class="fa fa-trash"></i></button></div></div>');
     
 
     $(".variant_value").tagsinput();
@@ -211,7 +202,7 @@ $(document).on('change', '.variant_option_row .variant_value', function (e) {
     $.each(firstVariantRow, function (rid, value) {
         let split_value = value.split('/');
         let expected_value = split_value.slice(0, split_value.length-1).join('/') + '-'+product_code + split_value[split_value.length-1];
-        $('#variant_option_table table tbody').append('<tr><td>' + expected_value + '</td><td><input type="text" name="variant_item_code[]" class="form-control" value="' + expected_value + '" disabled></td> <td><input type="text" name="variant_additional_cost[]" class="form-control" value=""></td><td class="text-center"><input type="text" class="form-control"  name="variant_additional_price[]"></td></tr>');
+        $('#variant_option_table table tbody').append('<tr><td>' + expected_value + '</td><td><input type="text" name="variant_item_code[]" class="form-control" value="' + expected_value + '" readonly></td> <td><input type="text" name="variant_additional_cost[]" class="form-control" value=""></td><td class="text-center"><input type="text" class="form-control"  name="variant_additional_price[]"></td></tr>'); 
     });
 
 })
@@ -221,6 +212,164 @@ $(document).on('click','#remove_varient_div',function(){
         $(this).remove();
     });
 })
+
+var pid_array = [];
+$('#add_combo_product').on('keypress',function(e){
+    if(e.which==13){
+        
+        let pid = $('#add_combo_product').val().split("@")[0];
+        let pname = $('#add_combo_product').val().split("@")[1];
+        // pid_array.push(pid);
+        
+        if(jQuery.inArray(pid, pid_array) != -1){
+            swal({
+                icon: "warning",
+                title: "Warning !",
+                text: 'Duplicate product not allowed',
+                confirmButtonText: "Ok",
+            }).then(function(){
+                $('#add_combo_product').val('');
+                $('#add_combo_product')[0].focus(); 
+            });
+        }else{
+            if($('#add_combo_product').val()==''){
+                swal({
+                    icon: "warning",
+                    title: "Warning !",
+                    text: 'Please select product',
+                    confirmButtonText: "Ok",
+                }).then(function(){
+                    $('#add_combo_product').val('');
+                    $('#add_combo_product')[0].focus(); 
+                });
+            }else{
+                if(jQuery.inArray($('#add_combo_product').val(), products) != -1){
+                    pid_array.push(pid);
+
+                    $.ajax({
+                        type: "get",
+                        url: 'get-variant/' + pid,
+                        dataType: 'JSON',
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        success: function (data) {
+                           if(data.variant!='No'){
+                                let select_variant = `<select name="combo_product_variant[]" id="combo_product_variant"><option value="" selected disabled>Select Please</option>`;
+                                $.each(data.variant,function(idx,val){
+                                    select_variant = select_variant + `<option value="${val.id}">${val.item_code}|${val.item_code}</option>`;
+                                });
+                                select_variant = select_variant + `</select>`;
+                                $('#combo_product_table tbody').append(`
+                                    <tr data-id="${pid}" >
+                                        <td style="width:50%">${pname} <input type="hidden"value="${pid}"
+                                        name="combo_product_id[]"> ${select_variant}</td>
+                                        <td><input type="number" class="form-control" value="1"
+                                                min="1" name="combo_product_quantity[]" id="combo_product_quantity" required></td>
+                                        <td><input type="number" class="form-control"
+                                                min="1" name="combo_product_unit_price[]" id="combo_product_price" value="${data.product.price}" required></td>
+                                        <td class="text-center"><button type="button"
+                                                class="btn btn-danger btn-sm px-2 py-2" id="delete_combo_button"><i
+                                                    class="fa fa-trash"
+                                                    style="font-size: 17px"></i></button></td>
+                                    </tr>
+                                `);
+                           }else{
+                                $('#combo_product_table tbody').append(`
+                                    <tr data-id="${pid}" >
+                                        <td style="width:50%">${pname}<input type="hidden" class="form-control" value="${pid}"
+                                        name="combo_product_id[]"></td>
+                                        <td><input type="number" class="form-control" value="1"
+                                                min="1" name="combo_product_quantity[]" id="combo_product_quantity" required></td>
+                                        <td><input type="number" class="form-control"
+                                                min="1" name="combo_product_unit_price[]" id="combo_product_price" value="${data.product.price}" required></td>
+                                        <td class="text-center"><button type="button"
+                                                class="btn btn-danger btn-sm px-2 py-2" id="delete_combo_button"><i
+                                                    class="fa fa-trash"
+                                                    style="font-size: 17px"></i></button></td>
+                                    </tr>
+                                `);
+                           }
+                        },
+                        error: function (err) {
+                            var err_message = err.responseJSON.message.split("(");
+                            swal({
+                                icon: "warning",
+                                title: "Warning !",
+                                text: err_message[0],
+                                confirmButtonText: "Ok",
+                            });
+                        }
+                    });
+                    
+                    $(this).val('');
+                }else{
+                    swal({
+                        icon: "warning",
+                        title: "Warning !",
+                        text: 'Invalid Product',
+                        confirmButtonText: "Ok",
+                    }).then(function(){
+                        $('#add_combo_product').val('');
+                        $('#add_combo_product')[0].focus(); 
+                    });
+                }
+                
+            }
+           
+        }
+    }
+})
+
+
+$(document).on("change",'#combo_product_quantity',function(){
+    var c_p_q = $(this);
+    if($(this).val()<1){
+        swal({
+            icon: "warning",
+            title: "Warning !",
+            text: 'Invalid Quantity',
+            confirmButtonText: "Ok",
+        }).then(function(){
+            c_p_q.val(1);
+            c_p_q[0].focus();
+        });
+    }
+})
+$(document).on("change",'#combo_product_price',function(){
+    var c_p_p = $(this);
+    if($(this).val()<1){
+        swal({
+            icon: "warning",
+            title: "Warning !",
+            text: 'Invalid Price',
+            confirmButtonText: "Ok",
+        }).then(function(){
+            c_p_p.val(c_p_p.closest('tr').data('index'));
+            c_p_p[0].focus();
+        });
+    }
+})
+$(document).on("click",'#delete_combo_button',function(){
+    pid_array.splice($.inArray($(this).closest('tr').data('id'), pid_array), 1);
+    $(this).closest('tr').remove();
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //dropzone
 
 Dropzone.autoDiscover = false;
@@ -232,7 +381,7 @@ var myDropzone = new Dropzone("div#dropzoneDragArea", {
     parallelUploads: 100,
     dictRemoveFile: 'Remove',
     maxFilesize: 12,
-    paramName: 'image',
+    paramName: 'image[]',
     clickable: true,
     method: 'POST',
     url: form_url,
@@ -253,7 +402,7 @@ var myDropzone = new Dropzone("div#dropzoneDragArea", {
             // e.stopPropagation();
             // console.log(myDropzone.getQueuedFiles().length);
             if (myDropzone.getQueuedFiles().length > 0)
-            {                        
+            {                     
                 myDropzone.processQueue();  
             } else {    
                     let fData =  new FormData(this);
@@ -273,13 +422,6 @@ var myDropzone = new Dropzone("div#dropzoneDragArea", {
                             console.log(data);
                         },
                         error: function (err) {
-                            // var err_message = err.responseJSON.message.split("(");
-                            // swal({
-                            //     icon: "warning",
-                            //     title: "Warning !",
-                            //     text: err_message[0],
-                            //     confirmButtonText: "Ok",
-                            // });
                             $('#add_product_form').find(" :input").each(function(){
                                 $(this).removeClass('border-danger is-invalid')
                             })
@@ -342,3 +484,7 @@ var myDropzone = new Dropzone("div#dropzoneDragArea", {
         // this.removeAllFiles(true);
     }
 });
+
+
+
+

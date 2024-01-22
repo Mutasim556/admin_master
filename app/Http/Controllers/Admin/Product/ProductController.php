@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Product\ProductStoreRequest;
 use App\Models\Admin\Product\Brand;
 use App\Models\Admin\Product\Category;
+use App\Models\Admin\Product\Product;
 use App\Models\Admin\Product\Unit;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
@@ -17,6 +18,7 @@ class ProductController extends Controller
 {
     public function __construct()
     {
+       
         $this->middleware('permission:product-store,admin')->only(['create','store']);
     }
     /**
@@ -35,7 +37,17 @@ class ProductController extends Controller
         $brands = Brand::where('brand_status',1)->get();
         $categories = Category::where([['category_status',1],['category_delete',0]])->get();
         $units = Unit::where([['unit_status',1]])->get();
-        return view('backend.blade.product.create',compact('brands','categories','units'));
+        $products = Product::where([['status',1],['delete',0]])->select('name','id','price','is_variant')->get();
+        $product_name = [];
+        $product_prices = [];
+        foreach($products as $key=>$product){
+            array_push($product_name,$product->id."@".$product->name);
+            $product_prices[$key]=$product->price;
+        }
+
+
+        // dd(implode(',',$product_prices));
+        return view('backend.blade.product.create',compact('brands','categories','units','product_name','product_prices'));
     }
 
     /**
@@ -43,25 +55,7 @@ class ProductController extends Controller
      */
     public function store(ProductStoreRequest $data)
     {
-        dd($data->all());
-        $images = $data->image;
-        // dd($images[0]->getClientOriginalName());
-        $image_names = [];
-
-        if($images) {
-            foreach ($images as $key => $image) {
-                $imageName = $image->getClientOriginalName();
-                $manager = new ImageManager(new Driver());
-                $manager->read($image)->resize(150,150)->save('admin/inventory/file/product/'.$imageName);
-                $imageName  = 'admin/inventory/file/product/'.$imageName;
-                $image_names[] = $imageName;
-            }
-            $data['product_image'] = implode(",", $image_names);
-        }
-        else {
-            $data['product_image'] = 'zummXD2dvAtI.png';
-        }
-        
+        $data->store();
         // dd($data['product_image']);
         return  $data['product_image'];
     }
@@ -117,4 +111,17 @@ class ProductController extends Controller
         $unit = Unit::where('id', $data->pram)->orWhere('unit_name', 'LIKE', '%' . $data->pram . '%')->select('id', 'unit_name')->first();
         return response($unit);
     }
+
+    public function getVariant(Request $data) :Response
+    {
+        $product = Product::with('productVariant')->where('id',$data->pram)->first();
+        if($product->is_variant){
+            return response(['variant'=>$product->productVariant,'product'=>$product]);
+        }else{
+            return response(['variant'=>'No','product'=>$product]);
+        }
+        
+    }
+
+    
 }
