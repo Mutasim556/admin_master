@@ -19,11 +19,11 @@ return new class extends Migration
             $table->string('barcode_symbology');
             $table->foreignId('brand_id')->nullable()->references('id')->on('brands');
             $table->foreignId('category_id')->references('id')->on('categories');
-            $table->foreignId('unit_id')->references('id')->on('units');
+            $table->foreignId('unit_id')->nullable()->references('id')->on('units');
             $table->integer('unit_size');
             $table->integer('cartoon_size');
-            $table->integer('purchase_unit_id');
-            $table->integer('sale_unit_id');
+            $table->integer('purchase_unit_id')->nullable();
+            $table->integer('sale_unit_id')->nullable();
             $table->double('cost');
             $table->double('price');
             $table->double('qty')->nullable();

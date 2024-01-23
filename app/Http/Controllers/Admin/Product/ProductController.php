@@ -24,9 +24,10 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index() :View
     {
-        
+        $products = Product::with('productVariant','warehousePrice','brand','category')->where('delete',0)->get();
+        return view('backend.blade.product.index',compact('products'));
     }
 
     /**
@@ -53,11 +54,22 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(ProductStoreRequest $data)
+    public function store(ProductStoreRequest $data) : Response
     {
-        $data->store();
-        // dd($data['product_image']);
-        return  $data['product_image'];
+        if($data->store()){
+            return  response([
+                'title'=>__('admin_local.Congratulations !'),
+                'text'=>__('admin_local.Product added successfully.'),
+                'confirmButtonText'=>__('admin_local.Ok'),
+            ],200);
+        }else{
+            return  response([
+                'title'=>__('admin_local.Warning !'),
+                'text'=>__('admin_local.Server Error'),
+                'confirmButtonText'=>__('admin_local.Ok'),
+            ],403);;
+        }
+       
     }
 
     /**

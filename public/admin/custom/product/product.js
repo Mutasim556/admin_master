@@ -56,7 +56,7 @@ $('#product_type').change(function () {
         $('#variant_row').show(300).find('div input').prop('checked', false);
         $('#warehouse_price_row').show(300).find('div input').prop('checked', false);
         $('#batch_expire_date_row').show(300).find('div input').prop('checked', false);
-
+        $('#imei_row').show(300).find('div input').prop('checked', false);
     } else if (product_type == 'combo') {
         $('#combo').fadeIn(500);
         $('#visible_unit').fadeOut(300);
@@ -255,9 +255,9 @@ $('#add_combo_product').on('keypress',function(e){
                         },
                         success: function (data) {
                            if(data.variant!='No'){
-                                let select_variant = `<select name="combo_product_variant[]" id="combo_product_variant"><option value="" selected disabled>Select Please</option>`;
+                                let select_variant = `<select name="combo_product_variant[]" id="combo_product_variant" required>`;
                                 $.each(data.variant,function(idx,val){
-                                    select_variant = select_variant + `<option value="${val.id}">${val.item_code}|${val.item_code}</option>`;
+                                    select_variant = select_variant + `<option value="${val.id}">${val.item_code}</option>`;
                                 });
                                 select_variant = select_variant + `</select>`;
                                 $('#combo_product_table tbody').append(`
@@ -351,7 +351,7 @@ $(document).on("change",'#combo_product_price',function(){
     }
 })
 $(document).on("click",'#delete_combo_button',function(){
-    pid_array.splice($.inArray($(this).closest('tr').data('id'), pid_array), 1);
+    pid_array.splice($.inArray($(this).closest('tr').data('id').toString(), pid_array), 1);
     $(this).closest('tr').remove();
 })
 
@@ -372,6 +372,7 @@ $(document).on("click",'#delete_combo_button',function(){
 
 //dropzone
 
+
 Dropzone.autoDiscover = false;
 let token = $('meta[name="csrf-token"]').attr('content');
 var myDropzone = new Dropzone("div#dropzoneDragArea", {
@@ -381,7 +382,7 @@ var myDropzone = new Dropzone("div#dropzoneDragArea", {
     parallelUploads: 100,
     dictRemoveFile: 'Remove',
     maxFilesize: 12,
-    paramName: 'image[]',
+    paramName: 'image',
     clickable: true,
     method: 'POST',
     url: form_url,
@@ -419,7 +420,15 @@ var myDropzone = new Dropzone("div#dropzoneDragArea", {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
                         success: function (data) {
-                            console.log(data);
+                            swal({
+                                icon: "success",
+                                title: data.title,
+                                text: data.text,
+                                confirmButtonText: data.confirmButtonText,
+                            }).then(function(){
+                                // this.removeAllFiles(true);
+                                window.location.reload()
+                            })
                         },
                         error: function (err) {
                             $('#add_product_form').find(" :input").each(function(){
@@ -452,6 +461,10 @@ var myDropzone = new Dropzone("div#dropzoneDragArea", {
         this.on('sending', function (file, xhr, formData) {
             // Append all form inputs to the formData Dropzone will POST
             var data = $("#add_product_form").serializeArray();
+            if($('#add_product_form #product_type').val()=='digital'){
+                data.push({name:'attatch_file',value:document.getElementById("attatched_file").files[0]})
+            }
+            console.log(data);
             $.each(data, function (key, el) {
                 formData.append(el.name, el.value);
             });
@@ -475,13 +488,22 @@ var myDropzone = new Dropzone("div#dropzoneDragArea", {
     successmultiple: function (file, response) {
         // console.log(response);
         this.removeAllFiles(true);
+        swal({
+            icon: "success",
+            title: response.title,
+            text: response.text,
+            confirmButtonText: response.confirmButtonText,
+        }).then(function(){
+            window.location.reload()
+        })
+        
     },
     completemultiple: function (file, response) {
-        // console.log(file, response, "completemultiple");
+        console.log(file, response, "completemultiple");
     },
     reset: function () {
-        // console.log("resetFiles");
-        // this.removeAllFiles(true);
+        console.log("resetFiles");
+        this.removeAllFiles(true);
     }
 });
 

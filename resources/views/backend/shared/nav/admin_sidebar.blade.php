@@ -66,10 +66,16 @@
                         </a>
                     </li>
                 @endif
+                @if (hasPermission(['product-index']))
+                    <li>
+                        <a href="{{ route('admin.product.index') }}" class="sidebar-link">
+                            <span > {{ __('admin_local.Product List') }} </span>
+                        </a>
+                    </li>
+                @endif
                 @if (hasPermission(['product-store']))
                     <li>
                         <a href="{{ route('admin.product.create') }}" class="sidebar-link">
-                            
                             <span > {{ __('admin_local.Add Product') }} </span>
                         </a>
                     </li>

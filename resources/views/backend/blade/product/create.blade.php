@@ -116,8 +116,9 @@
                                         </div>
                                         <div class="form-group col-md-4" id="attatchment_div">
                                             <label for="attatch_file">{{ __('admin_local.Attatched File') }} *</label>
-                                            <input type="file" class="form-control" id="attatch_file"
+                                            <input type="file" class="form-control" id="attatched_file"
                                                 name="attatch_file">
+                                            <span class="text-danger err-mgs-attatch_file"></span>
                                         </div>
                                         <div class="form-group col-md-4" id="brand_div">
                                             <label for="brand">{{ __('admin_local.Brand') }}</label>

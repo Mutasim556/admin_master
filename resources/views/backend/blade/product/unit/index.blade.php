@@ -186,7 +186,7 @@
             <div class="col-lg-10 mx-auto">
                 <div class="card">
                     <div class="card-header py-3" style="border-bottom: 2px dashed gray">
-                        <h3 class="card-title mb-0 text-center">{{ __('Unit List') }}</h3>
+                        <h3 class="card-title mb-0 text-center">{{ __('admin_local.Unit List') }}</h3>
                     </div>
 
                     <div class="card-body">
@@ -202,13 +202,13 @@
                             <table id="basic-1" class="display table-bordered">
                                 <thead>
                                     <tr>
-                                        <th>{{ __('Name') }}</th>
-                                        <th>{{ __('Code') }}</th>
-                                        <th>{{ __('Base Unit') }}</th>
-                                        <th>{{ __('Operator') }}</th>
-                                        <th>{{ __('Operation Value') }}</th>
-                                        <th>{{ __('Status') }}</th>
-                                        <th>{{ __('Action') }}</th>
+                                        <th>{{ __('admin_local.Name') }}</th>
+                                        <th>{{ __('admin_local.Code') }}</th>
+                                        <th>{{ __('admin_local.Base Unit') }}</th>
+                                        <th>{{ __('admin_local.Operator') }}</th>
+                                        <th>{{ __('admin_local.Operation Value') }}</th>
+                                        <th>{{ __('admin_local.Status') }}</th>
+                                        <th>{{ __('admin_local.Action') }}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
