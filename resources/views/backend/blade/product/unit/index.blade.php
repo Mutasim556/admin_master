@@ -47,29 +47,29 @@
             <div class="modal-content">
                 <div class="modal-header d-flex align-items-center" style="border-bottom:1px dashed gray">
                     <h4 class="modal-title" id="myLargeModalLabel">
-                        {{ __('Add Unit') }}
+                        {{ __('admin_local.Add Unit') }}
                     </h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
-                <p class="px-3 text-danger"><i>{{ __('The field labels marked with * are required input fields.') }}</i>
+                <p class="px-3 text-danger"><i>{{ __('admin_local.The field labels marked with * are required input fields.') }}</i>
                 </p>
                 <div class="modal-body" style="margin-top: -20px">
                     <form method="POST" action="" id="add_unit_form" enctype="multipart/form-data">
                         @csrf
                         <div class="row">
                             <div class="col-lg-12 mt-2">
-                                <label for="unit_name"><strong>{{ __('Unit Name') }} *</strong></label>
+                                <label for="unit_name"><strong>{{ __('admin_local.Unit Name') }} *</strong></label>
                                 <input type="text" class="form-control" name="unit_name" id="unit_name">
                                 <span class="text-danger err-mgs"></span>
                             </div>
                             <div class="col-lg-12 mt-2">
-                                <label for="unit_code"><strong>{{ __('Unit Code') }} *</strong></label>
+                                <label for="unit_code"><strong>{{ __('admin_local.Unit Code') }} *</strong></label>
                                 <input type="text" class="form-control" name="unit_code" id="unit_code">
                                 <span class="text-danger err-mgs"></span>
                             </div>
                             <div class="col-lg-12 mt-2">
-                                <label for="base_unit"><strong>{{ __('Base Unit') }} </strong></label>
+                                <label for="base_unit"><strong>{{ __('admin_local.Base Unit') }} </strong></label>
                                 <select class="js-example-basic-single form-control" name="base_unit" id="base_unit">
                                     <option value="">Select Please</option>
                                     @foreach ($units as $unit)
@@ -81,12 +81,12 @@
                         </div>
                         <div class="row d-none" id="invisible_div">
                             <div class="col-lg-12 mt-2">
-                                <label for="operator"><strong>{{ __('Operator') }} *</strong></label>
+                                <label for="operator"><strong>{{ __('admin_local.Operator') }} *</strong></label>
                                 <input type="text" class="form-control" name="operator" id="operator">
                                 <span class="text-danger err-mgs"></span>
                             </div>
                             <div class="col-lg-12 mt-2">
-                                <label for="operation_value"><strong>{{ __('Operation value') }} *</strong></label>
+                                <label for="operation_value"><strong>{{ __('admin_local.Operation value') }} *</strong></label>
                                 <input type="text" class="form-control" name="operation_value" id="operation_value">
                                 <span class="text-danger err-mgs"></span>
                             </div>
@@ -95,9 +95,9 @@
                             <div class="form-group col-lg-12">
                                 <button class="btn btn-danger text-white font-weight-medium waves-effect text-start"
                                     data-bs-dismiss="modal" style="float: right"
-                                    type="button">{{ __('Close') }}</button>
+                                    type="button">{{ __('admin_local.Close') }}</button>
                                 <button class="btn btn-primary mx-2" style="float: right"
-                                    type="submit">{{ __('Submit') }}</button>
+                                    type="submit">{{ __('admin_local.Submit') }}</button>
                             </div>
                         </div>
                     </form>
@@ -117,11 +117,11 @@
             <div class="modal-content">
                 <div class="modal-header d-flex align-items-center" style="border-bottom:1px dashed gray">
                     <h4 class="modal-title" id="myLargeModalLabel">
-                        {{ __('Edit Unit') }}
+                        {{ __('admin_local.Edit Unit') }}
                     </h4>
                     <button type="button" class="btn-close " data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <p class="px-3 text-danger"><i>{{ __('The field labels marked with * are required input fields.') }}</i>
+                <p class="px-3 text-danger"><i>{{ __('admin_local.The field labels marked with * are required input fields.') }}</i>
                 </p>
                 <div class="modal-body" style="margin-top: -20px">
                     <form id="edit_unit_form" enctype="multipart/form-data">
@@ -130,15 +130,15 @@
                         <input type="hidden" id="unit_id" name="unit_id" value="">
                         <div class="row">
                             <div class="col-lg-12 mt-2">
-                                <label for="unit_name"><strong>{{ __('Unit Name') }} *</strong></label>
+                                <label for="unit_name"><strong>{{ __('admin_local.Unit Name') }} *</strong></label>
                                 <input type="text" class="form-control" name="unit_name" id="unit_name">
                             </div>
                             <div class="col-lg-12 mt-2">
-                                <label for="unit_code"><strong>{{ __('Unit Code') }} *</strong></label>
+                                <label for="unit_code"><strong>{{ __('admin_local.Unit Code') }} *</strong></label>
                                 <input type="text" class="form-control" name="unit_code" id="unit_code">
                             </div>
                             <div class="col-lg-12 mt-2">
-                                <label for="base_unit"><strong>{{ __('Base Unit') }} </strong></label>
+                                <label for="base_unit"><strong>{{ __('admin_local.Base Unit') }} </strong></label>
                                 <select class="js-example-basic-single1 form-control" name="base_unit" id="base_unit">
                                     <option value="">Select Please</option>
                                     @foreach ($units as $unit)
@@ -149,11 +149,11 @@
                         </div>
                         <div class="row d-none" id="invisible_div">
                             <div class="col-lg-12 mt-2">
-                                <label for="operator"><strong>{{ __('Operator') }} *</strong></label>
+                                <label for="operator"><strong>{{ __('admin_local.Operator') }} *</strong></label>
                                 <input type="text" class="form-control" name="operator" id="operator">
                             </div>
                             <div class="col-lg-12 mt-2">
-                                <label for="operation_value"><strong>{{ __('Operation value') }} *</strong></label>
+                                <label for="operation_value"><strong>{{ __('admin_local.Operation value') }} *</strong></label>
                                 <input type="text" class="form-control" name="operation_value" id="operation_value">
                             </div>
                         </div>
@@ -162,9 +162,9 @@
                             <div class="form-group col-lg-12">
                                 <button class="btn btn-danger text-white font-weight-medium waves-effect text-start"
                                     data-bs-dismiss="modal" style="float: right"
-                                    type="button">{{ __('Close') }}</button>
+                                    type="button">{{ __('admin_local.Close') }}</button>
                                 <button class="btn btn-primary mx-2" style="float: right"
-                                    type="submit">{{ __('Submit') }}</button>
+                                    type="submit">{{ __('admin_local.Submit') }}</button>
                             </div>
                         </div>
                     </form>

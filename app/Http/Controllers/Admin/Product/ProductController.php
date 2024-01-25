@@ -67,7 +67,7 @@ class ProductController extends Controller
                 'title'=>__('admin_local.Warning !'),
                 'text'=>__('admin_local.Server Error'),
                 'confirmButtonText'=>__('admin_local.Ok'),
-            ],403);;
+            ],403);
         }
        
     }
@@ -77,7 +77,10 @@ class ProductController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $product = Product::with('brand','category','unit','warehousePrice','productVariant')->findOrFail($id);
+        return response([
+            'product'=>$product,
+        ]);
     }
 
     /**

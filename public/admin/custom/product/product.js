@@ -510,3 +510,7 @@ var myDropzone = new Dropzone("div#dropzoneDragArea", {
 
 
 
+
+
+
+

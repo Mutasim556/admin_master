@@ -1,15 +1,15 @@
 "use strict";
 function testAnim(x) {
-    $('.modal .modal-dialog').attr('class', 'modal-dialog  ' + x + '  animated');
+    $('.modal .modal-dialog').attr('class', 'modal-dialog  modal-xl ' + x + '  animated');
 };
 var modal_animate_custom = {
     init: function() {
-        $('#myModal').on('show.bs.modal', function (e) {
-            var anim = $('#entrance').val();
+        $('#product-details-modal').on('show.bs.modal', function (e) {
+            var anim = 'slideInDown';
             testAnim(anim);
         })
-        $('#myModal').on('hide.bs.modal', function (e) {
-            var anim = $('#exit').val();
+        $('#product-details-modal').on('hide.bs.modal', function (e) {
+            var anim = 'slideOutRight';
             testAnim(anim);
         })
         // $("a").tooltip();

@@ -134,6 +134,7 @@ return array (
   'Products' => 'Products',
   'Product List' => 'Product List',
   'Code' => 'Code',
+  'Vairant' => 'Vairant',
   'Cost' => 'Cost',
   'Cartoon' => 'Cartoon',
   'Once deleted, you will not be able to recover this maintenance data' => 'Once deleted, you will not be able to recover this maintenance data',

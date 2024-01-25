@@ -4,6 +4,8 @@
 @endpush
 @push('css')
     <link rel="stylesheet" href="{{ asset('admin/assets/css/custom.css') }}">
+    {{-- <link rel="stylesheet" type="text/css" href="{{ asset('admin/assets/css/vendors/animate.css') }}"> --}}
+    <link rel="stylesheet" type="text/css" href="{{ asset('admin/assets/css/vendors/owlcarousel.css') }}">
 @endpush
 @push('page_css')
     <style>
@@ -20,6 +22,16 @@
         .loader-box .loader-35:before {
             width: 20px;
             height: 10px;
+        }
+        .buttons-excel {
+            border-radius: 5px;
+            background-color: aqua;
+        }
+        #product-details-modal .table-bordered thead, #product-details-modal .table-bordered tbody, #product-details-modal .table-bordered tfoot, #product-details-modal .table-bordered tr, #product-details-modal .table-bordered td, #product-details-modal .table-bordered th{
+            border-color:black;
+        }
+        #product-details-modal .table-bordered th{
+            font-weight: 1000;
         }
     </style>
 @endpush
@@ -41,7 +53,46 @@
             </div>
         </div>
     </div>
-    {{-- add unit modal start --}}
+    {{-- Product details modal start --}}
+    <div class="modal fade" id="product-details-modal" tabindex="-1" aria-labelledby="bs-example-modal-lg" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header d-flex align-items-center" style="border-bottom:1px dashed gray">
+                    <h4 class="modal-title" id="myLargeModalLabel">
+                        {{ __('admin_local.Product Details') }}
+                    </h4>
+                    <button type="button" class="btn-close " data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" style="margin-top: -20px">
+                    <div class="row ">
+                        <div class="col-md-5 my-4">
+                            <div class="card">
+                                
+                                <h4>Product Image</h4>
+                                <div class="card-body" id="slider_body" style="border: 2px dotted lightgray">
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-7 mt-2" id="product_details">
+                            
+                        </div>
+                        <div class="col-md-12 mt-2" id="warehouse_details">
+                            
+                        </div>
+                        <div class="col-md-12 mt-2" id="variant_details">
+                            
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    
+    {{-- Product Details Modal End --}}
     <div class="container-fluid">
         <div class="row">
             <!-- Column -->
@@ -78,8 +129,9 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($products as $product)
-                                        <tr>
-                                            <td><img src="{{ $product->image?asset(explode(',',$product->image)[0]):'' }}" style="height:50px" alt=""></td>
+                                        <tr data-id="{{ $product->id }}"  id="product_row"  data-bs-toggle="modal"
+                                            data-bs-target="#product-details-modal">
+                                            <td class="text-center">@if($product->image)<img src="{{ $product->image?asset(explode(',',$product->image)[0]):'' }}" style="height:50px" alt="">@else <i style="font-size: 30px;color:red;" class="fa fa-file-image-o"></i> @endif</td>
                                             <td>{{ $product->name }}</td>
                                             <td>{{ $product->code }}</td>
                                             <td>{{ $product->brand->brand_name }}</td>
@@ -126,10 +178,15 @@
     <script src="{{ asset('admin/assets/js/datatable/datatable-extension/dataTables.fixedHeader.min.js') }}"></script>
     <script src="{{ asset('admin/assets/js/datatable/datatable-extension/dataTables.rowReorder.min.js') }}"></script>
     <script src="{{ asset('admin/assets/js/datatable/datatable-extension/dataTables.scroller.min.js') }}"></script>
-
+    {{-- <script src="{{ asset('admin/assets/js/modal-animated.js') }}"></script> --}}
+    <script src="{{ asset('admin/assets/js/owlcarousel/owl.carousel.js') }}"></script>
+    {{-- <script src="{{ asset('admin/assets/js/owlcarousel/owl-custom.j') }}s"></script> --}}
     <script src="{{ asset('admin/plugins/switchery/switchery.min.js') }}"></script>
     <script src="{{ asset('admin/assets/js/select2/select2.full.min.js') }}"></script>
     <script>
+        
+        
+
         $('[data-toggle="switchery"]').each(function(idx, obj) {
             new Switchery($(this)[0], $(this).data());
         });
@@ -152,7 +209,19 @@
             "<'row'<'col-sm-12'tr>>" +
             "<'row'<'col-sm-5'i><'col-sm-7'p>>",
             buttons: [
-                'excel', 'pdf','print'
+                {
+                    "extend": 'excel',
+                    "text": '<i class="fa fa-file-excel-o" style="font-size:18px;"></i>',
+                    'className': 'btn btn-success btn-square py-1 px-3'
+                },{
+                    "extend": 'pdf',
+                    "text": '<i class="fa fa-file-pdf-o" style="font-size:18px;"></i>',
+                    'className': 'btn btn-danger btn-square py-1 px-3'
+                },{
+                    "extend": 'print',
+                    "text": '<i class="fa fa-print" style="font-size:18px;"></i>',
+                    'className': 'btn btn-info btn-square py-1 px-3'
+                }
             ],
             columnDefs: [{
                 width: 20,
@@ -185,5 +254,5 @@
             `{{ __('admin_local.Once deleted, you will not be able to recover this maintenance data') }}`;
         var delete_swal_cancel_text = `{{ __('admin_local.Delete request canceld successfully') }}`;
     </script>
-    <script src="{{ asset('admin/custom/product/unit.js') }}"></script>
+    <script src="{{ asset('admin/custom/product/product_list.js') }}"></script>
 @endpush
