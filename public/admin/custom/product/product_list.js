@@ -36,6 +36,7 @@ $(document).on('click','#basic-1 #product_row',function(){
                     autoplayTimeout: 3000,
                     autoplayHoverPause: true,
                     nav: false,
+                    navText : ["<i class='fa fa-chevron-left'></i>","<i class='fa fa-chevron-right'></i>"],
                     responsive: {
                         320: {
                         items: 1,
@@ -54,59 +55,59 @@ $(document).on('click','#basic-1 #product_row',function(){
                 <h4 class="my-3">Product Details</h4>
                 <table class="table table-bordered">
                     <tr>
-                        <th style="width:30%" class="py-1">Name</th>
+                        <th style="width:30%;background-color:azure;" class="py-1">Name</th>
                         <td class="py-1">${product.name}</td>
                     </tr>
                     <tr>
-                        <th style="width:30%" class="py-1">Code</th>
+                        <th style="width:30%;background-color:azure;" class="py-1">Code</th>
                         <td class="py-1">${product.code}</td>
                     </tr>
                     <tr>
-                        <th style="width:30%" class="py-1">Type</th>
+                        <th style="width:30%;background-color:azure;" class="py-1">Type</th>
                         <td class="py-1">${product.type}</td>
                     </tr>
                     <tr>
-                        <th style="width:30%" class="py-1">Barcode </th>
+                        <th style="width:30%;background-color:azure;" class="py-1">Barcode </th>
                         <td class="py-1">${product.barcode_symbology}</td>
                     </tr>
                     <tr>
-                        <th style="width:30%" class="py-1">Brand</th>
+                        <th style="width:30%;background-color:azure;" class="py-1">Brand</th>
                         <td class="py-1">${product.brand?product.brand.brand_name:'N/A'}</td>
                     </tr>
                     <tr>
-                        <th style="width:30%" class="py-1">Category</th>
+                        <th style="width:30%;background-color:azure;" class="py-1">Category</th>
                         <td class="py-1">${product.category?product.category.category_name:'N/A'}</td>
                     </tr>
                     <tr>
-                        <th style="width:30%" class="py-1">Unit</th>
+                        <th style="width:30%;background-color:azure;" class="py-1">Unit</th>
                         <td class="py-1">${product.unit?product.unit.unit_code:'N/A'}</td>
                     </tr>
                     <tr>
-                        <th style="width:30%" class="py-1">Unit Size</th>
+                        <th style="width:30%;background-color:azure;" class="py-1">Unit Size</th>
                         <td class="py-1">${product.unit_size}</td>
                     </tr>
                     <tr>
-                        <th style="width:30%" class="py-1">Cartoon Size</th>
+                        <th style="width:30%;background-color:azure;" class="py-1">Cartoon Size</th>
                         <td class="py-1">${product.cartoon_size}</td>
                     </tr>
                     <tr>
-                        <th style="width:30%" class="py-1">Quantity</th>
+                        <th style="width:30%;background-color:azure;" class="py-1">Quantity</th>
                         <td class="py-1">${product.qty?product.qty:0}</td>
                     </tr>
                     <tr>
-                        <th style="width:30%" class="py-1">Cost</th>
+                        <th style="width:30%;background-color:azure;" class="py-1">Cost</th>
                         <td class="py-1">${product.cost?product.cost:0}</td>
                     </tr>
                     <tr>
-                        <th style="width:30%" class="py-1">Price</th>
+                        <th style="width:30%;background-color:azure;" class="py-1">Price</th>
                         <td class="py-1">${product.price?product.price:0} /-</td>
                     </tr>
                     <tr>
-                        <th style="width:30%" class="py-1">Alert Quantity</th>
+                        <th style="width:30%;background-color:azure;" class="py-1">Alert Quantity</th>
                         <td class="py-1">${product.alert_quantity?product.alert_quantity:0}</td>
                     </tr>
                     <tr>
-                        <th style="width:30%" class="py-1">Details</th>
+                        <th style="width:30%;background-color:azure;" class="py-1">Details</th>
                         <td class="py-1">${product.product_details?(product.product_details.length>40?"<div id='read_more_id' class=''>"+product.product_details.substring(0,40)+"<a style='color:red;cursor:pointer' "+read_more+">...Read More</a></div><div id='read_less_id' class='d-none'>"+product.product_details+"<a "+read_less+" style='color:red;cursor:pointer'>...Read Less</a></div>":product.product_details):'N/A'}</td>
                     </tr>
                 </table>
@@ -119,7 +120,7 @@ $(document).on('click','#basic-1 #product_row',function(){
                 $('#warehouse_details').empty().append(`
                     <h5 class="my-3 text-center">Warehouse Prices</h5>
                     <table class="table table-bordered">
-                        <tr>
+                        <tr style="background-color:azure;">
                             <th>Warehouse</th>
                             <th>Price</th>
                         </tr>
@@ -138,7 +139,7 @@ $(document).on('click','#basic-1 #product_row',function(){
                 $('#variant_details').empty().append(`
                     <h5 class="my-3 text-center">Variant Details</h5>
                     <table class="table table-bordered">
-                        <tr>
+                        <tr style="background-color:azure;">
                             <th>Variant Code</th>
                             <th>Additional Cost</th>
                             <th>Additional Price</th>

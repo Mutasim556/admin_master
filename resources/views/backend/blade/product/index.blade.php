@@ -33,6 +33,8 @@
         #product-details-modal .table-bordered th{
             font-weight: 1000;
         }
+
+        
     </style>
 @endpush
 @section('content')
