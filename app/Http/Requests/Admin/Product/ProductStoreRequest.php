@@ -159,6 +159,7 @@ class ProductStoreRequest extends FormRequest
                 $product_diff_price->product_id = $product->id;
                 $product_diff_price->warehouse_id = $this->warehouse_id[$key];
                 $product_diff_price->price = $this->warehouse_prices[$key];
+                $product_diff_price->quantity = $this->warehouse_quantity[$key];
                 $product_diff_price->created_by = LoggedAdmin()->id;
                 $product_diff_price->updated_by = LoggedAdmin()->id;
                 $product_diff_price->delete = 0;

@@ -1,6 +1,6 @@
 @extends('backend.shared.layouts.admin')
 @push('title')
-    {{ __('admin_local.Add Product') }}
+    {{ __('admin_local.Edit Product') }}
 @endpush
 @push('css')
     <link rel="stylesheet" href="{{ asset('admin/assets/css/custom.css') }}">
@@ -39,19 +39,21 @@
         }
     </style>
 @endpush
+
 @section('content')
     <div class="container-fluid">
         <div class="page-title">
             <div class="row">
                 <div class="col-sm-6">
-                    <h3>{{ __('admin_local.Add Product') }}</h3>
+                    <h3>{{ __('admin_local.Edit Product') }}</h3>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item">
                             <a href="javascript:void(0)">{{ __('admin_local.Product') }}</a>
                         </li>
-                        <li class="breadcrumb-item active">{{ __('admin_local.Add Product') }}</li>
+                        <li class="breadcrumb-item active">{{ __('admin_local.Product List') }}</li>
+                        <li class="breadcrumb-item active">{{ __('admin_local.Edit Product') }}</li>
                     </ol>
                 </div>
             </div>
@@ -63,7 +65,7 @@
             <div class="col-lg-12 mx-auto">
                 <div class="card">
                     <div class="card-header py-3" style="border-bottom: 2px dashed gray">
-                        <h3 class="card-title mb-0 text-center">{{ __('admin_local.Add Product') }}</h3>
+                        <h3 class="card-title mb-0 text-center">{{ __('admin_local.Edit Product') }}</h3>
                     </div>
                     <p class="px-4 text-danger"><i>{{ __('admin_local.The field labels marked with * are required input fields.') }}</i>
                     </p>
@@ -77,26 +79,25 @@
                                         <div class="form-group col-md-4">
                                             <label for="product_type">{{ __('admin_local.Product Type') }}</label>
                                             <select class="form-select" id="product_type" name="product_type">
-                                                <option value="" disabled>{{ __('admin_local.Please Select') }} *
-                                                </option>
-                                                <option value="standard" selected>Standard</option>
-                                                <option value="combo">Combo</option>
-                                                <option value="digital">Digital</option>
-                                                <option value="service">Service</option>
+                                                <option value="" disabled>{{ __('admin_local.Please Select') }} * </option>
+                                                <option value="standard" {{ $editproduct->type=="standard"?'selected':'' }}>Standard</option>
+                                                <option value="combo" {{ $editproduct->type=="combo"?'selected':'' }}>Combo</option>
+                                                <option value="digital" {{ $editproduct->type=="digital"?'selected':'' }}>Digital</option>
+                                                <option value="service" {{ $editproduct->type=="service"?'selected':'' }}>Service</option>
                                             </select>
                                             <span class="text-danger err-mgs-product_type"></span>
                                         </div>
                                         <div class="form-group col-md-4">
                                             <label for="product_name">{{ __('admin_local.Product Name') }} *</label>
                                             <input type="text" class="form-control" id="product_name"
-                                                name="product_name">
+                                                name="product_name" value="{{ $editproduct->name }}">
                                             <span class="text-danger err-mgs-product_name"></span>
                                         </div>
                                         <div class="form-group col-md-4">
                                             <label for="product_code">{{ __('admin_local.Product Code') }} *</label>
                                             <div class="input-group">
                                                 <input type="text" class="form-control" id="product_code"
-                                                    name="product_code"><span id="get_code" class="input-group-text"
+                                                    name="product_code" value="{{ $editproduct->code }}"><span id="get_code" class="input-group-text"
                                                     style="border:1px solid black;"><i class="fa fa-refresh"></i></span>
                                                 
                                             </div>
@@ -106,12 +107,12 @@
                                             <label for="barcode_symbology">{{ __('admin_local.Barcode Symbology') }} *</label>
                                             <select class="form-select" id="barcode_symbology" name="barcode_symbology">
                                                 <option value="" disabled>{{ __('admin_local.Please Select') }}</option>
-                                                <option value="C128" selected>Code 128</option>
-                                                <option value="C39">Code 39</option>
-                                                <option value="UPCA">UPC-A</option>
-                                                <option value="UPCE">UPC-E</option>
-                                                <option value="EAN8">EAN-8</option>
-                                                <option value="EAN13">EAN-13</option>
+                                                <option value="C128" {{ $editproduct->barcode_symbology=="C128"?'selected':'' }}>Code 128</option>
+                                                <option value="C39" {{ $editproduct->barcode_symbology=="C39"?'selected':'' }}>Code 39</option>
+                                                <option value="UPCA" {{ $editproduct->barcode_symbology=="UPCA"?'selected':'' }}>UPC-A</option>
+                                                <option value="UPCE" {{ $editproduct->barcode_symbology=="UPCE"?'selected':'' }}>UPC-E</option>
+                                                <option value="EAN8" {{ $editproduct->barcode_symbology=="EAN8"?'selected':'' }}>EAN-8</option>
+                                                <option value="EAN13" {{ $editproduct->barcode_symbology=="EAN13"?'selected':'' }}>EAN-13</option>
                                             </select>
                                         </div>
                                         <div class="form-group col-md-4" id="attatchment_div">
@@ -126,7 +127,7 @@
                                                 name="brand">
                                                 <option value="">{{ __('admin_local.Please Select') }}</option>
                                                 @foreach ($brands as $brand)
-                                                    <option value="{{ $brand->id }}">{{ $brand->brand_name }}
+                                                    <option value="{{ $brand->id }}" {{ $editproduct->brand_id==$brand->id?'selected':'' }}>{{ $brand->brand_name }}
                                                     </option>
                                                 @endforeach
                                             </select>
@@ -138,8 +139,7 @@
                                                 name="category">
                                                 <option value="">{{ __('admin_local.Please Select') }}</option>
                                                 @foreach ($categories as $category)
-                                                    <option value="{{ $category->id }}">
-                                                        {{ $category->category_name }}</option>
+                                                    <option value="{{ $category->id }}" {{ $editproduct->category_id==$category->id?'selected':'' }}>{{ $category->category_name }}</option>
                                                 @endforeach
                                             </select>
                                             <span class="text-danger err-mgs-category"></span>
@@ -186,7 +186,7 @@
                                                 name="product_unit">
                                                 <option value="">{{ __('admin_local.Please Select') }}</option>
                                                 @foreach ($units as $unit)
-                                                    <option value="{{ $unit->id }}">{{ $unit->unit_name }}</option>
+                                                    <option value="{{ $unit->id }}" {{ $editproduct->unit_id==$unit->id?'selected':'' }}>{{ $unit->unit_name }}</option>
                                                 @endforeach
                                             </select>
                                             <span class="text-danger err-mgs-product_unit"></span>
@@ -196,6 +196,9 @@
                                             <select class="js-example-basic-single form-control" id="sale_unit"
                                                 name="sale_unit">
                                                 <option value="">{{ __('admin_local.Please Select') }}</option>
+                                                @if ($editproduct->sale_unit_id)
+                                                    <option value="{{ $editproduct->unit_id }}" selected>{{ $editproduct->unit->unit_name }}</option>
+                                                @endif
                                             </select>
                                             <span class="text-danger err-mgs-sale_unit"></span>
                                         </div>
@@ -204,6 +207,9 @@
                                             <select class="js-example-basic-single form-control" style="border-color: #da4d4d !important;" id="purchase_unit"
                                                 name="purchase_unit">
                                                 <option value="">{{ __('admin_local.Please Select') }}</option>
+                                                @if ($editproduct->purchase_unit_id)
+                                                    <option value="{{ $editproduct->unit_id }}" selected>{{ $editproduct->unit->unit_name }}</option>
+                                                @endif
                                             </select>
                                             <span class="text-danger err-mgs-purchase_unit"></span>
                                         </div>
@@ -211,25 +217,25 @@
                                     <div class="row">
                                         <div class="form-group col-md-4">
                                             <label for="unit_size">{{ __('admin_local.Unit Size') }} *</label>
-                                            <input type="text" class="form-control" id="unit_size" name="unit_size">
+                                            <input type="text" class="form-control" id="unit_size" name="unit_size" value="{{ $editproduct->unit_size?$editproduct->unit_size:'' }}">
                                             <span class="text-danger err-mgs-unit_size"></span>
                                         </div>
                                         <div class="form-group col-md-4">
                                             <label for="cartoon_size">{{ __('admin_local.Cartoon Size') }} *</label>
                                             <input type="text" class="form-control" id="cartoon_size"
-                                                name="cartoon_size">
+                                                name="cartoon_size" value="{{ $editproduct->cartoon_size?$editproduct->cartoon_size:'' }}">
                                                 <span class="text-danger err-mgs-cartoon_size"></span>
                                         </div>
                                         <div class="form-group col-md-4" id="product_cost_div">
                                             <label for="product_cost">{{ __('admin_local.Product Cost') }} *</label>
                                             <input type="text" class="form-control" id="product_cost"
-                                                name="product_cost">
+                                                name="product_cost" value="{{ $editproduct->cost?$editproduct->cost:'' }}">
                                                 <span class="text-danger err-mgs-product_cost"></span>
                                         </div>
                                         <div class="form-group col-md-4">
                                             <label for="product_price">{{ __('admin_local.Product Price') }} *</label>
                                             <input type="text" class="form-control" id="product_price"
-                                                name="product_price">
+                                                name="product_price" value="{{ $editproduct->price?$editproduct->price:'' }}">
                                                 <span class="text-danger err-mgs-product_price"></span>
                                         </div>
                                         <div class="form-group col-md-4">
@@ -239,12 +245,12 @@
                                                     data-bs-placement="top"
                                                     title="{{ __('admin_local.Minimum qty which must be sold in a day. If not, you will be notified on dashboard. But you have to set up the cron job properly for that. Follow the documentation in that regard.') }}"></i></label>
                                             <input type="text" class="form-control" id="daily_sale_objective"
-                                                name="daily_sale_objective">
+                                                name="daily_sale_objective" value="{{ $editproduct->daily_sale_objective?$editproduct->daily_sale_objective:'' }}">
                                         </div>
                                         <div class="form-group col-md-4" id="alert_quantity_div">
                                             <label for="alert_quantity">{{ __('admin_local.Alert Quantity') }} </label>
                                             <input type="number" class="form-control" id="alert_quantity"
-                                                name="alert_quantity" min="0">
+                                                name="alert_quantity" min="0" value="{{ $editproduct->alert_quantity?$editproduct->alert_quantity:'' }}">
                                         </div>
                                         <div class="form-group col-md-4">
                                             <label for="product_tax">{{ __('admin_local.Product Tax') }}</label>
@@ -259,17 +265,17 @@
                                                     data-bs-placement="top"
                                                     title="{{ __('admin_local.Exclusive: Poduct price = Actual product price + Tax. Inclusive: Actual product price = Product price - Tax') }}"></i></label>
                                             <select class="form-control" id="tax_method" name="tax_method">
-                                                <option value="1">Inclusive</option>
-                                                <option value="2">Exclusive</option>
+                                                <option value="1" {{ $editproduct->tax_method?($editproduct->tax_method==1?'selected':''):'' }}>Inclusive</option>
+                                                <option value="2" {{ $editproduct->tax_method?($editproduct->tax_method==2?'selected':''):'' }}>Exclusive</option>
                                             </select>
                                         </div>
                                         <div class="form-group col-md-4">
-                                            <input type="checkbox" id="featured" class="mr-2" name="featured">
+                                            <input type="checkbox" id="featured" class="mr-2" name="featured" {{ $editproduct->featured?'checked':'' }}>
                                             &nbsp;&nbsp;<label for="featured">{{ __('admin_local.Featured') }} </label>
                                             <p>{{ __('admin_local.Featured product will be displayed in POS') }}</p>
                                         </div>
                                         <div class="form-group col-md-4">
-                                            <input type="checkbox" id="embedded_barcode" name="embedded_barcode" />
+                                            <input type="checkbox" id="embedded_barcode" name="embedded_barcode" {{ $editproduct->is_embeded?'checked':'' }}/>
                                             &nbsp;&nbsp;<label for="embedded_barcode">{{ __('admin_local.Embedded Barcode') }} <i
                                                     style="font-size: 16px;cursor:pointer"
                                                     class="fa fa-exclamation-circle" data-bs-toggle="tooltip"
@@ -293,16 +299,15 @@
                                         </div>
                                         <div class="form-group col-md-12">
                                             <label for="product_details">{{ __('admin_local.Product Details') }} </label>
-                                            <textarea id="editor1" name="product_details" cols="30" rows="10"></textarea>
+                                            <textarea id="editor1" name="product_details" cols="30" rows="10">{!! $editproduct->product_details?$editproduct->product_details:'' !!}</textarea>
                                         </div>
                                     </div>
                                     <div class="row" id="variant_row">
                                         <div class="form-group col-md-12">
-                                            <input type="checkbox" id="variant" class="mr-2" name="variant">
+                                            <input type="checkbox" id="variant" class="mr-2" name="variant" {{  $editproduct->is_variant==1?'checked':'' }}>
                                             &nbsp;&nbsp;<label for="variant">{{ __('admin_local.This product has variant') }}
                                             </label>
                                         </div>
-
                                     </div>
                                     <div class="row variant_option_row" id="variant_option_row"
                                         style="margin-bottom: -30px;">
@@ -321,10 +326,9 @@
                                                 id="variant_option">
                                             <span class="text-danger err-mgs"></span>
                                         </div>
-                                        <div class="form-group col-md-5">
-                                            <label for="variant_value">{{ __('admin_local.Value *') }}</label>
-                                            <input type="text" class="form-control variant_value"
-                                                name="variant_value[]" id="variant_value" data-role="tagsinput">
+                                        <div class="form-group col-md-5" id="variant_value_label">
+                                            <label for="variant_value" >{{ __('admin_local.Value *') }}</label>
+                                            <input type="text" class="form-control variant_value" name="variant_value[]" id="variant_value" data-role="tagsinput">
                                                 <span class="text-danger err-mgs"></span>
                                         </div>
                                         <div class="form-group col-md-2 text-center" style="line-height: 100px;">
@@ -354,7 +358,7 @@
                                     <div class="row " id="warehouse_price_row">
                                         <div class="form-group col-md-8">
                                             <input type="checkbox" id="warehouse_price" class="mr-2"
-                                                name="warehouse">
+                                                name="warehouse" {{  $editproduct->is_diffPrice==1?'checked':'' }}>
                                             &nbsp;&nbsp;<label
                                                 for="warehouse_price">{{ __('admin_local.This product has different price for different warehouse') }}
                                             </label>
@@ -372,12 +376,23 @@
                                                 </thead>
                                                 <tbody>
                                                     @foreach ($warehouses as $warehouse)
+                                                    @php
+                                                        $warehouse_qty=0;
+                                                        $warehouse_price=0;
+                                                        foreach ($editproduct->warehousePrice as $value) {
+                                                            if($value->warehouse_id==$warehouse->id){
+                                                                $warehouse_qty=$value->quantity;
+                                                                $warehouse_price=$value->price;
+                                                                break;
+                                                            }
+                                                        }
+                                                    @endphp
                                                         <tr>
                                                             <td><input type="text" class="form-control" name="warehouse_name[]" value="{{ $warehouse->name }}" readonly></td>
                                                             <input type="hidden" class="form-control" name="warehouse_id[]" value="{{ $warehouse->id }}" >
-                                                            <td><input type="number" name="warehouse_quantity[]" class="form-control" value="1"
+                                                            <td><input type="number" name="warehouse_quantity[]" class="form-control" value="{{ $warehouse_qty }}"
                                                                     min="1"></td>
-                                                            <td><input type="number" name="warehouse_prices[]" class="form-control" value="1"
+                                                            <td><input type="number" name="warehouse_prices[]" class="form-control" value="{{ $warehouse_price }}"
                                                                         min="1"></td>
                                                         </tr>
                                                     @endforeach
@@ -396,7 +411,7 @@
                                     </div>
                                     <div class="row" id="imei_row">
                                         <div class="form-group col-md-8">
-                                            <input type="checkbox" id="imei" class="mr-2" name="imei">
+                                            <input type="checkbox" id="imei" class="mr-2" name="imei" {{  $editproduct->is_imei==1?'checked':'' }}>
                                             &nbsp;&nbsp;<label
                                                 for="imei">{{ __('admin_local.This product has IMEI or Serial numbers') }}
                                             </label>
@@ -405,7 +420,7 @@
                                     <div class="row" id="add_promotional_price_div">
                                         <div class="form-group col-md-8">
                                             <input type="checkbox" id="add_promotional_price" class="mr-2"
-                                                name="add_promotional_price">
+                                                name="add_promotional_price" {{  $editproduct->promotion==1?'checked':'' }}>
                                             &nbsp;&nbsp;<label
                                                 for="add_promotional_price">{{ __('admin_local.Add Promotional Price') }} </label>
                                         </div>
@@ -414,7 +429,7 @@
                                         <div class="form-group col-md-4">
                                             <label for="promotional_price">{{ __('admin_local.Promotional Price') }}</label>
                                             <input type="text" name="promotional_price" id="promotional_price"
-                                                class="form-control">
+                                                class="form-control" value="{{ $editproduct->promotion==1?$editproduct->promotion_price:'' }}">
                                         </div>
                                         <div class="form-group col-md-4">
                                             <label for="promotional_start">{{ __('admin_local.Promotion Starts') }}</label>
@@ -423,7 +438,7 @@
                                                         class="fa fa-calendar"></i></span><input type="date"
                                                     name="promotional_start" id="promotional_start"
                                                     class="datepicker-here form-control digits" data-language="en"
-                                                    data-position="top right">
+                                                    data-position="top right" value="{{ $editproduct->promotion==1?$editproduct->starting_date:'' }}">
                                             </div>
                                         </div>
                                         <div class="form-group col-md-4">
@@ -433,7 +448,7 @@
                                                         class="fa fa-calendar"></i></span><input type="date"
                                                     name="promotional_end" id="promotional_end"
                                                     class="datepicker-here form-control digits" data-language="en"
-                                                    data-position="top right">
+                                                    data-position="top right" value="{{ $editproduct->promotion==1?$editproduct->last_date:'' }}">
                                             </div>
                                         </div>
                                     </div>
@@ -548,6 +563,41 @@
             source: substringMatcher(products)
         });
     </script>
-    <script src="{{ asset('admin/custom/product/product.js') }}"></script>
-    {{-- <script src="{{ asset('inventory/custom/user/user_list.js') }}"></script> --}}
+
+    <script>
+        $(document).ready(function(){
+            if($('#variant').val){
+                let product_vari = "{{$editproduct->variant_option }}";
+                let product_vari_val = "{{$editproduct->variant_value }}";
+                product_vari_val = product_vari_val.split("|");
+                
+                $.each(product_vari.split(","),function(varid,varopt){
+                    if(varid==0){
+                        $('#variant_option_row #variant_option').val(varopt);
+                        $('#variant_option_row #variant_value_label').empty().append('<label for="variant_value">Value *</label><input type="text" class="form-control variant_value" name="variant_value[]" value="'+product_vari_val[varid]+'" id="variant_value" data-role="tagsinput">');
+                        // console.log($('#variant_option_row div:nth-child(2)'));
+                    }else{
+                        $('#variant_option_row').next('div').append('<div class="row variant_option_row"><div class="form-group col-md-5"><label for="variant_option">Option *</label><input type="text" class="form-control" name="variant_option[]" id="variant_option" value="'+varopt+'"> </div><div class="form-group col-md-5"> <label for="variant_value">Value *</label><input type="text" class="form-control variant_value" name="variant_value[]" value="'+product_vari_val[varid]+'" id="variant_value" data-role="tagsinput"></div><div class="form-group col-md-2" style="line-height: 100px;"><button type="button" class="btn btn-danger py-2 px-2" id="remove_varient_div"><i class="fa fa-trash"></i></button></div></div>');
+                    }
+                    
+    
+
+                    $(".variant_value").tagsinput();
+                })
+            }
+        })   
+    </script>
+    <script src="{{ asset('admin/custom/product/product_edit.js') }}"></script>
+    <script>
+        $(document).ready(function(){
+            if($('#variant').val){
+                let var_add_cost = {!! $editproduct->productVariant !!};
+                $('#variant_option_table table tbody tr').each(function(tridx,trtdval){
+                    // $(this+" td:nth-child(2)").empty();
+                    $(this).find('td:eq(2)').find('input').val(var_add_cost[tridx]['additional_cost']);
+                    $(this).find('td:eq(3)').find('input').val(var_add_cost[tridx]['additional_price']);
+                })
+            }
+        })
+    </script>
 @endpush

@@ -30,7 +30,7 @@
         #product-details-modal .table-bordered thead, #product-details-modal .table-bordered tbody, #product-details-modal .table-bordered tfoot, #product-details-modal .table-bordered tr, #product-details-modal .table-bordered td, #product-details-modal .table-bordered th{
             border-color:black;
         }
-        #product-details-modal .table-bordered th{
+        #product-details-modal .table-bordered th{ 
             font-weight: 1000;
         }
 
@@ -61,16 +61,16 @@
             <div class="modal-content">
                 <div class="modal-header d-flex align-items-center" style="border-bottom:1px dashed gray">
                     <h4 class="modal-title" id="myLargeModalLabel">
-                        {{ __('admin_local.Product Details') }}
+                        {{ __('admin_local.Product Details') }} <button onclick='printDiv();' class="btn btn-danger py-1 px-2"><i class="fa fa-print" style="font-size:28px;"></i></button>
                     </h4>
                     <button type="button" class="btn-close " data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body" style="margin-top: -20px">
+                <div class="modal-body" id="DivIdToPrint" style="margin-top: -20px">
                     <div class="row ">
                         <div class="col-md-5 my-4">
                             <div class="card">
                                 
-                                <h4>Product Image</h4>
+                                <h4>{{ __('admin_local.Product Image') }}</h4>
                                 <div class="card-body" id="slider_body" style="border: 2px dotted lightgray">
 
                                 </div>
@@ -85,6 +85,14 @@
                         <div class="col-md-12 mt-2" id="variant_details">
                             
                         </div>
+                    </div>
+                    <div class="row mt-4 mb-2">
+                        <div class="form-group col-lg-12">
+                            <button class="btn btn-danger text-white font-weight-medium waves-effect text-start"
+                                data-bs-dismiss="modal" style="float: right"
+                                type="button">{{ __('admin_local.Close') }}</button>
+                        </div>
+
                     </div>
                 </div>
 
@@ -131,19 +139,39 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($products as $product)
-                                        <tr data-id="{{ $product->id }}"  id="product_row"  data-bs-toggle="modal"
-                                            data-bs-target="#product-details-modal">
-                                            <td class="text-center">@if($product->image)<img src="{{ $product->image?asset(explode(',',$product->image)[0]):'' }}" style="height:50px" alt="">@else <i style="font-size: 30px;color:red;" class="fa fa-file-image-o"></i> @endif</td>
-                                            <td>{{ $product->name }}</td>
-                                            <td>{{ $product->code }}</td>
-                                            <td>{{ $product->brand->brand_name }}</td>
-                                            <td>{{ $product->category->category_name }}</td>
-                                            <td>{{ $product->qty==null?0:$product->qty }}</td>
-                                            <td>{!! $product->is_variant==0?'<span class="badge badge-danger">No</span>':'<span style="cursor:pointer;" class="badge badge-success">Yes</span>' !!}</td>
-                                            <td>{{ $product->price==null?0:$product->price }}</td>
-                                            <td>{{ $product->cost==null?0:$product->cost }}</td>
-                                            <td>{{ $product->cartoon_size==null?0:$product->cartoon_size }}</td>
-                                            <td></td>
+                                        <tr data-id="{{ $product->id }}"  id="product_row"> 
+                                            <td data-bs-toggle="modal" data-bs-target="#product-details-modal" class="text-center">@if($product->image)<img src="{{ $product->image?asset(explode(',',$product->image)[0]):'' }}" style="height:50px" alt="">@else <i style="font-size: 30px;color:red;" class="fa fa-file-image-o"></i> @endif</td>
+                                            <td data-bs-toggle="modal" data-bs-target="#product-details-modal">{{ $product->name }}</td>
+                                            <td data-bs-toggle="modal" data-bs-target="#product-details-modal">{{ $product->code }}</td>
+                                            <td data-bs-toggle="modal" data-bs-target="#product-details-modal">{{ $product->brand->brand_name }}</td>
+                                            <td data-bs-toggle="modal" data-bs-target="#product-details-modal">{{ $product->category->category_name }}</td>
+                                            <td data-bs-toggle="modal" data-bs-target="#product-details-modal">{{ $product->qty==null?0:$product->qty }}</td>
+                                            <td data-bs-toggle="modal" data-bs-target="#product-details-modal">{!! $product->is_variant==0?'<span class="badge badge-danger">No</span>':'<span style="cursor:pointer;" class="badge badge-success">Yes</span>' !!}</td>
+                                            <td data-bs-toggle="modal" data-bs-target="#product-details-modal">{{ $product->price==null?0:$product->price }}</td>
+                                            <td data-bs-toggle="modal" data-bs-target="#product-details-modal">{{ $product->cost==null?0:$product->cost }}</td>
+                                            <td data-bs-toggle="modal" data-bs-target="#product-details-modal">{{ $product->cartoon_size==null?0:$product->cartoon_size }}</td>
+                                            <td>
+                                                @if (hasPermission(['warehouse-update','warehouse-delete']))
+                                                <div class="dropdown">
+                                                    <button
+                                                        class="btn btn-info text-white px-2 py-1 dropbtn">{{ __('admin_local.Action') }}
+                                                        <i class="fa fa-angle-down"></i></button>
+                                                    <div class="dropdown-content">
+                                                        @if (hasPermission(['warehouse-update']))
+                                                        <a style="cursor: pointer;" href="{{ route('admin.product.edit',$product->id) }}" class="text-primary"
+                                                            id="edit_button"><i class=" fa fa-edit mx-1"></i>{{ __('admin_local.Edit') }}</a>
+                                                        @endif
+                                                        @if (hasPermission(['warehouse-delete']))
+                                                        <a class="text-danger" id="delete_button"
+                                                            style="cursor: pointer;"><i class="fa fa-trash mx-1"></i>
+                                                            {{ __('admin_local.Delete') }}</a>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                                @else
+                                                <span class="badge badge-danger">{{ __('admin_local.No Permission') }}</span>
+                                                @endif
+                                            </td>
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -193,10 +221,10 @@
             new Switchery($(this)[0], $(this).data());
         });
         $('.js-example-basic-single').select2({
-            dropdownParent: $('#add-unit-modal')
+            dropdownParent: $('#add-warehouse-modal')
         });
         $('.js-example-basic-single1').select2({
-            dropdownParent: $('#edit-unit-modal')
+            dropdownParent: $('#edit-warehouse-modal')
         });
         $('.js-example-basic-single3').select2({
             dropdownParent: $('#add-specific-user-permission-modal')
@@ -244,7 +272,7 @@
             ],
         });
 
-        var form_url = "{{ route('admin.product.unit.store') }}";
+    
         // var getting_permission = `<span>{{ __('admin_local.Getting Permissons') }} ...... <i class="fa fa-spinner fa-spin" ></i></span>`;
         var submit_btn_after = `{{ __('admin_local.Submitting') }}`;
         var submit_btn_before = `{{ __('admin_local.Submit') }}`;

@@ -117,7 +117,7 @@
             </ul>
         </li>
     @endif
-    @if (hasPermission(['maintenance-mode-index']))
+    @if (hasPermission(['maintenance-mode-index','warehouse-index']))
     <li class="sidebar-list">
         <a class="sidebar-link sidebar-title" href="javascript:void(0)" aria-expanded="false">
             <i data-feather="settings"></i>
@@ -128,6 +128,13 @@
             <li>
                 <a href="{{ route('admin.settings.server.maintenanceMode') }}" class="sidebar-link">
                     <span> {{ __('admin_local.Maintenance Mode') }} </span>
+                </a>
+            </li>
+            @endif
+            @if (hasPermission(['warehouse-index']))
+            <li>
+                <a href="{{ route('admin.settings.warehouse.index') }}" class="sidebar-link">
+                    <span> {{ __('admin_local.Warehouses') }} </span>
                 </a>
             </li>
             @endif

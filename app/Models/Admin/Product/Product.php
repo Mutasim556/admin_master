@@ -2,6 +2,7 @@
 
 namespace App\Models\Admin\Product;
 
+use App\Models\Admin\Settings\Warehouse;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 

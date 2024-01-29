@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\Localization\BackendLanguageController;
 use App\Http\Controllers\Admin\Localization\ChangeLanguageController;
 use App\Http\Controllers\Admin\Localization\LanguageController;
 use App\Http\Controllers\Admin\Role\RoleAndPermissionController;
+use App\Http\Controllers\Admin\Setting\WarehouseController;
 use App\Http\Controllers\Admin\Settings\MaintenanceModeController;
 use App\Http\Controllers\Admin\User\UserController;
 use Illuminate\Support\Facades\Route;
@@ -63,6 +64,11 @@ Route::prefix('admin')->name('admin.')->group(function(){
             Route::get('/server/up',[MaintenanceModeController::class,'up'])->name('server.up');
             Route::get('/secret-code/delete/{id}',[MaintenanceModeController::class,'destroy'])->name('secret-code.delete');
             Route::get('/secret-code/delete-all',[MaintenanceModeController::class,'destroyAll'])->name('secret-code.delete-all');
+
+            Route::resource('warehouse',WarehouseController::class)->except(['craete','show']);
+            Route::controller(WarehouseController::class)->name('warehouse.')->prefix('warehouse')->group(function () {
+                Route::get('/update/status/{id}/{status}', 'updateStatus');
+            });
         });
 
         //products

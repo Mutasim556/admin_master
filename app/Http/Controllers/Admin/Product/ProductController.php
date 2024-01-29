@@ -8,9 +8,10 @@ use App\Models\Admin\Product\Brand;
 use App\Models\Admin\Product\Category;
 use App\Models\Admin\Product\Product;
 use App\Models\Admin\Product\Unit;
+use App\Models\Admin\Settings\Warehouse;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use Illuminate\Http\Response; 
 use Intervention\Image\Drivers\Gd\Driver;
 use Intervention\Image\ImageManager;
 
@@ -20,6 +21,8 @@ class ProductController extends Controller
     {
        
         $this->middleware('permission:product-store,admin')->only(['create','store']);
+        $this->middleware('permission:product-delete,admin')->only(['destroy']);
+        $this->middleware('permission:product-update,admin')->only(['edit','update']);
     }
     /**
      * Display a listing of the resource.
@@ -27,6 +30,7 @@ class ProductController extends Controller
     public function index() :View
     {
         $products = Product::with('productVariant','warehousePrice','brand','category')->where('delete',0)->get();
+       
         return view('backend.blade.product.index',compact('products'));
     }
 
@@ -46,9 +50,9 @@ class ProductController extends Controller
             $product_prices[$key]=$product->price;
         }
 
-
+        $warehouses = Warehouse::where([['delete',0],['status',1]])->get();
         // dd(implode(',',$product_prices));
-        return view('backend.blade.product.create',compact('brands','categories','units','product_name','product_prices'));
+        return view('backend.blade.product.create',compact('brands','categories','units','product_name','product_prices','warehouses'));
     }
 
     /**
@@ -78,6 +82,12 @@ class ProductController extends Controller
     public function show(string $id)
     {
         $product = Product::with('brand','category','unit','warehousePrice','productVariant')->findOrFail($id);
+        if($product->is_diffPrice==1){
+            foreach($product->warehousePrice as $key=>$value){
+                $product->warehousePrice[$key]->warehouse_name = $value->warehouse()->first()->name;
+            }
+        }
+
         return response([
             'product'=>$product,
         ]);
@@ -88,7 +98,27 @@ class ProductController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $editproduct = Product::with('brand','category','unit','warehousePrice','productVariant')->findOrFail($id);
+        if($editproduct->is_diffPrice==1){
+            foreach($editproduct->warehousePrice as $key=>$value){
+                $editproduct->warehousePrice[$key]->warehouse_name = $value->warehouse()->first()->name;
+            }
+        }
+        
+        $brands = Brand::where('brand_status',1)->get();
+        $categories = Category::where([['category_status',1],['category_delete',0]])->get();
+        $units = Unit::where([['unit_status',1]])->get();
+        $products = Product::where([['status',1],['delete',0]])->select('name','id','price','is_variant')->get();
+        $product_name = [];
+        $product_prices = [];
+        foreach($products as $key=>$product){
+            array_push($product_name,$product->id."@".$product->name);
+            $product_prices[$key]=$product->price;
+        }
+
+        $warehouses = Warehouse::where([['delete',0],['status',1]])->get();
+         
+        return view('backend.blade.product.edit',compact('editproduct','brands','categories','units','products','warehouses','product_name','product_prices'));
     }
 
     /**
@@ -102,9 +132,16 @@ class ProductController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(string $id) : Response
     {
-        //
+        $product = Product::findOrFail($id);
+        $product->delete = 1;
+        $product->save();
+        return response([
+            'title'=>__('admin_local.Congratulations !'),
+            'text'=>__('admin_local.Product deleted successfully.'),
+            'confirmButtonText'=>__('admin_local.Ok'),
+        ]);
     }
 
 

@@ -14,8 +14,9 @@ return new class extends Migration
         Schema::create('warehouse_prices', function (Blueprint $table) {
             $table->id();
             $table->foreignId('product_id')->references('id')->on('products');
-            $table->integer('warehouse_id');
+            $table->foreignId('warehouse_id')->references('id')->on('warehouses');
             $table->double('price');
+            $table->integer('quantity')->nullable();
             $table->foreignId('created_by')->references('id')->on('admins');
             $table->foreignId('updated_by')->references('id')->on('admins');
             $table->boolean('delete')->default(0)->comment('0=Not Deleted and 1= Not Deleted');

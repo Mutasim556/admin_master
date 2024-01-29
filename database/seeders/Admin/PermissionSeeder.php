@@ -71,8 +71,10 @@ class PermissionSeeder extends Seeder
         // Permission::create(['guard_name'=>'admin','name'=>'category-delete','group_name'=>'Product Category Permissions']);
 
         //products
-        Permission::create(['guard_name'=>'admin','name'=>'product-index','group_name'=>'Product Permissions']);
-        Permission::create(['guard_name'=>'admin','name'=>'product-store','group_name'=>'Product Permissions']);
+        // Permission::create(['guard_name'=>'admin','name'=>'product-index','group_name'=>'Product Permissions']);
+        // Permission::create(['guard_name'=>'admin','name'=>'product-store','group_name'=>'Product Permissions']);
+        Permission::create(['guard_name'=>'admin','name'=>'product-update','group_name'=>'Product Permissions']);
+        Permission::create(['guard_name'=>'admin','name'=>'product-delete','group_name'=>'Product Permissions']);
         
         //backend settings permission
         // Permission::create(['guard_name'=>'admin','name'=>'maintenance-mode-index','group_name'=>'Settings Permissions']);
@@ -80,6 +82,12 @@ class PermissionSeeder extends Seeder
         // Permission::create(['guard_name'=>'admin','name'=>'backend-string-update','group_name'=>'Backend Language Permissions']);
         // Permission::create(['guard_name'=>'admin','name'=>'backend-string-index','group_name'=>'Backend Language Permissions']);
         // Permission::create(['guard_name'=>'admin','name'=>'backend-api-accesskey','group_name'=>'Backend Language Permissions']);
+
+        //warehouse
+        // Permission::create(['guard_name'=>'admin','name'=>'warehouse-index','group_name'=>'Warehouse Permissions']);
+        // Permission::create(['guard_name'=>'admin','name'=>'warehouse-store','group_name'=>'Warehouse Permissions']);
+        // Permission::create(['guard_name'=>'admin','name'=>'warehouse-update','group_name'=>'Warehouse Permissions']);
+        // Permission::create(['guard_name'=>'admin','name'=>'warehouse-delete','group_name'=>'Warehouse Permissions']);
 
     }
 }

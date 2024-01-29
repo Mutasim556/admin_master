@@ -1,3 +1,14 @@
+function printDiv() 
+{
+    var printContents = document.getElementById('DivIdToPrint').innerHTML;
+    var originalContents = document.body.innerHTML;
+
+    document.body.innerHTML = printContents;
+
+    window.print();
+
+    document.body.innerHTML = originalContents;
+}
 //view products
 function productDetails(x){
     if(x=='more'){
@@ -8,8 +19,8 @@ function productDetails(x){
         $('#read_more_id').removeClass('d-none');
     }
 }
-$(document).on('click','#basic-1 #product_row',function(){
-    let product_id = $(this).data('id');
+$(document).on('click','#basic-1 #product_row',function(){ 
+    let product_id = $(this).closest('tr').data('id');
     // alert(product_id);
     $.ajax({
         type: "get",
@@ -112,16 +123,17 @@ $(document).on('click','#basic-1 #product_row',function(){
                     </tr>
                 </table>
             `);
-            if(product.is_diffPrice==1){
+            if(product.is_diffPrice==1){ 
                 let war_price = ``;
                 $.each(product.warehouse_price,function(pid,pval){
-                    war_price = war_price + `<tr><td>${pval.warehouse_id}</td><td>${pval.price}</td></tr>`;
+                    war_price = war_price + `<tr><td>${pval.warehouse_name}</td><td>${pval.quantity}</td><td>${pval.price}/-</td></tr>`;
                 });
                 $('#warehouse_details').empty().append(`
                     <h5 class="my-3 text-center">Warehouse Prices</h5>
                     <table class="table table-bordered">
                         <tr style="background-color:azure;">
-                            <th>Warehouse</th>
+                            <th style="width:40%">Warehouse</th>
+                            <th>Stock</th>
                             <th>Price</th>
                         </tr>
                         ${war_price}
@@ -162,4 +174,49 @@ $(document).on('click','#basic-1 #product_row',function(){
         }
     });
 })
+
+//delete data
+$(document).on('click','#delete_button',function(){
+    var delete_id = $(this).closest('tr').data('id');
+    var tblrow = $(this).closest('tr');
+    swal({
+        title: delete_swal_title,
+        text: delete_swal_text,
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+    }).then((willDelete) => { 
+        if (willDelete) {
+            $.ajax({
+                type: "delete",
+                url: 'product/'+delete_id,
+                data: {
+                    _token : $("input[name=_token]").val(),
+                },
+                success: function (rdata) {
+                    swal({
+                        icon: "success",
+                        title: rdata.title,
+                        text: rdata.text,
+                        confirmButtonText: rdata.confirmButtonText,
+                    }).then(function () {
+                        tblrow.remove();
+                    });
+                },
+                error: function (err) {
+                    var err_message = err.responseJSON.message.split("(");
+                    swal({
+                        icon: "warning",
+                        title: "Warning !",
+                        text: err_message[0],
+                        confirmButtonText: "Ok",
+                    });
+                }
+            });
+           
+        } else {
+            swal(delete_swal_cancel_text);
+        }
+    })
+});
 
