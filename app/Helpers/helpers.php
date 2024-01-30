@@ -5,16 +5,22 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
 
 function userRoleName(){
-    return auth()->guard('admin')->user()->getRoleNames()->first();
+    if(Auth::guard('admin')->check()){
+        return auth()->guard('admin')->user()->getRoleNames()->first();
+    }
+    
 }
 
 
 function hasPermission(array $permission){
-    if(userRoleName()==='Super Admin'){
-        return true;
-    }else{
-        return auth()->guard('admin')->user()->hasAnyPermission($permission);
+    if(Auth::guard('admin')->check()){
+        if(userRoleName()==='Super Admin'){
+            return true;
+        }else{
+            return auth()->guard('admin')->user()->hasAnyPermission($permission);
+        }
     }
+    
 }
 
 

@@ -598,6 +598,16 @@
                     $(this).find('td:eq(3)').find('input').val(var_add_cost[tridx]['additional_price']);
                 })
             }
+
+            if($('#product_type').val()=='stadard'){
+                product_type_standard();
+            }else if($('#product_type').val()=='combo'){
+                product_type_combo();
+            }else if($('#product_type').val()=='digital'){
+                product_type_digital();
+            }else if($('#product_type').val()=='service'){
+                product_type_service();
+            }
         })
     </script>
 @endpush

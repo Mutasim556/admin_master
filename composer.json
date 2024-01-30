@@ -11,6 +11,7 @@
         "intervention/image": "^3.2",
         "laravel/breeze": "^1.27",
         "laravel/framework": "^10.10",
+        "laravel/pulse": "^1.0@beta",
         "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.8",
         "laravel/ui": "^4.3",
@@ -71,6 +72,6 @@
             "php-http/discovery": true
         }
     },
-    "minimum-stability": "stable",
+    "minimum-stability": "beta",
     "prefer-stable": true
 }

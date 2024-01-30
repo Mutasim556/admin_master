@@ -56,73 +56,84 @@ $('#add_product_form select[name="product_unit"]').change(function () {
         }
     })
 })
+function product_type_standard(){
+    $('#visible_unit').fadeIn(300);
+    $('#product_cost_div').fadeIn(500);
+    $('#alert_quantity_div').fadeIn(500);
+    $('#brand_div').fadeIn(500);
+    $('#category_div').fadeIn(500);
+    $('#combo').fadeOut(300);
+    $('#attatchment_div').fadeOut(300);
 
+    $('#variant_row').show(300).find('div input').prop('checked', false);
+    $('#warehouse_price_row').show(300).find('div input').prop('checked', false);
+    $('#batch_expire_date_row').show(300).find('div input').prop('checked', false);
+    $('#imei_row').show(300).find('div input').prop('checked', false);
+}
+function product_type_combo(){
+    $('#combo').fadeIn(500);
+    $('#visible_unit').fadeOut(300);
+    $('#attatchment_div').fadeOut(300);
+    $('#product_cost_div').fadeOut(300);
+    $('#alert_quantity_div').fadeOut(300);
+
+    $('#variant_row').hide(300);
+    $('#variant_option_row').hide(300);
+    $('#variant_option_table').hide(300);
+
+    $('#warehouse_price_row').hide(300);
+    $('#warehouse_price_table').hide(300);
+
+    $('#batch_expire_date_row').show(300).find('div input').prop('checked', false);
+    $('#imei_row').show(300).find('div input').prop('checked', false);
+}
+function product_type_digital(){
+    $('#attatchment_div').fadeIn(500);
+    $('#brand_div').fadeIn(500);
+    $('#category_div').fadeIn(500);
+    $('#combo').fadeOut(300);
+    $('#visible_unit').fadeOut(300);
+    $('#product_cost_div').fadeOut(300);
+    $('#alert_quantity_div').fadeOut(300);
+
+    $('#variant_row').hide(300);
+    $('#variant_option_row').hide(300);
+    $('#variant_option_table').hide(300);
+
+    $('#warehouse_price_row').hide(300);
+    $('#warehouse_price_table').hide(300);
+
+    $('#batch_expire_date_row').hide(300);
+    $('#imei_row').show(300).find('div input').prop('checked', false);
+}
+function product_type_service(){
+    $('#brand_div').fadeIn(500);
+    $('#category_div').fadeIn(500);
+    $('#visible_unit').fadeOut(300);
+    $('#attatchment_div').fadeOut(300);
+    $('#combo').fadeOut(300);
+    $('#product_cost_div').fadeOut(300);
+    $('#alert_quantity_div').fadeOut(300);
+
+    $('#variant_row').hide(300).find('div input').prop('checked', false);
+    $('#warehouse_price_row').hide(300).find('div input').prop('checked', false);
+    $('#batch_expire_date_row').hide(300).find('div input').prop('checked', false);
+    $('#imei_row').hide(300).find('div input').prop('checked', false);
+}
 $('#product_type').change(function () {
     let product_type = $(this).val();
     if (product_type == 'standard') {
-        $('#visible_unit').fadeIn(300);
-        $('#product_cost_div').fadeIn(500);
-        $('#alert_quantity_div').fadeIn(500);
-        $('#brand_div').fadeIn(500);
-        $('#category_div').fadeIn(500);
-        $('#combo').fadeOut(300);
-        $('#attatchment_div').fadeOut(300);
-
-        $('#variant_row').show(300).find('div input').prop('checked', false);
-        $('#warehouse_price_row').show(300).find('div input').prop('checked', false);
-        $('#batch_expire_date_row').show(300).find('div input').prop('checked', false);
-        $('#imei_row').show(300).find('div input').prop('checked', false);
+        product_type_standard();
     } else if (product_type == 'combo') {
-        $('#combo').fadeIn(500);
-        $('#visible_unit').fadeOut(300);
-        $('#attatchment_div').fadeOut(300);
-        $('#product_cost_div').fadeOut(300);
-        $('#alert_quantity_div').fadeOut(300);
-
-        $('#variant_row').hide(300);
-        $('#variant_option_row').hide(300);
-        $('#variant_option_table').hide(300);
-
-        $('#warehouse_price_row').hide(300);
-        $('#warehouse_price_table').hide(300);
-
-        $('#batch_expire_date_row').show(300).find('div input').prop('checked', false);
-        $('#imei_row').show(300).find('div input').prop('checked', false);
+        product_type_combo();
         // $('#warehouse_price_row').show(300).find('div input').prop('checked',false);
         // $('#variant_option_table').hide(300);
         // $('#brand_div').fadeOut(300);
         // $('#category_div').fadeOut(300);
     } else if (product_type == 'digital') {
-        $('#attatchment_div').fadeIn(500);
-        $('#brand_div').fadeIn(500);
-        $('#category_div').fadeIn(500);
-        $('#combo').fadeOut(300);
-        $('#visible_unit').fadeOut(300);
-        $('#product_cost_div').fadeOut(300);
-        $('#alert_quantity_div').fadeOut(300);
-
-        $('#variant_row').hide(300);
-        $('#variant_option_row').hide(300);
-        $('#variant_option_table').hide(300);
-
-        $('#warehouse_price_row').hide(300);
-        $('#warehouse_price_table').hide(300);
-
-        $('#batch_expire_date_row').hide(300);
-        $('#imei_row').show(300).find('div input').prop('checked', false);
+        product_type_digital();
     } else if (product_type == 'service') {
-        $('#brand_div').fadeIn(500);
-        $('#category_div').fadeIn(500);
-        $('#visible_unit').fadeOut(300);
-        $('#attatchment_div').fadeOut(300);
-        $('#combo').fadeOut(300);
-        $('#product_cost_div').fadeOut(300);
-        $('#alert_quantity_div').fadeOut(300);
-
-        $('#variant_row').hide(300).find('div input').prop('checked', false);
-        $('#warehouse_price_row').hide(300).find('div input').prop('checked', false);
-        $('#batch_expire_date_row').hide(300).find('div input').prop('checked', false);
-        $('#imei_row').hide(300).find('div input').prop('checked', false);
+        product_type_service();
     }
 });
 
