@@ -30,7 +30,7 @@ $(document).on('click','#basic-1 #product_row',function(){
             $('#warehouse_details').empty();
             $('#variant_details').empty();
             let product = data.product;
-            if(product.image!=''){
+            if(product.image){
                 let image = product.image.split(',');
                 let cursor_image = '';
                 $.each(image,function(imgid,img){

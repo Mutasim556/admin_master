@@ -74,6 +74,7 @@
                             <div class="col-md-12">
                                 <input type="hidden" id="csrf_token" value="{{ csrf_token() }}">
                                 <form action="theme-form" id="add_product_form" enctype="multipart/form-data">
+                                    @method('PUT')
                                     @csrf
                                     <div class="row">
                                         <div class="form-group col-md-4">
@@ -172,7 +173,7 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        
+                                                         
                                                     </tbody>
                                                 </table>
                                             </div>
@@ -391,9 +392,9 @@
                                                             <td><input type="text" class="form-control" name="warehouse_name[]" value="{{ $warehouse->name }}" readonly></td>
                                                             <input type="hidden" class="form-control" name="warehouse_id[]" value="{{ $warehouse->id }}" >
                                                             <td><input type="number" name="warehouse_quantity[]" class="form-control" value="{{ $warehouse_qty }}"
-                                                                    min="1"></td>
+                                                                    min="0"></td>
                                                             <td><input type="number" name="warehouse_prices[]" class="form-control" value="{{ $warehouse_price }}"
-                                                                        min="1"></td>
+                                                                        min="0"></td>
                                                         </tr>
                                                     @endforeach
                                                 </tbody>
@@ -454,7 +455,7 @@
                                     </div>
                                     <div class="row">
                                         <div class="form-group col-md-8">
-                                            <button class="btn btn-primary" id="submit-btn" type="submit">{{ __('admin_local.Add Product')}}</button>
+                                            <button class="btn btn-primary" id="submit-btn" type="submit">{{ __('admin_local.Update Product')}}</button>
                                         </div>
                                     </div>
 
@@ -488,6 +489,7 @@
     <script src="{{ asset('admin/assets/js/typeahead/typeahead.bundle.js') }}"></script>
     {{-- <script src="{{ asset('admin/assets/js/typeahead/typeahead.custom.js') }}"></script> --}}
     {{-- <script src="{{ asset('inventory/assets/js/select2/select2-custom.js') }}"></script> --}}
+    
     <script>
         $('.js-example-basic-single').select2();
         $(document).on('select2:open', () => {
@@ -526,7 +528,7 @@
             }
         });
 
-        var form_url = "{{ route('admin.product.store') }}";
+        var form_url = "{{ route('admin.product.update',$editproduct->id) }}";
         var submit_btn_after = `{{ __('admin_local.Submitting') }}`;
         var submit_btn_before = `{{ __('admin_local.Submit') }}`;
         var no_permission_mgs = `{{ __('admin_local.No Permission') }}`;
@@ -609,5 +611,17 @@
                 product_type_service();
             }
         })
+        var pid_array = [];
+        
     </script>
+    @if ($editproduct->type=='combo')
+        @foreach ($combop_id as $combop_id_id)
+            <script>
+                $(document).ready(function(){
+                    comboProduct({{ $combop_id_id }});
+                    pid_array.push('{{ $combop_id_id }}');
+                })
+            </script>
+        @endforeach
+    @endif
 @endpush

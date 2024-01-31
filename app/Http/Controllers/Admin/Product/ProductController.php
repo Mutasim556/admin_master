@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\Product;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Product\ProductStoreRequest;
+use App\Http\Requests\Admin\Product\ProductUpdateRequest;
 use App\Models\Admin\Product\Brand;
 use App\Models\Admin\Product\Category;
 use App\Models\Admin\Product\Product;
@@ -117,16 +118,40 @@ class ProductController extends Controller
         }
 
         $warehouses = Warehouse::where([['delete',0],['status',1]])->get();
+
+        if($editproduct->type=='combo'){
+            $combop_id = explode(',',$editproduct->product_list);
+            $combop_variant_id = explode(',',$editproduct->variant_list);
+            $combop_qty_list = explode(',',$editproduct->qty_list);
+            $combop_price_list = explode(',',$editproduct->price_list);
+        }else{
+            $combop_id = [];
+            $combop_variant_id = [];
+            $combop_qty_list = [];
+            $combop_price_list = [];
+        }
          
-        return view('backend.blade.product.edit',compact('editproduct','brands','categories','units','products','warehouses','product_name','product_prices'));
+        return view('backend.blade.product.edit',compact('editproduct','brands','categories','units','products','warehouses','product_name','product_prices','combop_id','combop_variant_id','combop_qty_list','combop_price_list'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(ProductUpdateRequest $data, string $id)
     {
-        //
+        if($data->update($id)){
+            return  response([
+                'title'=>__('admin_local.Congratulations !'),
+                'text'=>__('admin_local.Product update successfully.'),
+                'confirmButtonText'=>__('admin_local.Ok'),
+            ],200);
+        }else{
+            return  response([
+                'title'=>__('admin_local.Warning !'),
+                'text'=>__('admin_local.Server Error'),
+                'confirmButtonText'=>__('admin_local.Ok'),
+            ],403);
+        }
     }
 
     /**

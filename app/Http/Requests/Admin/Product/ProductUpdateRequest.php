@@ -6,11 +6,10 @@ use App\Models\Admin\Product\Product;
 use App\Models\Admin\Product\ProductVariant;
 use App\Models\Admin\Product\WarehousePrice;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Log;
 use Intervention\Image\Drivers\Gd\Driver;
 use Intervention\Image\ImageManager;
 
-class ProductStoreRequest extends FormRequest
+class ProductUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -54,9 +53,8 @@ class ProductStoreRequest extends FormRequest
         ];
     }
 
-    public function store()
-    {
-        $product = new Product();
+    public function update(string $id){
+        $product = Product::findOrFail($id);
         $product->type = $this->product_type;
         $product->name = $this->product_name;
         $product->code = $this->product_code;
@@ -82,6 +80,12 @@ class ProductStoreRequest extends FormRequest
             $images = $this->image;
             $image_names = [];
           
+            if($product->image){
+                $prev_img = explode(',',$product->image);
+                foreach($prev_img as $prev_img_val){
+                    unlink($prev_img_val);
+                }
+            }
             foreach ($images as $key => $image) {
                 $imageName = $image->getClientOriginalName();
                 $manager = new ImageManager(new Driver());
@@ -91,7 +95,7 @@ class ProductStoreRequest extends FormRequest
             }
             $product_images = implode(",", $image_names);
         } else {
-            $product_images = null;
+            $product_images = $product->image;
         }
         $product->image = $product_images;
         $product->product_details = $this->product_details;
@@ -126,19 +130,22 @@ class ProductStoreRequest extends FormRequest
             $product->cost = 0;
             if($this->attatch_file){
                 $file = $this->attatch_file;
+                if($product->file){
+                    unlink($product->file);
+                }
                 $fileName = "DIGITAL_PRODUCT_FILE_".time().'.'.$file->getClientOriginalExtension();
                 $this->attatch_file->move('admin/inventory/file/product/file/',$fileName);
                 $product->file = 'admin/inventory/file/product/file/'.$fileName;
             }else{
-                $product->file = null;
+                $product->file = $product->file;
             }
         }
         $product->save();
         if ($this->variant) {
+            ProductVariant::where('product_id',$id)->delete();
             foreach (array_slice($this->variant_item_code, 0, floor(count($this->variant_item_code) / ($this->image ? count($this->image) : 1))) as $key => $code) {
-                Log::info($code);
                 $product_variant = new ProductVariant();
-                $product_variant->product_id = $product->id;
+                $product_variant->product_id = $id;
                 $product_variant->variant_id = $key + 1;
                 $product_variant->position = $key + 1;
                 $product_variant->item_code = $code;
@@ -154,12 +161,12 @@ class ProductStoreRequest extends FormRequest
 
         if ($this->warehouse) {
             foreach (array_slice($this->warehouse_name, 0, floor(count($this->warehouse_name) / ($this->image ? count($this->image) : 1))) as $key => $wname) {
-                $product_diff_price = new WarehousePrice();
+                $product_diff_price = WarehousePrice::findOrFail($this->warehouse_id[$key]);
                 $product_diff_price->product_id = $product->id;
                 $product_diff_price->warehouse_id = $this->warehouse_id[$key];
                 $product_diff_price->price = $this->warehouse_prices[$key];
                 $product_diff_price->quantity = $this->warehouse_quantity[$key];
-                $product_diff_price->created_by = LoggedAdmin()->id;
+                // $product_diff_price->created_by = LoggedAdmin()->id;
                 $product_diff_price->updated_by = LoggedAdmin()->id;
                 $product_diff_price->delete = 0;
                 $product_diff_price->save();

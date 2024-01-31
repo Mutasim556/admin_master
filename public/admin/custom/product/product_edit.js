@@ -242,3 +242,255 @@ $(document).on('click','#remove_varient_div',function(){
         $(this).remove();
     });
 })
+
+
+function comboProduct(pid){
+    
+    $.ajax({
+        type: "get",
+        url: '/admin/product/get-variant/' + pid,
+        dataType: 'JSON',
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        success: function (data) {
+           if(data.variant!='No'){
+                let select_variant = `<select name="combo_product_variant[]" id="combo_product_variant" required>`;
+                $.each(data.variant,function(idx,val){
+                    select_variant = select_variant + `<option value="${val.id}">${val.item_code}</option>`;
+                });
+                select_variant = select_variant + `</select>`;
+                $('#combo_product_table tbody').append(`
+                    <tr data-id="${data.product.id}" >
+                        <td style="width:50%">${data.product.name} <input type="hidden"value="${data.product.id}"
+                        name="combo_product_id[]"> ${select_variant}</td>
+                        <td><input type="number" class="form-control" value="1"
+                                min="1" name="combo_product_quantity[]" id="combo_product_quantity" required></td>
+                        <td><input type="number" class="form-control"
+                                min="1" name="combo_product_unit_price[]" id="combo_product_price" value="${data.product.price}" required></td>
+                        <td class="text-center"><button type="button"
+                                class="btn btn-danger btn-sm px-2 py-2" id="delete_combo_button"><i
+                                    class="fa fa-trash"
+                                    style="font-size: 17px"></i></button></td>
+                    </tr>
+                `);
+           }else{
+                $('#combo_product_table tbody').append(`
+                    <tr data-id="${data.product.id}" >
+                        <td style="width:50%">${data.product.name}<input type="hidden" class="form-control" value="${data.product.id}"
+                        name="combo_product_id[]"></td>
+                        <td><input type="number" class="form-control" value="1"
+                                min="1" name="combo_product_quantity[]" id="combo_product_quantity" required></td>
+                        <td><input type="number" class="form-control"
+                                min="1" name="combo_product_unit_price[]" id="combo_product_price" value="${data.product.price}" required></td>
+                        <td class="text-center"><button type="button"
+                                class="btn btn-danger btn-sm px-2 py-2" id="delete_combo_button"><i
+                                    class="fa fa-trash"
+                                    style="font-size: 17px"></i></button></td>
+                    </tr>
+                `);
+           }
+        },
+        error: function (err) {
+            var err_message = err.responseJSON.message.split("(");
+            swal({
+                icon: "warning",
+                title: "Warning !",
+                text: err_message[0],
+                confirmButtonText: "Ok",
+            });
+        }
+    });
+}
+
+
+$('#add_combo_product').on('keypress',function(e){
+    if(e.which==13){
+        
+        let pid = $('#add_combo_product').val().split("@")[0];
+        let pname = $('#add_combo_product').val().split("@")[1];
+        // pid_array.push(pid);
+        
+        if(jQuery.inArray(pid, pid_array) != -1){
+            swal({
+                icon: "warning",
+                title: "Warning !",
+                text: 'Duplicate product not allowed',
+                confirmButtonText: "Ok",
+            }).then(function(){
+                $('#add_combo_product').val('');
+                $('#add_combo_product')[0].focus(); 
+            });
+        }else{
+            if($('#add_combo_product').val()==''){
+                swal({
+                    icon: "warning",
+                    title: "Warning !",
+                    text: 'Please select product',
+                    confirmButtonText: "Ok",
+                }).then(function(){
+                    $('#add_combo_product').val('');
+                    $('#add_combo_product')[0].focus(); 
+                });
+            }else{
+                if(jQuery.inArray($('#add_combo_product').val(), products) != -1){
+                    pid_array.push(pid);
+
+                    comboProduct(pid);
+                    
+                    $(this).val('');
+                }else{
+                    swal({
+                        icon: "warning",
+                        title: "Warning !",
+                        text: 'Invalid Product',
+                        confirmButtonText: "Ok",
+                    }).then(function(){
+                        $('#add_combo_product').val('');
+                        $('#add_combo_product')[0].focus(); 
+                    });
+                }
+                
+            }
+           
+        }
+    }
+})
+
+
+//dropzone
+
+
+Dropzone.autoDiscover = false;
+let token = $('meta[name="csrf-token"]').attr('content');
+var myDropzone = new Dropzone("div#dropzoneDragArea", {
+    addRemoveLinks: true,
+    autoProcessQueue: false,
+    uploadMultiple: true,
+    parallelUploads: 100,
+    dictRemoveFile: 'Remove',
+    maxFilesize: 12,
+    paramName: 'image',
+    clickable: true,
+    method: 'POST',
+    url: form_url,
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    },
+    renameFile: function (file) {
+        var dt = new Date();
+        var time = dt.getTime();
+        var file_ext = file.name.split('.');
+        return 'PRODUCT-'+time+'.'+file_ext[file_ext.length-1];
+    },
+    acceptedFiles: ".jpeg,.jpg,.png,.gif",
+    init: function (file) {
+        var myDropzone = this;
+        $('#add_product_form').on("submit", function (e) {
+            e.preventDefault();
+            // e.stopPropagation();
+            // console.log(myDropzone.getQueuedFiles().length);
+            if (myDropzone.getQueuedFiles().length > 0)
+            {                     
+                myDropzone.processQueue();  
+            } else {    
+                    let fData =  new FormData(this);
+                    fData.append('_token',$('#csrf_token').val());            
+                    $.ajax({
+                        type: 'POST',
+                        url: form_url,
+                        data: fData,
+                        dataType: 'JSON',
+                        contentType: false,
+                        cache: false,
+                        processData: false,
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        success: function (data) {
+                            swal({
+                                icon: "success",
+                                title: data.title,
+                                text: data.text,
+                                confirmButtonText: data.confirmButtonText,
+                            }).then(function(){
+                                // this.removeAllFiles(true);
+                                window.location.reload()
+                            })
+                        },
+                        error: function (err) {
+                            $('#add_product_form').find(" :input").each(function(){
+                                $(this).removeClass('border-danger is-invalid')
+                            })
+                            $('#add_product_form .text-danger').each(function(id,val){
+                                $(this).empty();
+                            })
+                           
+                            $.each(err.responseJSON.errors,function(idx,val){
+                                let splitVal = idx.split('.');
+                                if(splitVal.length>1 ){
+                                    if(splitVal[0]='variant_option'){
+                                        $('#add_product_form #variant_error').removeClass('d-none');
+                                    }else if(splitVal[0]='variant_value'){
+                                        $('#add_product_form #variant_error').removeClass('d-none');
+                                    }else{
+                                        $('#add_product_form #variant_error').addClass('d-none');
+                                    }
+                                }else{
+                                    $('#add_product_form #variant_error').addClass('d-none');
+                                }
+                                $('#add_product_form #'+idx).addClass('border-danger is-invalid')
+                                $('#add_product_form .err-mgs-'+idx).empty().append(val);
+                            })
+                        },
+                    });
+            }   
+        });
+        this.on('sending', function (file, xhr, formData) {
+            // Append all form inputs to the formData Dropzone will POST
+            var data = $("#add_product_form").serializeArray();
+            if($('#add_product_form #product_type').val()=='digital'){
+                data.push({name:'attatch_file',value:document.getElementById("attatched_file").files[0]})
+            }
+            console.log(data);
+            $.each(data, function (key, el) {
+                formData.append(el.name, el.value);
+            });
+        });
+    },
+    error: function (file, err) {
+        this.removeAllFiles(true);
+
+        $('#add_product_form').find(" :input").each(function(){
+            $(this).removeClass('border-danger is-invalid')
+        })
+        $('#add_product_form .text-danger').each(function(id,val){
+            $(this).empty();
+        })
+       
+        $.each(err.errors,function(idx,val){
+            $('#add_product_form #'+idx).addClass('border-danger is-invalid')
+            $('#add_product_form .err-mgs-'+idx).empty().append(val);
+        })
+    },
+    successmultiple: function (file, response) {
+        // console.log(response);
+        this.removeAllFiles(true);
+        swal({
+            icon: "success",
+            title: response.title,
+            text: response.text,
+            confirmButtonText: response.confirmButtonText,
+        }).then(function(){
+            window.location.reload()
+        })
+        
+    },
+    completemultiple: function (file, response) {
+        console.log(file, response, "completemultiple");
+    },
+    reset: function () {
+        console.log("resetFiles");
+        this.removeAllFiles(true);
+    }
+});
