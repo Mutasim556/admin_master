@@ -80,6 +80,20 @@
                         </a>
                     </li>
                 @endif
+                @if (hasPermission(['print-barcode']))
+                    <li>
+                        <a href="{{ route('admin.product.printBarcode') }}" class="sidebar-link">
+                            <span > {{ __('admin_local.Print Barcode') }} </span>
+                        </a>
+                    </li>
+                @endif
+                @if (hasPermission(['create-adjustment']))
+                    <li>
+                        <a href="{{ route('admin.product.adjustment.create') }}" class="sidebar-link">
+                            <span > {{ __('admin_local.Add Adjustment') }} </span>
+                        </a>
+                    </li>
+                @endif
             </ul>
         </li>
         
@@ -138,6 +152,8 @@
                 </a>
             </li>
             @endif
+
+            
         </ul>
     </li>
     @endif

@@ -15,6 +15,8 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response; 
 use Intervention\Image\Drivers\Gd\Driver;
 use Intervention\Image\ImageManager;
+use Milon\Barcode\DNS1D;
+use Milon\Barcode\DNS2D;
 
 class ProductController extends Controller
 {
@@ -22,8 +24,10 @@ class ProductController extends Controller
     {
        
         $this->middleware('permission:product-store,admin')->only(['create','store']);
+        $this->middleware('permission:product-index,admin')->only(['index','show']);
         $this->middleware('permission:product-delete,admin')->only(['destroy']);
         $this->middleware('permission:product-update,admin')->only(['edit','update']);
+        $this->middleware('permission:print-barcode,admin')->only(['printBarcode']);
     }
     /**
      * Display a listing of the resource.
@@ -200,5 +204,38 @@ class ProductController extends Controller
         
     }
 
-    
+    public function printBarcode() : View {
+        $products = Product::where([['status',1],['delete',0]])->select('name','id','price','is_variant')->get();
+        $product_name = [];
+        $product_prices = [];
+        foreach($products as $key=>$product){
+            array_push($product_name,$product->id."@".$product->name);
+            $product_prices[$key]=$product->price;
+        }
+        return view('backend.blade.product.barcode.index',compact('product_name','product_prices'));
+    }
+
+    public function generateBarcode(Request $data){
+        // dd($data->all());
+        $barcode_details = []; 
+        foreach($data->product_id as $key => $product_id){
+            $product = Product::findOrFail($product_id);
+            $barcode_details[$key]['barcode'] = DNS1D::getBarcodePNG($product->code,$product->barcode_symbology);
+            $barcode_details[$key]['code'] = $product->code;
+            $barcode_details[$key]['name'] =$product->name;
+            $barcode_details[$key]['price'] =$product->price;
+            $barcode_details[$key]['name_show'] =$data->name?1:0;
+            $barcode_details[$key]['code_show'] =$data->code?1:0;
+            $barcode_details[$key]['price_show'] =$data->price?1:0;
+            $barcode_details[$key]['paper_size'] =$data->paper_size;
+        }
+        return response()->json([
+            'barcode_details'=>$barcode_details,
+        ]);
+        // echo DNS1D::getBarcodeSVG('4445645656', 'C39')."<br>";
+        // // echo DNS2D::getBarcodeHTML('4445645656', 'QRCODE');
+        // echo DNS2D::getBarcodePNGPath('4445645656', 'PDF417')."<br>";
+        // echo DNS2D::getBarcodeSVG('4445645656', 'DATAMATRIX');
+        // echo '<img src="data:image/png;base64,' . DNS2D::getBarcodePNG('4', 'PDF417') . '" alt="barcode"   />';
+    }
 }

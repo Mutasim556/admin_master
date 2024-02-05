@@ -73,8 +73,13 @@ class PermissionSeeder extends Seeder
         //products
         // Permission::create(['guard_name'=>'admin','name'=>'product-index','group_name'=>'Product Permissions']);
         // Permission::create(['guard_name'=>'admin','name'=>'product-store','group_name'=>'Product Permissions']);
-        Permission::create(['guard_name'=>'admin','name'=>'product-update','group_name'=>'Product Permissions']);
-        Permission::create(['guard_name'=>'admin','name'=>'product-delete','group_name'=>'Product Permissions']);
+        // Permission::create(['guard_name'=>'admin','name'=>'product-update','group_name'=>'Product Permissions']);
+        // Permission::create(['guard_name'=>'admin','name'=>'product-delete','group_name'=>'Product Permissions']);
+        // Permission::create(['guard_name'=>'admin','name'=>'print-barcode','group_name'=>'Product Permissions']);
+        Permission::create(['guard_name'=>'admin','name'=>'adjustment-index','group_name'=>'Product Permissions']);
+        Permission::create(['guard_name'=>'admin','name'=>'adjustment-store','group_name'=>'Product Permissions']);
+        Permission::create(['guard_name'=>'admin','name'=>'adjustment-update','group_name'=>'Product Permissions']);
+        Permission::create(['guard_name'=>'admin','name'=>'adjustment-delete','group_name'=>'Product Permissions']);
         
         //backend settings permission
         // Permission::create(['guard_name'=>'admin','name'=>'maintenance-mode-index','group_name'=>'Settings Permissions']);

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\Product\AdjustmentController;
 use App\Http\Controllers\Admin\Product\BrandController;
 use App\Http\Controllers\Admin\Product\CategoryController;
 use App\Http\Controllers\Admin\Product\ParentCategoryController;
@@ -47,4 +48,8 @@ Route::controller(ProductController::class)->prefix('product')->group(function (
    Route::get('/generate/product-code', 'generateProductCode');
    Route::get('/get-unit/{pram}', 'getUnit');
    Route::get('/get-variant/{pram}', 'getVariant');
+   Route::get('/print/barcode', 'printBarcode')->name('product.printBarcode');
+   Route::post('/generate/barcode', 'generateBarcode')->name('product.generateBarcode');
 });
+Route::name('product')->resource('product/adjustment', AdjustmentController::class);
+
