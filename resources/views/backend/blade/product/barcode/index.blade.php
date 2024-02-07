@@ -221,7 +221,6 @@
     {{-- <script src="{{ asset('inventory/assets/js/select2/select2-custom.js') }}"></script> --}}
     <script src="{{ asset('admin/assets/js/typeahead/handlebars.js') }}"></script>
     <script src="{{ asset('admin/assets/js/typeahead/typeahead.bundle.js') }}"></script>
-    <script src="{{ asset('admin/barcodeJs/jquery-barcode.js') }}"></script>
     <script>
         $('[data-toggle="switchery"]').each(function(idx, obj) {
             new Switchery($(this)[0], $(this).data());
