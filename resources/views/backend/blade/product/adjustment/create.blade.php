@@ -265,7 +265,7 @@
         $(document).on('select2:open', () => {
             document.querySelector('.select2-search__field').focus();
         });
-        var form_url = "{{ route('admin.adjustment.store') }}";
+        var form_url = "{{ route('admin.productAdjustment.store') }}";
         // var getting_permission = `<span>{{ __('admin_local.Getting Permissons') }} ...... <i class="fa fa-spinner fa-spin" ></i></span>`;
         var submit_btn_after = `{{ __('admin_local.Submitting') }}`;
         var submit_btn_before = `{{ __('admin_local.Submit') }}`;

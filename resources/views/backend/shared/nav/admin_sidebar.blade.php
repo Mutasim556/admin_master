@@ -89,14 +89,14 @@
                 @endif
                 @if (hasPermission(['adjustment-index']))
                     <li>
-                        <a href="{{ route('admin.adjustment.index') }}" class="sidebar-link">
+                        <a href="{{ route('admin.productAdjustment.index') }}" class="sidebar-link">
                             <span > {{ __('admin_local.Adjustment List') }} </span>
                         </a>
                     </li>
                 @endif
                 @if (hasPermission(['adjustment-store']))
                     <li>
-                        <a href="{{ route('admin.adjustment.create') }}" class="sidebar-link">
+                        <a href="{{ route('admin.productAdjustment.create') }}" class="sidebar-link">
                             <span > {{ __('admin_local.Add Adjustment') }} </span>
                         </a>
                     </li>
