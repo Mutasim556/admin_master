@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Admin\Product;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Product\AdjustmentStoreRequest;
+use App\Models\Admin\Product\Adjustment;
 use App\Models\Admin\Product\Product;
 use App\Models\Admin\Product\WarehousePrice;
 use App\Models\Admin\Settings\Warehouse;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -15,14 +17,26 @@ class AdjustmentController extends Controller
     public function __construct()
     {
         $this->middleware('permission:adjustment-store,admin')->only(['create','store','getWarehouseProduct','getProduct']);
+        $this->middleware('permission:adjustment-index,admin')->only(['index','getAdjustmentProduct']);
     }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        echo "Hello";
-        // return view('backend.blade.product.adjustment.index');
+        if(isset($_GET['date_range'])){
+            $date_range = explode(' - ',$_GET['date_range']);
+            $startDate = Carbon::parse($date_range[0])->startOfDay();
+            $endDate = Carbon::parse($date_range[1])->endOfDay();
+            $adjustments = Adjustment::whereBetween('created_at',[$startDate,$endDate])->with('warehouse','admin')->get();
+        }else{
+            $startDate = Carbon::now()->subDays(6)->startOfDay();
+            $endDate = Carbon::now()->endOfDay();
+            $adjustments = Adjustment::whereBetween('created_at',[$startDate,$endDate])->with('warehouse','admin')->get();
+        }
+        $startDate =  $startDate->format('m/d/Y');
+        $endDate =  $endDate->format('m/d/Y');
+        return view('backend.blade.product.adjustment.index',compact('adjustments','startDate','endDate'));
     }
 
     /**
@@ -117,5 +131,19 @@ class AdjustmentController extends Controller
         }else{
             return response(['warehouse_price'=>'No','variant'=>'No','product'=>$product]);
         }
+    }
+
+    public function getAdjustmentProduct(string $id):Response{
+        $adjustment = Adjustment::findOrFail($id);
+        $products = [];
+        $quantity_explode = explode(',',$adjustment->total_qty);
+        $adjustment_action = explode(',',$adjustment->action);
+        foreach(explode(',',$adjustment->product_id) as $key=>$value){
+            $prod = Product::select('name','code','qty')->findOrFail($value);
+            $prod->adjust_qty = $quantity_explode[$key];
+            $prod->action = $adjustment_action[$key]=='-'?'Subtraction':'Addition';
+            array_push($products,$prod);
+        }
+        return response($products);
     }
 }

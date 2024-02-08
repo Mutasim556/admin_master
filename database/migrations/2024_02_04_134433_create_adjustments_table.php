@@ -13,12 +13,13 @@ return new class extends Migration
     {
         Schema::create('adjustments', function (Blueprint $table) {
             $table->id();
-            $table->integer('reference_no')->nullable();
+            $table->string('reference_no')->nullable();
             $table->foreignId('warehouse_id')->nullable()->references('id')->on('warehouses');
             $table->string('document')->nullable();
             $table->string('total_qty')->nullable();
             $table->string('product_id');
             $table->text('note')->nullable();
+            $table->string('action')->nullable();
             $table->foreignId('created_by')->references('id')->on('admins');
             $table->foreignId('updated_by')->references('id')->on('admins');
             $table->timestamps();

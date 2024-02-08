@@ -55,5 +55,6 @@ Route::resource('productAdjustment', AdjustmentController::class);
 Route::controller(AdjustmentController::class)->prefix('product')->group(function () {
    Route::get('/warehouse/product/{id}', 'getWarehouseProduct')->name('product.getWarehouseProduct');
    Route::get('/get/product/{id}/{wid}', 'getProduct')->name('product.getProduct');
+   Route::get('/get/adjustment/product/{id}', 'getAdjustmentProduct')->name('product.getAdjustmentProduct');
 });
 

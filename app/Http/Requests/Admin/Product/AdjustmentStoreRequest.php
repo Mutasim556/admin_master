@@ -39,12 +39,13 @@ class AdjustmentStoreRequest extends FormRequest
 
     public function store(){
         $adjustment = new Adjustment();
-        $adjustment->reference_no = $this->referance;
+        $adjustment->reference_no = $this->referance?$this->referance:'adj-'.time();
         $adjustment->warehouse_id = $this->warehouse;
         
         $adjustment->total_qty = implode(',',$this->product_quantity);
         $adjustment->product_id = implode(',',$this->product_id);
         $adjustment->note = $this->notes;
+        $adjustment->action = implode(',',$this->action);
         $adjustment->created_by = LoggedAdmin()->id;
         $adjustment->updated_by = LoggedAdmin()->id;
         if($this->attatched_file){

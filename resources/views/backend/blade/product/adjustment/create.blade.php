@@ -280,5 +280,5 @@
 
         
     </script>
-    <script src="{{ asset('admin/custom/product/add_adjustment.js') }}"></script>
+    <script src="{{ asset('admin/custom/product/adjustment_add.js') }}"></script>
 @endpush
