@@ -78,7 +78,6 @@ class PermissionSeeder extends Seeder
         // Permission::create(['guard_name'=>'admin','name'=>'print-barcode','group_name'=>'Product Permissions']);
         Permission::create(['guard_name'=>'admin','name'=>'adjustment-index','group_name'=>'Product Permissions']);
         Permission::create(['guard_name'=>'admin','name'=>'adjustment-store','group_name'=>'Product Permissions']);
-        Permission::create(['guard_name'=>'admin','name'=>'adjustment-update','group_name'=>'Product Permissions']);
         Permission::create(['guard_name'=>'admin','name'=>'adjustment-delete','group_name'=>'Product Permissions']);
         
         //backend settings permission

@@ -51,7 +51,7 @@ Route::controller(ProductController::class)->prefix('product')->group(function (
    Route::get('/print/barcode', 'printBarcode')->name('product.printBarcode');
    Route::post('/generate/barcode', 'generateBarcode')->name('product.generateBarcode');
 });
-Route::resource('productAdjustment', AdjustmentController::class);
+Route::resource('productAdjustment', AdjustmentController::class)->except('show','edit','update','destroy');
 Route::controller(AdjustmentController::class)->prefix('product')->group(function () {
    Route::get('/warehouse/product/{id}', 'getWarehouseProduct')->name('product.getWarehouseProduct');
    Route::get('/get/product/{id}/{wid}', 'getProduct')->name('product.getProduct');

@@ -138,9 +138,12 @@
                                             <td>{{ $adjustment->admin->name }}</td>
                                             <td>{{ date('d-M-Y',strtotime($adjustment->created_at)) }}</td>
                                             <td>
+                                                @if (hasPermission(['permission-index']))
                                                 <button class="btn btn-sm btn-primary px-2 py-1" data-bs-toggle="modal"
-                                                data-bs-target="#view-adjustment-modal" id="view_btn"><i class="fa fa-desktop"></i></button>
-                                                <button class="btn btn-sm btn-danger px-2 py-1"><i class="fa fa-trash"></i></button>
+                                                data-bs-target="#view-adjustment-modal" id="view_btn"><i class="fa fa-desktop"></i></button> 
+                                                @endif
+                                                
+                                                {{-- <button class="btn btn-sm btn-danger px-2 py-1"><i class="fa fa-trash"></i></button> --}}
                                             </td>
                                         </tr>
                                     @endforeach
