@@ -29,3 +29,45 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+
+
+Route::get('module',function(){
+    return config('modules');
+});
+
+Route::get('modulec',function(){
+    $test = config('modules');
+    $tt ='';
+    $true = true;
+    $false = false;
+    $content = "
+        'status'=>$true,
+        'route'=>'modules/subscription/routes/web.php',
+    ";
+    if(config('modules')){
+        foreach(config('modules') as $key=>$val){
+            if($key == 'subscription'){
+                break ;
+                return 'already exist';
+            }
+            if(is_array($val)){
+                $zz = '';
+               foreach($val as $dkey=>$dd){
+                if(is_int($dd)){
+                    $zz = $zz."        '$dkey'=>$dd,\n";
+                }else{
+                    $zz = $zz."        '$dkey'=>'$dd',\n";
+                }
+                
+               }
+            }
+    
+            $tt = $tt."\n    '$key'=>[\n$zz\n    ],";
+        }
+    }
+    
+    $tt = $tt."\n    'subscription'=>[       $content],";
+    $phpArray = "<?php\n\nreturn [  $tt \n];";
+    file_put_contents(config_path('modules.php'), $phpArray);
+    echo $phpArray;
+});

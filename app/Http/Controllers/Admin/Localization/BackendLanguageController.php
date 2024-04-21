@@ -48,7 +48,7 @@ class BackendLanguageController extends Controller
     {
         $directories = explode(',', $data->directory);
         $language_code = $data->lang;
-        $fileName = $data->file_name;
+        $fileName = $data->file_name; 
         $localizationStrings = [];
 
         foreach ($directories as $directory) {
