@@ -136,7 +136,7 @@ class UserController extends Controller
                 'username' => $data->username,
             ]);
             $user = Admin::findOrFail($id);
-            $user->syncRoles($data->user_role);
+            $user->syncRoles($data->user_role); 
         }
 
         if($update){

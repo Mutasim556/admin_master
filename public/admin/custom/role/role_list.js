@@ -1,7 +1,7 @@
 //add role
 $('#add_role_form').submit(function (e) {
     e.preventDefault();
-    $('#add_role_form .err-mgs').each(function(id,val){
+    $('#add_role_form .err-mgs').each(function(id,val){ 
         $(this).prev('input').removeClass('border-danger is-invalid')
         $(this).prev('textarea').removeClass('border-danger is-invalid')
         $(this).empty();
@@ -12,7 +12,7 @@ $('#add_role_form').submit(function (e) {
     $.ajax({
         type: "post",
         url: form_url,
-        data: $(this).serialize(),
+        data: $(this).serialize(), 
         dataType: 'JSON',
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
