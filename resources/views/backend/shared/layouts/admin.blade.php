@@ -10,30 +10,30 @@
     <meta name="keywords"
         content="admin template, Tivo admin template, dashboard template, flat admin template, responsive admin template, web app">
     <meta name="author" content="pixelstrap">
-    <link rel="icon" href="{{ asset('admin/assets/images/favicon/favicon.png') }}" type="image/x-icon">
-    <link rel="shortcut icon" href="{{ asset('admin/assets/images/favicon/favicon.png') }}" type="image/x-icon">
+    <link rel="icon" href="{{ asset('public/admin/assets/images/favicon/favicon.png') }}" type="image/x-icon">
+    <link rel="shortcut icon" href="{{ asset('public/admin/assets/images/favicon/favicon.png') }}" type="image/x-icon">
     <title>{{ env('APP_BACKEND_NAME') }} -@stack('title')</title>
-    <link rel="stylesheet" type="text/css" href="{{ asset('admin/assets/css/vendors/font-awesome.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('public/admin/assets/css/vendors/font-awesome.css') }}">
     <!-- ico-font-->
-    <link rel="stylesheet" type="text/css" href="{{ asset('admin/assets/css/vendors/icofont.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('public/admin/assets/css/vendors/icofont.css') }}">
     <!-- Themify icon-->
-    <link rel="stylesheet" type="text/css" href="{{ asset('admin/assets/css/vendors/themify.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('public/admin/assets/css/vendors/themify.css') }}">
     <!-- Flag icon-->
-    <link rel="stylesheet" type="text/css" href="{{ asset('admin/assets/css/vendors/flag-icon.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('public/admin/assets/css/vendors/flag-icon.css') }}">
     <!-- Feather icon-->
-    <link rel="stylesheet" type="text/css" href="{{ asset('admin/assets/css/vendors/feather-icon.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('admin/assets/css/vendors/scrollbar.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('admin/assets/css/vendors/animate.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('public/admin/assets/css/vendors/feather-icon.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('public/admin/assets/css/vendors/scrollbar.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('public/admin/assets/css/vendors/animate.css') }}">
     <!-- Bootstrap css-->
-    <link rel="stylesheet" type="text/css" href="{{ asset('admin/assets/css/vendors/bootstrap.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('public/admin/assets/css/vendors/bootstrap.css') }}">
     <!-- App css-->
     @stack('css')
-    <link rel="stylesheet" type="text/css" href="{{ asset('admin/assets/css/style.css') }}">
-    <link id="color" rel="stylesheet" href="{{ asset('admin/assets/css/color-1.css') }}" media="screen">
+    <link rel="stylesheet" type="text/css" href="{{ asset('public/admin/assets/css/style.css') }}">
+    <link id="color" rel="stylesheet" href="{{ asset('public/admin/assets/css/color-1.css') }}" media="screen">
     <!-- Responsive css-->
-    <link rel="stylesheet" type="text/css" href="{{ asset('admin/assets/css/responsive.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('public/admin/assets/css/responsive.css') }}">
     @stack('page_css')
-    <link rel="stylesheet" href="{{ asset('admin/assets/css/my_style.css') }}">
+    <link rel="stylesheet" href="{{ asset('public/admin/assets/css/my_style.css') }}">
 </head>
 
 <body>
@@ -58,8 +58,8 @@
                     <div class="toggle-sidebar"><i class="status_toggle middle sidebar-toggle" data-feather="grid"> </i>
                     </div>
                     <div class="logo-header-main"><a href="index.html"><img class="img-fluid for-light img-100"
-                                src="{{ asset('admin/assets/images/logo/logo2.png') }}" alt=""><img
-                                class="img-fluid for-dark" src="{{ asset('admin/assets/images/logo/logo.png') }}"
+                                src="{{ asset('public/admin/assets/images/logo/logo2.png') }}" alt=""><img
+                                class="img-fluid for-dark" src="{{ asset('public/admin/assets/images/logo/logo.png') }}"
                                 alt=""></a></div>
                 </div>
                 <div class="left-header col horizontal-wrapper ps-0">
@@ -142,14 +142,13 @@
                                 </div>
                                 <div class="more_lang">
                                     @php
-                                        $languages = DB::table('languages')
-                                            ->where([['status', 1], ['delete', 0]])
+                                        $languages =  \App\Models\Admin\Language::where([['status', 1], ['delete', 0]])
                                             ->get();
                                     @endphp
                                     @foreach ($languages as $language)
-                                        <div class="lang {{ getLanguageSession()==$language->lang?'selected':'' }}" onclick="change_lang('{{ $language->lang }}')">
-                                            <span class="lang-txt">{{ $language->name }}</span>
-                                        </div>
+                                        <a class="lang {{ getLanguageSession()==$language->lang?'selected':'' }}" href="{{ route('admin.changeLanguage',$language->lang) }}">
+                                            <span class="lang-txt">{{  $language->name, $language->lang }}</span>
+                                        </a>
                                     @endforeach
 
                                     {{-- <div class="lang selected" onclick="change_lang('bn')"><i
@@ -181,7 +180,7 @@
             <div class="sidebar-wrapper">
                 <div>
                     <div class="logo-wrapper"><a href="index.html"><img class="img-fluid for-light"
-                                src="{{ asset('admin/assets/images/logo/logo.png') }}" alt=""></a>
+                                src="{{ asset('public/admin/assets/images/logo/logo.png') }}" alt=""></a>
                         <div class="back-btn"><i data-feather="grid"></i></div>
                         <div class="toggle-sidebar icon-box-sidebar"><i class="status_toggle middle sidebar-toggle"
                                 data-feather="grid"> </i></div>
@@ -219,36 +218,36 @@
         </div>
     </div>
     <!-- latest jquery-->
-    <script src="{{ asset('admin/assets/js/jquery-3.6.0.min.js') }}"></script>
+    <script src="{{ asset('public/admin/assets/js/jquery-3.6.0.min.js') }}"></script>
     <!-- Bootstrap js-->
-    <script src="{{ asset('admin/assets/js/bootstrap/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('public/admin/assets/js/bootstrap/bootstrap.bundle.min.js') }}"></script>
     {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script> --}}
     <!-- feather icon js-->
-    <script src="{{ asset('admin/assets/js/icons/feather-icon/feather.min.js') }}"></script>
-    <script src="{{ asset('admin/assets/js/icons/feather-icon/feather-icon.js') }}"></script>
+    <script src="{{ asset('public/admin/assets/js/icons/feather-icon/feather.min.js') }}"></script>
+    <script src="{{ asset('public/admin/assets/js/icons/feather-icon/feather-icon.js') }}"></script>
     <!-- scrollbar js-->
-    <script src="{{ asset('admin/assets/js/scrollbar/simplebar.js') }}"></script>
-    <script src="{{ asset('admin/assets/js/scrollbar/custom.js') }}"></script>
+    <script src="{{ asset('public/admin/assets/js/scrollbar/simplebar.js') }}"></script>
+    <script src="{{ asset('public/admin/assets/js/scrollbar/custom.js') }}"></script>
     <!-- Sidebar jquery-->
-    <script src="{{ asset('admin/assets/js/config.js') }}"></script>
-    <script src="{{ asset('admin/assets/js/sidebar-menu.js') }}"></script>
-    <script src="{{ asset('admin/assets/js/clipboard/clipboard.min.js') }}"></script>
+    <script src="{{ asset('public/admin/assets/js/config.js') }}"></script>
+    <script src="{{ asset('public/admin/assets/js/sidebar-menu.js') }}"></script>
+    <script src="{{ asset('public/admin/assets/js/clipboard/clipboard.min.js') }}"></script>
     @stack('js')
-    <script src="{{ asset('admin/assets/js/tooltip-init.js') }}"></script>
-    <script src="{{ asset('admin/assets/js/custom-card/custom-card.js') }}"></script>
-    <script src="{{ asset('admin/assets/js/notify/bootstrap-notify.min.js') }}"></script>
-    {{-- <script src="{{ asset('admin/assets/js/notify/index.js') }}"></script> --}}
+    <script src="{{ asset('public/admin/assets/js/tooltip-init.js') }}"></script>
+    <script src="{{ asset('public/admin/assets/js/custom-card/custom-card.js') }}"></script>
+    <script src="{{ asset('public/admin/assets/js/notify/bootstrap-notify.min.js') }}"></script>
+    {{-- <script src="{{ asset('public/admin/assets/js/notify/index.js') }}"></script> --}}
 
-    {{-- <script src="{{ asset('admin/assets/js/dashboard/default.js') }}"></script> --}}
-    {{-- <script src="{{ asset('admin/assets/js/notify/index.js') }}"></script> --}}
-    <script src="{{ asset('admin/assets/js/typeahead/handlebars.js') }}"></script>
-    <script src="{{ asset('admin/assets/js/typeahead/typeahead.bundle.js') }}"></script>
-    {{-- <script src="{{ asset('admin/assets/js/typeahead/typeahead.custom.js') }}"></script> --}}
-    <script src="{{ asset('admin/assets/js/typeahead-search/handlebars.js') }}"></script>
-    <script src="{{ asset('admin/assets/js/typeahead-search/typeahead-custom.js') }}"></script>
+    {{-- <script src="{{ asset('public/admin/assets/js/dashboard/default.js') }}"></script> --}}
+    {{-- <script src="{{ asset('public/admin/assets/js/notify/index.js') }}"></script> --}}
+    <script src="{{ asset('public/admin/assets/js/typeahead/handlebars.js') }}"></script>
+    <script src="{{ asset('public/admin/assets/js/typeahead/typeahead.bundle.js') }}"></script>
+    {{-- <script src="{{ asset('public/admin/assets/js/typeahead/typeahead.custom.js') }}"></script> --}}
+    <script src="{{ asset('public/admin/assets/js/typeahead-search/handlebars.js') }}"></script>
+    <script src="{{ asset('public/admin/assets/js/typeahead-search/typeahead-custom.js') }}"></script>
     <!-- Template js-->
-    <script src="{{ asset('admin/assets/js/script.js') }}"></script>
-    {{-- <script src="{{ asset('admin/assets/js/theme-customizer/customizer.js') }}"></script> --}}
+    <script src="{{ asset('public/admin/assets/js/script.js') }}"></script>
+    {{-- <script src="{{ asset('public/admin/assets/js/theme-customizer/customizer.js') }}"></script> --}}
     <!-- login js-->
     <script></script>
     <script>

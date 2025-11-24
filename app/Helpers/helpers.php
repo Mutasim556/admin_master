@@ -55,3 +55,24 @@ function routeExist(string $routeName){
 function maintenanceMailSwitch(){
     return false;
 } 
+
+
+function getDirectoryLink($dirName){
+    $dir = env('ASSET_DIRECTORY').'/admin/file/'.$dirName;
+    return $dir;
+}
+function baseUrl(){
+    return URL::to('/');
+}
+
+function createDirectory($dir){
+    if (!File::isDirectory($dir)) {
+        File::makeDirectory($dir, 0755, true);
+    }
+    return true;
+}
+
+function getLangs(){
+    $languages = Language::where([['status',1],['delete',0],['lang','!=','en']])->get();
+    return $languages;
+}

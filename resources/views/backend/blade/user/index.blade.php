@@ -3,7 +3,7 @@
     {{ __('admin_local.User List') }}
 @endpush
 @push('css')
-    <link rel="stylesheet" href="{{ asset('admin/assets/css/custom.css') }}">
+    <link rel="stylesheet" href="{{ asset('public/admin/assets/css/custom.css') }}">
 @endpush
 @push('page_css')
     <style>
@@ -303,9 +303,9 @@
     </div>
 @endsection
 @push('js')
-    <script src="{{ asset('admin/assets/js/sweet-alert/sweetalert.min.js') }}"></script>
-    <script src="{{ asset('admin/assets/js/datatable/datatables/jquery.dataTables.min.js') }}"></script>
-    <script src="{{ asset('admin/plugins/switchery/switchery.min.js') }}"></script>
+    <script src="{{ asset('public/admin/assets/js/sweet-alert/sweetalert.min.js') }}"></script>
+    <script src="{{ asset('public/admin/assets/js/datatable/datatables/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('public/admin/plugins/switchery/switchery.min.js') }}"></script>
 
     <script>
         $('[data-toggle="switchery"]').each(function(idx, obj) {
@@ -317,6 +317,6 @@
 
         var form_url = "{{ route('admin.user.store') }}";
     </script>
-    <script src="{{ asset('admin/custom/user/create_user.js') }}"></script>
-    <script src="{{ asset('admin/custom/user/user_list.js') }}"></script> 
+    <script src="{{ asset('public/admin/custom/user/create_user.js') }}"></script>
+    <script src="{{ asset('public/admin/custom/user/user_list.js') }}"></script> 
 @endpush

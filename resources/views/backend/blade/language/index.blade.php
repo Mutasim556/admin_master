@@ -3,7 +3,7 @@
     {{ __('admin_local.Language List') }}
 @endpush
 @push('css')
-    <link rel="stylesheet" href="{{ asset('admin/assets/css/custom.css') }}">
+    <link rel="stylesheet" href="{{ asset('public/admin/assets/css/custom.css') }}">
 @endpush
 @push('page_css')
     <style>
@@ -72,10 +72,18 @@
                                 <span class="text-danger err-mgs"></span>
                             </div>
                             <div class="col-lg-6 mt-2">
-                                <label for="name"><strong>{{ __('admin_local.Name') }} *</strong></label>
-                                <input type="text" class="form-control" name="name" id="name">
+                                <label for="name"><strong>{{ __('admin_local.Name') }} ( {{ __('admin_local.Default') }} ) *</strong></label>
+                                <input type="text" class="form-control" name="name" id="name" readonly>
                                 <span class="text-danger err-mgs"></span>
                             </div>
+                            @foreach (getLangs() as $lang)
+                            <div class="col-lg-6 mt-2">
+                                <label for="name"><strong>{{ __('admin_local.Name') }} ( {{ $lang->name }} ) </strong></label>
+                                <input type="text" class="form-control" name="name_{{ $lang->lang }}"
+                                    id="name_{{ $lang->lang }}" readonly>
+                                <span class="text-danger err-mgs"></span>
+                            </div>
+                            @endforeach
                             <div class="col-lg-6 mt-2">
                                 <label for="slug"><strong>{{ __('admin_local.Slug') }} *</strong></label>
                                 <input type="text" class="form-control" name="slug" id="slug" readonly>
@@ -141,13 +149,21 @@
                                     @endforeach
 
                                 </select>
-                                <span class="text-danger err-mgs"></span>
+                                <span class="text-danger err-mgs"></span> 
                             </div>
                             <div class="col-lg-6 mt-2">
-                                <label for="name"><strong>{{ __('admin_local.Name') }} *</strong></label>
-                                <input type="text" class="form-control" name="name" id="name">
+                                <label for="name"><strong>{{ __('admin_local.Name') }} ( {{ __('admin_local.Default') }} ) *</strong></label>
+                                <input type="text" class="form-control" name="name" id="name" readonly>
                                 <span class="text-danger err-mgs"></span>
                             </div>
+                            @foreach (getLangs() as $lang)
+                            <div class="col-lg-6 mt-2">
+                                <label for="name"><strong>{{ __('admin_local.Name') }} ( {{ $lang->name }} ) </strong></label>
+                                <input type="text" class="form-control" name="name_{{ $lang->lang }}"
+                                    id="name_{{ $lang->lang }}" readonly>
+                                <span class="text-danger err-mgs"></span>
+                            </div>
+                            @endforeach
                             <div class="col-lg-6 mt-2">
                                 <label for="slug"><strong>{{ __('admin_local.Slug') }} *</strong></label>
                                 <input type="text" class="form-control" name="slug" id="slug" readonly>
@@ -209,7 +225,7 @@
                                         <th>{{ __('admin_local.Language') }}</th>
                                         <th>{{ __('admin_local.Slug') }}</th>
                                         <th>{{ __('admin_local.Default') }}</th>
-                                        <th>{{ __('admin_local.Status') }}</th>
+                                        <th>{{ __('admin_local.Language Status') }}</th>
                                         <th>{{ __('admin_local.Action') }}</th>
                                     </tr>
                                 </thead>
@@ -269,10 +285,10 @@
     </div>
 @endsection
 @push('js')
-    <script src="{{ asset('admin/assets/js/sweet-alert/sweetalert.min.js') }}"></script>
-    <script src="{{ asset('admin/assets/js/datatable/datatables/jquery.dataTables.min.js') }}"></script>
-    <script src="{{ asset('admin/plugins/switchery/switchery.min.js') }}"></script>
-    <script src="{{ asset('admin/assets/js/select2/select2.full.min.js') }}"></script>
+    <script src="{{ asset('public/admin/assets/js/sweet-alert/sweetalert.min.js') }}"></script>
+    <script src="{{ asset('public/admin/assets/js/datatable/datatables/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('public/admin/plugins/switchery/switchery.min.js') }}"></script>
+    <script src="{{ asset('public/admin/assets/js/select2/select2.full.min.js') }}"></script>
     <script>
         $('[data-toggle="switchery"]').each(function(idx, obj) {
             new Switchery($(this)[0], $(this).data());
@@ -289,6 +305,7 @@
         var oTable = $("#basic-1").DataTable();
 
         var form_url = "{{ route('admin.language.store') }}";
+        var translate_url = `{{ route('admin.translateString') }}`;
     </script>
-    <script src="{{ asset('admin/custom/language/language_list.js') }}"></script>
+    <script src="{{ asset('public/admin/custom/language/language_list.js') }}"></script>
 @endpush

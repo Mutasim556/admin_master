@@ -25,15 +25,15 @@ class AdminLoginController extends Controller
     }
 
     public function handleLogin(HandleLoginRequest $data) : RedirectResponse {
-        try {
+        // try {
             if($data->authenticate()){
                 return to_route('admin.index')->with('success_login',1);
             }else{
                 return back()->with('invalid_login', 1);
             }
-        } catch (\Throwable $th) {
-            return response(['status' => 'error', 'message' => __('admin_local.Someting went wrong!')]);
-        }
+        // } catch (\Throwable $th) {
+        //     return response(['status' => 'error', 'message' => __('admin_local.Someting went wrong!')]);
+        // }
     }
 
     public function index() : View{

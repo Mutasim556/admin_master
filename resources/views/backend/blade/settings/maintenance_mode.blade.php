@@ -3,7 +3,7 @@
     {{ __('admin_local.Maintenance Mood') }}
 @endpush
 @push('css')
-    <link rel="stylesheet" href="{{ asset('admin/assets/css/custom.css') }}">
+    <link rel="stylesheet" href="{{ asset('public/admin/assets/css/custom.css') }}">
 @endpush
 @push('page_css')
     <style>
@@ -203,10 +203,10 @@
 @endsection
 
 @push('js')
-    <script src="{{ asset('admin/assets/js/sweet-alert/sweetalert.min.js') }}"></script>
-    <script src="{{ asset('admin/assets/js/datatable/datatables/jquery.dataTables.min.js') }}"></script>
-    <script src="{{ asset('admin/plugins/switchery/switchery.min.js') }}"></script>
-    <script src="{{ asset('admin/assets/js/select2/select2.full.min.js') }}"></script>
+    <script src="{{ asset('public/admin/assets/js/sweet-alert/sweetalert.min.js') }}"></script>
+    <script src="{{ asset('public/admin/assets/js/datatable/datatables/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('public/admin/plugins/switchery/switchery.min.js') }}"></script>
+    <script src="{{ asset('public/admin/assets/js/select2/select2.full.min.js') }}"></script>
     <script>
         $('[data-toggle="switchery"]').each(function(idx, obj) {
             new Switchery($(this)[0], $(this).data());
@@ -251,5 +251,5 @@
             `{{ __('admin_local.Once deleted, you will not be able to recover this maintenance data') }}`;
         var delete_swal_cancel_text = `{{ __('admin_local.Delete request canceld successfully') }}`;
     </script>
-    <script src="{{ asset('admin/custom/settings/maintenance.js') }}"></script>
+    <script src="{{ asset('public/admin/custom/settings/maintenance.js') }}"></script>
 @endpush

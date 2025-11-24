@@ -3,7 +3,7 @@
     {{ __('admin_local.Roles And Permissions') }}
 @endpush
 @push('css')
-    <link rel="stylesheet" href="{{ asset('admin/assets/css/custom.css') }}">
+    <link rel="stylesheet" href="{{ asset('public/admin/assets/css/custom.css') }}">
 @endpush
 @push('page_css')
     <style>
@@ -296,10 +296,10 @@
     </div>
 @endsection
 @push('js')
-    <script src="{{ asset('admin/assets/js/sweet-alert/sweetalert.min.js') }}"></script>
-    <script src="{{ asset('admin/assets/js/datatable/datatables/jquery.dataTables.min.js') }}"></script>
-    <script src="{{ asset('admin/plugins/switchery/switchery.min.js') }}"></script>
-    <script src="{{ asset('admin/assets/js/select2/select2.full.min.js') }}"></script>
+    <script src="{{ asset('public/admin/assets/js/sweet-alert/sweetalert.min.js') }}"></script>
+    <script src="{{ asset('public/admin/assets/js/datatable/datatables/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('public/admin/plugins/switchery/switchery.min.js') }}"></script>
+    <script src="{{ asset('public/admin/assets/js/select2/select2.full.min.js') }}"></script>
     <script>
         $('[data-toggle="switchery"]').each(function(idx, obj) {
             new Switchery($(this)[0], $(this).data());
@@ -325,5 +325,5 @@
         var submit_btn_after = `{{ __('admin_local.Submitting') }}`;
         var submit_btn_before = `{{ __('admin_local.Submit') }}`;
     </script>
-    <script src="{{ asset('admin/custom/role/role_list.js') }}"></script>
+    <script src="{{ asset('public/admin/custom/role/role_list.js') }}"></script>
 @endpush

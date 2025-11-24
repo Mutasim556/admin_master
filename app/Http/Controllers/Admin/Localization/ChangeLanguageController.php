@@ -16,9 +16,11 @@ class ChangeLanguageController extends Controller
         try {
             Cookie::queue('language', $lang, 10);
             // session()->put('language',$lang);
+            return back();
         } catch (\Throwable $th) {
             Cookie::queue('language','en',10);
             // session()->put('en');
+            return back();
         }
     }
 }
